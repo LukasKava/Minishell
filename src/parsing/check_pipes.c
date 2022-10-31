@@ -6,34 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:05 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:39:47 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 15:17:20 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-/*
-returns position if successful otherwise 0 (start of string if failed)
-*/
-int quotes_in_pipe(t_info *info, char quote, int position)
-{
-	while (info->readline[position] != quote)
-	{
-		position++;
-		if (info->readline[position] == '\0')
-			return (0);
-	}
-	return (position);
-}
-
-static int skip_whitespaces(const char *str, size_t i)
-{
-	while (str[i] == ' ')
-		i++;
-	if (str[i] == '|')
-		return (1);
-	return (0);
-}
+#include "../../includes/minishell.h"
 
 /**
  * FUCNTION: (pipe_cases) checks for the specific error cases on the pipes.
@@ -64,14 +41,8 @@ int pipe_cases(t_info *info)
 	while (info->readline[i])
 	{
 		if (info->readline[i] == '"' || info->readline[i] == 39)
-		{
-
-			if (quotes_in_pipe(info, info->readline[i], i + 1) == 0)
-				return (1);
-			else
-				i = quotes_in_pipe(info, info->readline[i], i + 1);
-		}
-		if (info->readline[i] == '|' && skip_whitespaces(info->readline, i + 1) == 1)
+			i = skip_quotes(info->readline, info->readline[i], i + 1);
+		if (info->readline[i] == '|' && info->readline[skip_white_sp(info->readline, i + 1)] == '|' )
 			return (1);
 		if (info->readline[i] == '|')
 			pipe = 1;
@@ -82,13 +53,6 @@ int pipe_cases(t_info *info)
 	if (pipe == 1)
 		return (1);
 	return (0);
-}
-
-static int skip_quotes(char *str, char quote, int i)
-{
-	while (str[i] != quote && str[i] != '\0')
-		i++;
-	return (i);
 }
 
 /**

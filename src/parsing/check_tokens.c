@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:42:30 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:59:03 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 //	x everything else = -9
 //	x forced redirection ('>|') = -7

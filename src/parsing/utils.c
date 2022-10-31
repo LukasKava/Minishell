@@ -6,36 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:27 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:44:45 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 15:18:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-/**
- * FUNCTION (count_quotes) counts the quotes that are in the
- * 				input.
- */
-void count_quotes(t_info *info)
-{
-	int i;
-	int double_quotes;
-	int single_quotes;
-
-	i = 0;
-	double_quotes = 0;
-	single_quotes = 0;
-	while (info->readline[i] != '\0')
-	{
-		if (info->readline[i] == 34)
-			double_quotes++;
-		else if (info->readline[i] == 39)
-			single_quotes++;
-		i++;
-	}
-	info->d_quotes = double_quotes;
-	info->s_quotes = single_quotes;
-}
+#include "../../includes/minishell.h"
 
 /**
  * FUNCTION: (ft_strcmp) takes compares s1 and s2 and returns
@@ -54,25 +29,6 @@ int ft_strcmp(const char *s1, const char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
-
-// void count_redirections(t_info *info)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (info->readline[i] != '\0')
-// 	{
-// 		if (info->readline[i] == '<' && info->readline[i + 1] != '<' && info->readline[i - 1] != '<')
-// 			info->redirect_input++;
-// 		else if (info->readline[i] == '<' && info->readline[i + 1] == '<')
-// 			info->redirect_input_append++;
-// 		if (info->readline[i] == '>' && info->readline[i + 1] != '>' && info->readline[i - 1] != '>')
-// 			info->redirect_output++;
-// 		else if (info->readline[i] == '>' && info->readline[i + 1] == '>')
-// 			info->redirect_output_append++;
-// 		i++;
-// 	}
-// }
 
 void check_dollar_signs(t_info *info)
 {
@@ -98,6 +54,13 @@ void check_dollar_signs(t_info *info)
 int skip_white_sp(char *s, int i)
 {
 	while (s[i] == ' ' && s[i] != '\0')
+		i++;
+	return (i);
+}
+
+int skip_quotes(char *str, char quote, int i)
+{
+	while (str[i] != quote && str[i] != '\0')
 		i++;
 	return (i);
 }

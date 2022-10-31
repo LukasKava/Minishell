@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:22:38 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 15:47:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@
 typedef struct s_token
 {
 	char		*token;
-//	int			pipe;
-//	int			single_quotes;
-//	int			double_quotes;
 	bool		single_quotes;
 	bool		double_quotes;
 	bool		ignore;
@@ -69,35 +66,50 @@ typedef struct s_info
 	int		exit_status;
 }	t_info;
 
+/*----	lexer_cases.c	-----------------*/
+int		rest_of_the_cases(t_info *info, int i, t_token **token);
+int		quotes(t_info *info, int i, t_token **token);
+int 	doubles(t_info *info, int i, t_token **token);
 
-void	lexer(t_info *info, t_token **token);
-int pipe_excistence(t_info *info);
-void check_tokens(t_info *info, t_token **token);
-int	check_quotes(t_info *info);
+/*----	lexer.c	-----------------*/
+int		ft_check_speacials(char *str, int i);
+void 	lexer(t_info *info, t_token **token);
 
-/*----freeing.c----------------------*/
-void freeing_tokens(t_token *token);
+/*----	check_pipes.c	-----------------*/
+int		pipe_cases(t_info *info);
+int		pipe_excistence(t_info *info);
+
+/*----	quotes.c	-----------------*/
+void	check_quote_type(t_token **token, char c);
+int		check_quotes(t_info *info);
+void	count_quotes(t_info *info);
+
+void	check_tokens(t_info *info, t_token **token);
+int 	space(t_info *info, int i, t_token **token);
+
+/*----	freeing.c	----------------------*/
+void	freeing_tokens(t_token *token);
 
 int		parsing(t_info *info);
-int		check_pipes(t_info *info);
-int 	pipe_cases(t_info *info);
 int 	quotes_in_pipe(t_info *info, char quote, int position); 
 char 	**bananasplit(t_info *info);
 int 	which_quote(const char *s1, int index);
 int 	if_quotes_closed(t_info *info, char quote);
 
-/*----utils.c------------------------*/
-void	count_quotes(t_info *info);
+/*----	utils.c	------------------------*/
 int		ft_strcmp(const char *s1, const char *s2);
 int 	set_error_str(t_info *info, char *message, int error);
 void	count_redirections(t_info *info);
 void	check_dollar_signs(t_info *info);
 int		skip_white_sp(char *s, int i);
+int 	skip_quotes(char *str, char quote, int i);
 
-/*----initialize.c-------------------*/
+/*----	initialize.c	-------------------*/
 void	initialize_info(t_info *info);
+t_token	*attach_token_end(t_token *token);
 
-/*----register_tokens.c-------------*/
-void	register_tokens(t_info *info, t_token **token, char **envp);
+/*----	register_tokens.c	-------------*/
+void register_tokens(t_info *info, t_token **token, char **envp);
+void print_the_list(char *message, t_token *token);
 
 #endif

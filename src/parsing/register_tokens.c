@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   regiter_tokens.c                                   :+:      :+:    :+:   */
+/*   register_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:44:30 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:59:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 /**
  *	x everything else = -9
@@ -104,7 +104,7 @@ static void check_specials(t_token **token)
 		(*token)->indentifier = 5;
 	else if ((*token)->token[0] == '\\')
 		(*token)->indentifier = 6;
-	else if ((*token)->token[0] == '\0')
+	else if ((*token)->token[0] == '\0' || (*token)->token[0] == ' ')
 		(*token)->indentifier = 0;
 	else if ((*token)->token[0] == '-' && ft_isalpha((*token)->token[1]) == 1)
 		(*token)->indentifier = 10;
@@ -204,11 +204,14 @@ static void recognise_commands(t_token **token)
 			if ((*token)->indentifier == -9) // Beggining != builtin = command
 				(*token)->indentifier = 7;	 // Command
 			(*token) = (*token)->next;
-			while ((*token) != NULL && ((*token)->indentifier == -9 ||
-										(*token)->indentifier > 6 || (*token)->ignore == true))
+			while ((*token) != NULL && ((*token)->indentifier == -9 || \
+			(*token)->indentifier == 0 || (*token)->indentifier > 6 || (*token)->ignore == true))
 			{
 				if ((*token)->indentifier == -9)
+				{
+					printf("token token: %s\n", (*token)->token);
 					(*token)->indentifier = 9;
+				}
 				(*token) = (*token)->next;
 			}
 			if ((*token) == NULL)
@@ -285,6 +288,7 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
+	print_the_list("inside", (*token));
 	if (info->error == false)
 	{
 		recognise_commands(token);

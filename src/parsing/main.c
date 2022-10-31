@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:43:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 18:01:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 static void check_non_generic(t_info *info)
 {
@@ -109,15 +109,31 @@ void errors_before(t_info *info)
 	check_dollar_signs(info);
 }
 
+void print_the_list(char *message, t_token *token)
+{
+	printf("________%s_________________\n\n", message);
+	while (token != NULL) // Printing out the  tokens for checking the correct info
+	{
+		printf("full list1[%d]: indentifier: %d %s ", token->index, token->indentifier, token->token);
+		if (token->ignore == true)
+			printf("%d", token->ignore);
+		if (token->double_quotes == true)
+			printf("%d\n", token->double_quotes);
+		else if (token->single_quotes == true)
+			printf("%d\n", token->single_quotes);
+		else
+			printf("\n");
+		token = token->next;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	t_info info;
 	t_token *token;
-	t_token *free_token;
 
 	printf("envp %s\n", envp[1]);
 	token = NULL;
-	free_token = NULL;
 	if (argc != 1)
 	{
 		printf("%s doesn't need more arguments.\n", argv[0]);
@@ -131,41 +147,12 @@ int main(int argc, char **argv, char **envp)
 		if (info.error == false)
 		{
 			token = initialize_token(token, &info);
-			lexer(&info, &token); // WORKS NEEDS CLEANING
-			free_token = token;
-			printf("________lexing check_________________\n\n");
-			while (token != NULL) // Printing out the  tokens for checking the correct info
-			{
-				printf("full list1[%d]: indentifier: %d %s ", token->index, token->indentifier, token->token);
-				if (token->ignore == true)
-					printf("%d", token->ignore);
-				if (token->double_quotes == true)
-					printf("%d\n", token->double_quotes);
-				else if (token->single_quotes == true)
-					printf("%d\n", token->single_quotes);
-				else
-					printf("\n");
-				token = token->next;
-			}
-			token = free_token;
-			//	register_tokens(&info, &token, envp);	//FIXING
-			//	printf("\n________register tokens check_________\n\n");
-			//	while (token != NULL)	//Printing out the  tokens for checking the correct info
-			//	{
-			//		printf("full list[%d]: indentifier: %d %s ", token->index, token->indentifier, token->token);
-			//		if (token->ignore == true)
-			//			printf("%d", token->ignore);
-			//		if (token->double_quotes == true)
-			//			printf("%d\n", token->double_quotes);
-			//		else if (token->single_quotes == true)
-			//			printf("%d\n", token->single_quotes);
-			//		else
-			//			printf("\n");
-			//		token = token->next;
-			//	}
-			//	token = free_token;
-			freeing_tokens(token); // WORKS NEEDS TO BE CHECKED FOR LEAKS
-			//		token = free_token;
+			lexer(&info, &token);
+			print_the_list("after lexing", token);
+			register_tokens(&info, &token, envp);
+			print_the_list("register tokens check", token);
+			
+			freeing_tokens(token);
 		}
 		printf("after the !register_the_information!\n");
 		if (ft_strlen(info.readline) != 0)

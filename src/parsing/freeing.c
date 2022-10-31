@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:42:40 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:59:08 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void freeing_tokens(t_token *token)
 {

@@ -3,15 +3,16 @@ CFLAGS = -Wall -Werror -Wextra
 
 NAME = minishell
 
-MAIN =	./src/main.c \
-		./src/utils.c \
-		./src/freeing.c \
-		./src/initialize.c \
-		./src/register_tokens.c\
-		./src/check_tokens.c\
-		./src/check_pipes.c \
-		./src/check_quotes.c \
-		./src/lexer.c \
+MAIN =	./src/parsing/main.c \
+		./src/parsing/utils.c \
+		./src/parsing/freeing.c \
+		./src/parsing/initialize.c \
+		./src/parsing/register_tokens.c\
+		./src/parsing/lexer_cases.c\
+		./src/parsing/check_tokens.c\
+		./src/parsing/check_pipes.c \
+		./src/parsing/quotes.c \
+		./src/parsing/lexer.c \
 
 
 OBJS = ${SOURCES:.c=.o}
