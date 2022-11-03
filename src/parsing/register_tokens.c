@@ -280,6 +280,33 @@ static void check_command_excists(t_token **token, char **envp)
 	(*token) = temp;
 }
 
+/**
+ * FUNCTION: (ignore)  finds already preset ignore trigger that is true
+ * 				and sets the following token ignore triggers to true until
+ * 				it finds one of the metacharacters. Ex. Pipe.
+ */
+static void	ignore(t_token **token)
+{
+	t_token *temp;
+
+	temp = (*token);
+	while ((*token) != NULL)
+	{
+		if ((*token)->ignore == true)
+		{
+			while ((*token) != NULL && ((*token)->indentifier < PIPE || (*token)->indentifier > R_AP_OUTPUT))
+			{
+				printf("token->token: %s\n", (*token)->token);
+				(*token)->ignore = true;
+				(*token) = (*token)->next;
+			}
+		}
+		if ((*token) != NULL)
+			(*token) = (*token)->next;
+	}
+	(*token) = temp;
+}
+
 void register_tokens(t_info *info, t_token **token, char **envp)
 {
 	t_token *temp_token;
@@ -288,11 +315,14 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
-	print_the_list("inside", (*token));
+//	print_the_list("inside", (*token));
 	if (info->error == false)
 	{
 		recognise_commands(token);
 		check_command_excists(token, envp);
+//		printf("after\n");
+		ignore(token);
+//		printf("went through ignore\n");
 	}
 	printf("after recognise commands\n");
 	(*token) = temp_token;

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 15:05:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/02 14:10:06 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,40 @@ void initialize_info(t_info *info)
 	info->start = 0;
 	info->trigger = 0;
 	info->error = false;
+}
+
+t_token *initialize_token(t_token *token, t_info *info)
+{
+	token = ft_calloc(1, sizeof(t_token)); // This could be a function initialize first token
+	if (!token)
+	{
+		printf("ERROR(initialize_token): malloc has failed!\n");
+		info->error = true;
+		return (NULL);
+	}
+	token->token = NULL;
+	token->next = NULL;
+	token->single_quotes = false;
+	token->double_quotes = false;
+	token->ignore = false;
+	token->indentifier = 0;
+	return (token);
+}
+
+t_chunk *initialize_chunk(t_chunk *chunk, t_info *info)
+{
+	chunk = ft_calloc(1, sizeof(t_chunk));
+	if (!chunk)
+	{
+		printf("ERROR(initialize_chunk): malloc has failed!\n");
+		info->error = true;
+		return (NULL);
+	}
+	chunk->arguments = NULL;
+	chunk->command_path = NULL;
+	chunk->indentifier = -1;
+	chunk->next = NULL;
+	return (chunk);
 }
 
 /**
@@ -53,4 +87,23 @@ t_token *attach_token_end(t_token *token)
 	temp->next = NULL;
 	token->next = temp;
 	return (token);
+}
+
+
+t_chunk *attach_chunk_end(t_chunk *chunk)
+{
+	t_chunk *temp;
+
+	temp = malloc(sizeof(t_chunk));
+	if (!temp)
+	{
+		printf("allocation failed!\n");
+		return (NULL);
+	}
+	temp->command_path = NULL;
+	temp->arguments = NULL;
+	temp->indentifier = 0;
+	temp->next = NULL;
+	chunk->next = temp;
+	return (chunk);
 }

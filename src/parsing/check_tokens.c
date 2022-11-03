@@ -6,12 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 13:59:03 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/03 20:45:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+//	|space = 10
 //	x everything else = -9
 //	x forced redirection ('>|') = -7
 //	x ampersand ('&') = -6
@@ -20,7 +21,6 @@
 //	x double_semicolon (';;') = -3
 //	x left_bracket ('(') = -2
 //	x right_bracket (')') = -1
-//	|space = 0
 //	|pipe = 1
 //	|redirection_input = 2
 //	|redirection_output = 3
@@ -59,14 +59,14 @@ void check_tokens(t_info *info, t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if (((*token)->indentifier >= 2 && (*token)->indentifier <= 5) && (*token)->next == NULL)
+		if (((*token)->indentifier >= 1 && (*token)->indentifier <= 5) && (*token)->next == NULL)
 		{
 			printf("bash: syntax error near unexpected token `newline'\n");
 			info->exit_status = 2;
 			info->error = true;
 			break;
 		}
-		else if ((*token)->indentifier >= 2 && (*token)->indentifier <= 5 && ((*token)->next->indentifier >= -6 && (*token)->next->indentifier <= 5))
+		else if ((*token)->indentifier >= 1 && (*token)->indentifier <= 5 && ((*token)->next->indentifier >= -6 && (*token)->next->indentifier <= 5))
 		{
 			printf("bash: syntax error near unexpected token `%s'\n", (*token)->next->token);
 			info->exit_status = 2;

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 18:01:28 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/03 21:23:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,6 @@ static void check_non_generic(t_info *info)
 	}
 }
 
-static t_token *initialize_token(t_token *token, t_info *info)
-{
-	token = ft_calloc(1, sizeof(t_token)); // This could be a function initialize first token
-	if (!token)
-	{
-		printf("ERROR(initialize_token): malloc has failed!\n");
-		info->error = true;
-		return (NULL);
-	}
-	token->token = NULL;
-	token->next = NULL;			  // This could be a function initialize first token
-	token->single_quotes = false; // This could be a function initialize first token
-	token->double_quotes = false; // This could be a function initialize first token
-	token->ignore = false;		  // This could be a function initialize first token
-	token->indentifier = 0;		  // This could be a function initialize first token
-	return (token);
-}
-
 void errors_before(t_info *info)
 {
 	count_quotes(info);								// COUNTS THE QUOTES
@@ -109,31 +91,16 @@ void errors_before(t_info *info)
 	check_dollar_signs(info);
 }
 
-void print_the_list(char *message, t_token *token)
-{
-	printf("________%s_________________\n\n", message);
-	while (token != NULL) // Printing out the  tokens for checking the correct info
-	{
-		printf("full list1[%d]: indentifier: %d %s ", token->index, token->indentifier, token->token);
-		if (token->ignore == true)
-			printf("%d", token->ignore);
-		if (token->double_quotes == true)
-			printf("%d\n", token->double_quotes);
-		else if (token->single_quotes == true)
-			printf("%d\n", token->single_quotes);
-		else
-			printf("\n");
-		token = token->next;
-	}
-}
-
 int main(int argc, char **argv, char **envp)
 {
 	t_info info;
 	t_token *token;
+	t_chunk	*chunk_array;
+	
 
 	printf("envp %s\n", envp[1]);
 	token = NULL;
+	chunk_array = NULL;
 	if (argc != 1)
 	{
 		printf("%s doesn't need more arguments.\n", argv[0]);
@@ -146,15 +113,20 @@ int main(int argc, char **argv, char **envp)
 		errors_before(&info);
 		if (info.error == false)
 		{
+			//PARSING
 			token = initialize_token(token, &info);
+			chunk_array = initialize_chunk(chunk_array, &info);
 			lexer(&info, &token);
 			print_the_list("after lexing", token);
 			register_tokens(&info, &token, envp);
 			print_the_list("register tokens check", token);
-			
+			get_the_commands(&info, token, envp, &chunk_array);
+			if (info.error == false)
+				print_the_chunk_list("CHUNK LIST", chunk_array);
+			//EXECUTION CAN BEGIN
 			freeing_tokens(token);
+			freeing_chunks(chunk_array, &info);
 		}
-		printf("after the !register_the_information!\n");
 		if (ft_strlen(info.readline) != 0)
 		{
 			add_history(info.readline);

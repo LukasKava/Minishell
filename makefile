@@ -13,6 +13,8 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/check_pipes.c \
 		./src/parsing/quotes.c \
 		./src/parsing/lexer.c \
+		./src/parsing/parsing.c\
+		./src/parsing/debugging.c\
 
 
 OBJS = ${SOURCES:.c=.o}

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 15:47:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/03 21:20:02 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,13 @@
 # include "../libft/libft.h"
 # include <stdbool.h>
 
-//	pipe = 1
-//	file_name = 2
-//	command = 3
-//	redirection_input = 4
-//	redirection_output = 5
-//	redirect_append_input = 6
-//	redirect_append_output = 7
-//	text = 8
-//	space = 0
-
-// typedef struct s_chunk
-// {
-// 	char	*command_path;
-// 	char	**arguments;
-// 	int		indentifier;
-// }	t_token;
+typedef struct s_chunk
+{
+	char	*command_path;
+	char	**arguments;
+	int		indentifier;
+	struct	s_chunk	*next;
+}	t_chunk;
 
 typedef struct s_token
 {
@@ -89,6 +80,7 @@ int 	space(t_info *info, int i, t_token **token);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
+void	freeing_chunks(t_chunk *chunk, t_info *info);
 
 int		parsing(t_info *info);
 int 	quotes_in_pipe(t_info *info, char quote, int position); 
@@ -106,10 +98,87 @@ int 	skip_quotes(char *str, char quote, int i);
 
 /*----	initialize.c	-------------------*/
 void	initialize_info(t_info *info);
-t_token	*attach_token_end(t_token *token);
+t_token *initialize_token(t_token *token, t_info *info);
+t_chunk *initialize_chunk(t_chunk *chunk, t_info *info);
+t_token *attach_token_end(t_token *token);
+t_chunk *attach_chunk_end(t_chunk *chunk);
 
 /*----	register_tokens.c	-------------*/
-void register_tokens(t_info *info, t_token **token, char **envp);
-void print_the_list(char *message, t_token *token);
+void	register_tokens(t_info *info, t_token **token, char **envp);
+
+/*----	parsing.c	-------------*/
+void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);
+
+/*----	debugging.c	-------------*/
+void	print_the_list(char *message, t_token *token);
+void	print_the_chunk_list(char *message, t_chunk *chunk);
+
+//INDENTIFIER EXPLANATION:
+/**
+ *	x everything else = -9
+ *	x forced redirection ('>|') = -7	//Cast an error because its not manditory.
+ *	x ampersand ('&') = -6				//Cast an error because its not manditory
+ *	x double_ampersand ('&&') = -5		//Cast an error because its not manditory
+ *	x semicolon	(';') = -4				//Cast an error because its not manditory
+ *	x double_semicolon (';;') = -3		//Cast an error because its not manditory
+ *	x left_bracket ('(') = -2			//Cast an error because its not manditory
+ *	x right_bracket (')') = -1			//Cast an error because its not manditory
+ *	|space = 0
+ *	|pipe = 1
+ *	|redirection_input = 2
+ *	|redirection_output = 3
+ *	|redirect_append_input = 4
+ *	|redirect_append_output = 5
+ *	|escape_char '\' == 6
+ *	command = 7
+ *	built-in = 8
+ *	arguments = 9
+ *	flags = 10
+ *	input_file = 11
+ *	output_file = 12
+ *	delimitor = 13
+ */
+
+// indentifiers:
+//  command block == 20
+//  Built-in block == 21
+//  input file == 11
+//	output file == 12
+//  delimitor == 13
+
+// NOT USED
+#define FORCED_R -7
+#define AMPERSAND -6
+#define DOUBLE_AMPERSAND -5
+#define SEMICOLON -4
+#define DOUBLE_SEMICOLON -3
+#define L_BRACKET -2
+#define R_BRACKET -1
+
+// USED
+#define ELSE -9
+#define SPace 0
+#define PIPE 1
+#define R_INPUT 2
+#define R_OUTPUT 3
+#define R_AP_INPUT 4
+#define R_AP_OUTPUT 5
+#define ESCAPE 6
+#define COMMAND 7
+#define BUILT_IN 8
+#define ARGUMENT 9
+#define FLAG 10
+#define INPUT_F 11
+#define OUTPUT_F 12
+#define DELIMITOR 13
+
+// USEFULL FOR THE EXECUTION
+
+#define CMD_BLOCK 20
+#define BUILT_IN_BLOCK 21
+
+// INPUT_F the same
+// OUTPUT_F the same
+// DELIMITOR the same
 
 #endif
