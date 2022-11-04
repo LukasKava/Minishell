@@ -1,1 +1,3 @@
 *.o
+infile.txt
+*.txt
