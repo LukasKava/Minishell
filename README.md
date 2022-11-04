@@ -36,3 +36,4 @@ cat < lexer.c ls -l | > output.txt ! Check why I dont get the error\
 cat < lexer.c ls -l > output.txt\
 
 Error handling
+There is a leak when wrong command.
