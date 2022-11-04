@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/03 21:20:02 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/04 12:20:08 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 # include <stdbool.h>
+# include <unistd.h>
+# include <sys/wait.h>
 
 typedef struct s_chunk
 {
@@ -113,6 +115,10 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 
+/*----	fork.c	-------------*/
+void	single_child(t_chunk	*salt, char	**envp);
+/*----	run.c	-------------*/
+void	run(t_chunk	*salt, char	**envp);
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9

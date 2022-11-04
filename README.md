@@ -34,3 +34,5 @@ ls -l < input.txt\
 ls -l > output.txt\
 cat < lexer.c ls -l | > output.txt ! Check why I dont get the error\
 cat < lexer.c ls -l > output.txt\
+
+Error handling

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/03 21:23:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/04 12:21:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int main(int argc, char **argv, char **envp)
 	}
 	while (1)
 	{
-		info.readline = readline("Mini_hell\U0001F34C\U0001F412 ");
+		info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
 		initialize_info(&info);
 		errors_before(&info);
 		if (info.error == false)
@@ -124,6 +124,7 @@ int main(int argc, char **argv, char **envp)
 			if (info.error == false)
 				print_the_chunk_list("CHUNK LIST", chunk_array);
 			//EXECUTION CAN BEGIN
+			single_child(chunk_array, envp);
 			freeing_tokens(token);
 			freeing_chunks(chunk_array, &info);
 		}
