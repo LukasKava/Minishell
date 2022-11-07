@@ -6,10 +6,10 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/04 12:52:09 by pbiederm         ###   ########.fr       */
-/*   Updated: 2022/11/07 09:42:34 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 15:39:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -21,6 +21,7 @@
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <unistd.h>
+#include <fcntl.h>
 # include <sys/wait.h>
 
 typedef struct s_chunk
@@ -108,6 +109,7 @@ t_chunk *attach_chunk_end(t_chunk *chunk);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, char **envp);
+char	*ft_delete(char *str, char *part);
 
 /*----	parsing.c	-------------*/
 void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);

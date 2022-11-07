@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 10:54:36 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:56:06 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void freeing_tokens(t_token *token)
 		free(temp);
 		printf("token freed succesfully!\n");
 	}
+	printf("HEY!\n");
 	free(token);
+	printf("HEY1!\n");
 }
 
 void freeing_chunks(t_chunk **chunk, t_info *info)

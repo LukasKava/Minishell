@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 09:29:43 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 16:42:42 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,31 @@ static	char *find_command_path(char *s, char **envp)
 		i++;
 	path = envp[i];
 	splitted_path = ft_split(path, ':');
-	splitted_path[0] = ft_strtrim(splitted_path[0], "PATH=");
+	splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
 	i = 0;
 	while (splitted_path[i] != NULL)
 	{
 		splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 		splitted_path[i] = ft_strjoin(splitted_path[i], s);
-		if (access(splitted_path[i], F_OK) == 0)
+		if (access(splitted_path[i], F_OK) == 0 && access(splitted_path[i], X_OK) == 0)
 		{
-			if (access(splitted_path[i], X_OK) == 0)
-			{
-				printf("command_path: %s\n", splitted_path[i]);
-				return (splitted_path[i]);
-			}
+			printf("command_path: %s\n", splitted_path[i]);
+			path = splitted_path[i];
+			break ;
 		}
+		free(splitted_path[i]);
 		i++;
 	}
-	printf("ERROR (find_command_path): could not find the command!\n");
-	i = 0;
+	if (splitted_path[i] == NULL)
+		printf("ERROR (find_command_path): could not find the command!\n");
+	i++;
 	while (splitted_path[i] != NULL)
 	{
 		free(splitted_path[i]);
 		i++;
 	}
 	free(splitted_path);
-	return (NULL);
+	return (path);
 }
 
 static void	find_arguments(t_token *token, t_chunk **chunk)
@@ -153,7 +153,6 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 		}
 		token = token->next;
 	}
-	(*chunk) = attach_chunk_end(*chunk);
 	(*chunk)->next = NULL;
 	(*chunk) = temp;
 	printf("info->info: %d\n", info->d_quotes);

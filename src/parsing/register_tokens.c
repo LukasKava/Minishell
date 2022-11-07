@@ -79,6 +79,23 @@ static bool specials_outside(t_token **token)
 	return (false);
 }
 
+static	int	check_for_spaces(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ')
+		{
+			printf("warum:");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 /**
  * FUNCTION: (check_speacials) checks for special character combinations
  * 				that are included in mandatory part of the minishell.
@@ -104,7 +121,9 @@ static void check_specials(t_token **token)
 		(*token)->indentifier = R_AP_OUTPUT;
 	else if ((*token)->token[0] == '\\')
 		(*token)->indentifier = ESCAPE;
-	else if ((*token)->token[0] == '\0' || (*token)->token[0] == ' ')
+	else if ((*token)->token[0] == '\0')
+		(*token)->indentifier = SPace;
+	else if (check_for_spaces((*token)->token) == 0)
 		(*token)->indentifier = SPace;
 	else if ((*token)->token[0] == '-' && ft_isalpha((*token)->token[1]) == 1)
 		(*token)->indentifier = FLAG;
@@ -205,7 +224,7 @@ static void recognise_commands(t_token **token)
 				(*token)->indentifier = COMMAND;	 // Command
 			(*token) = (*token)->next;
 			while ((*token) != NULL && ((*token)->indentifier == ELSE || \
-			(*token)->indentifier == SPACE || (*token)->indentifier > ESCAPE || (*token)->ignore == true))
+			(*token)->indentifier == SPace || (*token)->indentifier > ESCAPE || (*token)->ignore == true))
 			{
 				if ((*token)->indentifier == ELSE)
 				{
@@ -224,6 +243,31 @@ static void recognise_commands(t_token **token)
 	(*token) = temp;
 }
 
+char *ft_delete(char *str, char *part)
+{
+	char *new_str;
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	new_str = NULL; 
+	while (part[i] != '\0')
+		i++;
+	len = ft_strlen(str) - i;
+	new_str = ft_calloc(len + 1, sizeof(char));
+	new_str[len] = '\0';
+	len = 0;
+	while (str[i] != '\0')
+	{
+		new_str[len] = str[i];
+		i++;
+		len++;
+	}
+	free(str);
+	return (new_str);
+}
+
 static void check_command_excists(t_token **token, char **envp)
 {
 	int i;
@@ -237,27 +281,23 @@ static void check_command_excists(t_token **token, char **envp)
 	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
 		i++;
 	path = envp[i];
+	printf("path: %s\n", path);
 	temp = (*token);
 	i = 0;
 	while ((*token) != NULL)
 	{
 		if ((*token)->indentifier == COMMAND)
 		{
-			printf("path: %s\n", path);
 			splitted_path = ft_split(path, ':');
-			splitted_path[0] = ft_strtrim(splitted_path[0], "PATH=");
+			splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
 			while (splitted_path[i] != NULL)
 			{
 				splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 				splitted_path[i] = ft_strjoin(splitted_path[i], (*token)->token);
-				if (access(splitted_path[i], F_OK) == 0)
+				if (access(splitted_path[i], F_OK) == 0 && access(splitted_path[i], X_OK) == 0)
 				{
-					printf("checking the path: %s\n", splitted_path[i]);
-					if (access(splitted_path[i], X_OK) == 0)
-					{
-						printf("Command excists and can be executed!\n");
-						break;
-					}
+					printf("command: %s does excist: %s\n", (*token)->token, splitted_path[i]);
+					break ;
 				}
 				i++;
 			}
@@ -266,12 +306,14 @@ static void check_command_excists(t_token **token, char **envp)
 				printf("command: %s does not excist!\n", (*token)->token);
 				(*token)->ignore = true;
 			}
-			for (int z = 0; splitted_path[z] != NULL; z++)
-				free(splitted_path[z]);
+			i = 0;
+			while (splitted_path[i] != NULL)
+			{
+				free(splitted_path[i]);
+				i++;
+			}
 			free(splitted_path);
-			splitted_path = NULL;
 		}
-		i = 0;
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
@@ -312,7 +354,7 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
-//	print_the_list("inside", (*token));
+	print_the_list("inside", (*token));
 	if (info->error == false)
 	{
 		recognise_commands(token);
