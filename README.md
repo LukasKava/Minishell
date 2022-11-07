@@ -52,11 +52,19 @@ cat  test.txt > long4.txt > long5.txt
 File descriptors are created. Files are created but long3.txt and long5.txt are populated, long.2.txt and long4.txt 
 are created during the file descriptors but not pupulated by the command.
 
-these cases:
+these cases for redirection:
  
 > testfile.txt creates new file, writes to file descriptor by default stdout
 < testfile.txt opened to reading on stdin 
 >testfile.txt segfaults and does not give the right vaulue, it would create a file
+1) cat Makefile|grep c|wc <<lo
+2) cat <<end >lala|wc -l
+
+other cases
+2 : minishell> export abc=$var
+
+*** USEFULL LINKS ***
+https://github.com/we-sh/42ShellTester
 
 *** TEST LOGS ***
 
@@ -94,3 +102,25 @@ ________CHUNK LIST_________________
 full listC: indentifier: -1: (null)
 ARGUMENTS:
 zsh: segmentation fault  ./minishell
+
+zsh: suspended   >> testfile.txt
+pbiederm@c2s16d92 Minishell % ./minishell
+envp USER=pbiederm
+Mini_hell🍌🐒> >>testfile.txt
+________after lexing_________________
+
+
+//this one should create a file
+full list1[0]: indentifier: 0 >> 
+full list1[0]: indentifier: 0 testfile.txt 
+after recognise commands
+________register tokens check_________________
+
+full list1[0]: indentifier: 5 >> 
+full list1[1]: indentifier: 12 testfile.txt 
+info->info: 0
+________CHUNK LIST_________________
+full listC: indentifier: -1: (null)
+ARGUMENTS:
+zsh: segmentation fault  ./minishell
+pbiederm@c2s16d92 Minishell % 
