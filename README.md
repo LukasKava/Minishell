@@ -59,6 +59,11 @@ these cases for redirection:
 >testfile.txt segfaults and does not give the right vaulue, it would create a file
 1) cat Makefile|grep c|wc <<lo
 2) cat <<end >lala|wc -l
+cat << EOF and  cat << 'EOF'
+echo -n -n -n
+echo -nnnn
+EcHO
+VAR+=
 
 other cases
 2 : minishell> export abc=$var
