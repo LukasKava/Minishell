@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
 /*   Updated: 2022/11/04 12:52:09 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 09:42:34 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +83,7 @@ int 	space(t_info *info, int i, t_token **token);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
-void	freeing_chunks(t_chunk *chunk, t_info *info);
+void	freeing_chunks(t_chunk **chunk, t_info *info);
 
 int		parsing(t_info *info);
 int 	quotes_in_pipe(t_info *info, char quote, int position); 

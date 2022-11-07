@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/03 21:09:59 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 09:29:43 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 static	char *find_command_path(char *s, char **envp)
 {
 	int		i;
-	char	*path;
-	char	**splitted_path;
+	char	*path = NULL;
+	char	**splitted_path = NULL;
 
 	i = 0;
 	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
@@ -63,6 +63,13 @@ static	char *find_command_path(char *s, char **envp)
 		i++;
 	}
 	printf("ERROR (find_command_path): could not find the command!\n");
+	i = 0;
+	while (splitted_path[i] != NULL)
+	{
+		free(splitted_path[i]);
+		i++;
+	}
+	free(splitted_path);
 	return (NULL);
 }
 
@@ -75,18 +82,18 @@ static void	find_arguments(t_token *token, t_chunk **chunk)
 	i = 0;
 	length = 0;
 	temp = token;
-	while (token != NULL && (token->indentifier < 1 || token->indentifier > 5))
+	while (token != NULL && (token->indentifier < PIPE || token->indentifier > R_AP_OUTPUT))
 	{
-		if (token->indentifier >= 7 && token->indentifier <= 10)
+		if (token->indentifier >= COMMAND && token->indentifier <= FLAG)
 			length++;
 		token = token->next;
 	}
 	(*chunk)->arguments = ft_calloc(length + 1, sizeof(char *));
 	(*chunk)->arguments[length] = NULL;
 	token = temp;
-	while (token != NULL && (token->indentifier < 1 || token->indentifier > 5))
+	while (token != NULL && (token->indentifier < PIPE || token->indentifier > R_AP_OUTPUT))
 	{
-		if (token->indentifier >= 7 && token->indentifier <= 10)
+		if (token->indentifier >= COMMAND && token->indentifier <= FLAG)
 		{
 			(*chunk)->arguments[i] = token->token;
 			i++;
@@ -121,27 +128,25 @@ static void	register_chunk(t_token *token, t_chunk **chunk, int indentifier)
 
 void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk)
 {
-//	int	lenght;
 	t_chunk *temp;
 
-//	lenght = 0;
 	temp = (*chunk);
 	while (token != NULL)
 	{
-		if (token->indentifier == 11)
-			register_chunk(token, chunk, 3);
-		else if (token->indentifier == 12)
-			register_chunk(token, chunk, 4);
-		else if (token->indentifier == 13)
-			register_chunk(token, chunk, 5);
-		else if (token->indentifier == 7)
+		if (token->indentifier == INPUT_F)
+			register_chunk(token, chunk, INPUT_F);
+		else if (token->indentifier == OUTPUT_F)
+			register_chunk(token, chunk, OUTPUT_F);
+		else if (token->indentifier == DELIMITOR)
+			register_chunk(token, chunk, DELIMITOR);
+		else if (token->indentifier == COMMAND)
 		{
 			printf("command: %s\n", token->token);
 			(*chunk)->command_path = find_command_path(token->token, envp);
 			find_arguments(token, chunk);
-			(*chunk)->indentifier = 1;
+			(*chunk)->indentifier = CMD_BLOCK;
 		}
-		if (token->indentifier >= 1 && token->indentifier <= 5)
+		if (token->indentifier >= PIPE && token->indentifier <= R_AP_OUTPUT)
 		{
 			(*chunk) = attach_chunk_end(*chunk);
 			(*chunk) = (*chunk)->next;
@@ -151,6 +156,5 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 	(*chunk) = attach_chunk_end(*chunk);
 	(*chunk)->next = NULL;
 	(*chunk) = temp;
-//	printf("command-path: %s\n", (*chunk)->command_path);
 	printf("info->info: %d\n", info->d_quotes);
 }
