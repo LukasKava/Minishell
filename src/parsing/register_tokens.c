@@ -205,7 +205,7 @@ static void recognise_commands(t_token **token)
 				(*token)->indentifier = COMMAND;	 // Command
 			(*token) = (*token)->next;
 			while ((*token) != NULL && ((*token)->indentifier == ELSE || \
-			(*token)->indentifier == SPACE || (*token)->indentifier > ESCAPE || (*token)->ignore == true))
+			(*token)->indentifier == SPace || (*token)->indentifier > ESCAPE || (*token)->ignore == true))
 			{
 				if ((*token)->indentifier == ELSE)
 				{

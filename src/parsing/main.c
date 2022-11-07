@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 10:09:34 by pbiederm         ###   ########.fr       */
-/*   Updated: 2022/11/07 10:52:39 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:42:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv, char **envp)
 			if (info.error == false)
 				print_the_chunk_list("CHUNK LIST", chunk_array);
 			//EXECUTION CAN BEGIN
-			// to_program(chunk_array, &info, envp);
+			from_infile(chunk_array, &info, envp);
 			// single_child(chunk_array, &info, envp);
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);

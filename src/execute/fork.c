@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/07 10:28:53 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:47:31 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,27 @@
 	// switch between the chunks
 // }
 
-void	to_program(t_chunk	*salt, t_info *info, char	**envp)
+void	from_infile(t_chunk	*salt, t_info *info, char	**envp)
 {
-	int	fd;
-	int pfd[2];
+	int	infile;
+	int	pid;
 
-	fd = open("test.txt", O_RDONLY);
-	if (pipe = pfd[2] < 0)
-		{
-			printf("Error: while creating the pipe.\n");
-			return ;
-		}
-
+	// printf("salt->next->arguments : %s", *salt->next->arguments);
+	// return ;
+	infile = open(*(salt->next->arguments), O_RDONLY);
+	pid = fork();
+	if (pid < 0)
+	{
+		freeing_chunks(&salt, info);
+		printf("Error: while making fork.\n");
+	}
+	if (pid == 0)
+	{
+		dup2(infile, STDIN_FILENO);
+		close(infile);
+		run(salt, info, envp);
+	}
+	waitpid(pid, NULL, 0);
 }
 
 void	single_child(t_chunk	*salt, t_info *info, char	**envp)
@@ -38,7 +47,7 @@ void	single_child(t_chunk	*salt, t_info *info, char	**envp)
 	pid = fork();
 	if (pid < 0)
 	{
-		freeing_chunks(salt, info);
+		freeing_chunks(&salt, info);
 		// printf("terst: %d\n", info->d_quotes);
 		printf("Error: while forking single child process.\n");
 		return ;
