@@ -40,6 +40,8 @@ From Pete with <3
 Need ifile in the second position. Basically: wc -l < test.txt.
 Indentifiers:
 
+Doubly linked list would come in handy
+
 
 
 Error handling

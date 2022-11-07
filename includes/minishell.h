@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 13:25:48 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 16:23:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,8 @@ void	print_the_chunk_list(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
 void	first_child(t_chunk	*salt, t_info *info, char	**envp);
-void	single_child(t_chunk	*salt, t_info *info, char	**envp);
 void	from_infile(t_chunk	*salt, t_info *info, char	**envp);
+void	free_fd(int **fd)
 /*----	run.c	-------------*/
 void	run(t_chunk	*salt, t_info *info, char	**envp);
 //INDENTIFIER EXPLANATION:
@@ -188,7 +188,8 @@ void	run(t_chunk	*salt, t_info *info, char	**envp);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
-
+#define	RIGHT 1
+#define LEFT 0
 // INPUT_F the same
 // OUTPUT_F the same
 // DELIMITOR the same
