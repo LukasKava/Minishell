@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/03 20:59:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 10:54:36 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void freeing_tokens(t_token *token)
 {
-	printf("IN");
+	printf("\n");
 	t_token *temp;
 
 	temp = token;
@@ -32,22 +32,21 @@ void freeing_tokens(t_token *token)
 	free(token);
 }
 
-void freeing_chunks(t_chunk *chunk, t_info *info)
+void freeing_chunks(t_chunk **chunk, t_info *info)
 {
 	t_chunk *free_token;
 
-	free_token = chunk;
-	printf("iN2\n");
-	while (chunk != NULL && info->error == false)
+	free_token = (*chunk);
+	while ((*chunk) != NULL)
 	{
-
-		free_token = chunk;
-		printf("command path: %s\n", chunk->command_path);
-		free(chunk->command_path);
-		free(chunk->arguments);
-		chunk = chunk->next;
+		free_token = (*chunk);
+		printf("command path: %s\n", (*chunk)->command_path);
+		free((*chunk)->command_path);
+		free((*chunk)->arguments);
+		(*chunk) = (*chunk)->next;
 		free(free_token);
 		printf("chunk freed succesfully!\n");
 	}
-	free(chunk);
+	free(*chunk);
+	printf("dksj: %d\n", info->d_quotes);
 }

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/03 20:45:59 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/04 13:53:42 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void check_tokens(t_info *info, t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if (((*token)->indentifier >= 1 && (*token)->indentifier <= 5) && (*token)->next == NULL)
+		if (((*token)->indentifier >= PIPE && (*token)->indentifier <= R_AP_OUTPUT) && (*token)->next == NULL)
 		{
 			printf("bash: syntax error near unexpected token `newline'\n");
 			info->exit_status = 2;
 			info->error = true;
 			break;
 		}
-		else if ((*token)->indentifier >= 1 && (*token)->indentifier <= 5 && ((*token)->next->indentifier >= -6 && (*token)->next->indentifier <= 5))
+		else if ((*token)->indentifier >= PIPE && (*token)->indentifier <= R_AP_OUTPUT && ((*token)->next->indentifier >= AMPERSAND && (*token)->next->indentifier <= R_AP_OUTPUT))
 		{
 			printf("bash: syntax error near unexpected token `%s'\n", (*token)->next->token);
 			info->exit_status = 2;

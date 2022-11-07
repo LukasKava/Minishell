@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:08:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 10:49:56 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 	int x;
 
 	x = 0;
+	if (word)
+		return (NULL);
+	word[w_len] = '\0';
 	while (w_len > 0)
 	{
 		word[x] = s1[i - w_len];
 		w_len--;
 		x++;
 	}
-	word[x] = '\0';
 	return (word);
 }
 
@@ -76,7 +78,7 @@ static void s_words(size_t w_count, char const *s1, char c, char **splitted)
 		w_len = 0;
 		x++;
 	}
-	splitted[x] = 0;
+	splitted[x] = NULL;
 }
 
 char **ft_split(char const *s1, char c)
@@ -84,6 +86,7 @@ char **ft_split(char const *s1, char c)
 	size_t w_count;
 	char **splitted;
 
+	splitted = NULL;
 	if (!s1)
 		return (NULL);
 	w_count = ft_word_count(s1, c);
@@ -93,3 +96,80 @@ char **ft_split(char const *s1, char c)
 	s_words(w_count, s1, c, splitted);
 	return (splitted);
 }
+
+// static size_t word_count(char const *s, char c)
+// {
+// 	size_t word_count;
+// 	size_t i;
+// 	size_t in_word;
+
+// 	i = 0;
+// 	in_word = 0;
+// 	word_count = 0;
+// 	while (s[i] != '\0')
+// 	{
+// 		if (s[i] != c)
+// 			in_word = 1;
+// 		if (in_word == 1 && s[i] == c)
+// 		{
+// 			in_word = 0;
+// 			word_count++;
+// 		}
+// 		i++;
+// 	}
+// 	if (in_word == 1)
+// 		word_count++;
+// 	return (word_count);
+// }
+
+// static size_t word_start(char *s, char del, size_t pos)
+// {
+// 	if (s[pos] != del)
+// 		return (pos);
+// 	while (s[pos] == del)
+// 	{
+// 		pos++;
+// 	}
+// 	if (s[pos] != del)
+// 		return (pos);
+// 	else
+// 		return (0);
+// }
+
+// static size_t word_len(char *s, char c, size_t pos)
+// {
+// 	size_t len;
+
+// 	len = 0;
+// 	while (s[pos] != '\0' && s[pos] != c)
+// 	{
+// 		len++;
+// 		pos++;
+// 	}
+// 	return (len);
+// }
+
+// char **ft_split(char const *s, char c)
+// {
+// 	char **adr_arr;
+// 	size_t w_count;
+// 	size_t i;
+// 	size_t start;
+// 	size_t len;
+
+// 	w_count = word_count(s, c);
+// 	adr_arr = (char **)malloc((w_count + 1) * sizeof(char *));
+// 	if (!adr_arr)
+// 		return (NULL);
+// 	i = 0;
+// 	len = 0;
+// 	start = 0;
+// 	while (i < w_count)
+// 	{
+// 		start = word_start((char *)s, c, start + len);
+// 		len = word_len((char *)s, c, start);
+// 		adr_arr[i++] = ft_substr((char *)s, start, len);
+// 	}
+// 	adr_arr[i] = (NULL);
+// 	return (adr_arr);
+// }

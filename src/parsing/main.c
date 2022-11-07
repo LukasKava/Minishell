@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/04 12:21:33 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 10:52:39 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int main(int argc, char **argv, char **envp)
 			//EXECUTION CAN BEGIN
 			single_child(chunk_array, envp);
 			freeing_tokens(token);
-			freeing_chunks(chunk_array, &info);
+			freeing_chunks(&chunk_array, &info);
 		}
 		if (ft_strlen(info.readline) != 0)
 		{
