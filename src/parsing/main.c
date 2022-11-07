@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 13:38:38 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 19:37:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ int main(int argc, char **argv, char **envp)
 			if (info.error == false)
 				print_the_chunk_list("CHUNK LIST", chunk_array);
 			//EXECUTION CAN BEGIN
-			first_child(chunk_array, &info, envp);
+			// first_child(chunk_array, &info, envp);
+			// second_child(chunk_array, &info, envp);
 			// from_infile(chunk_array, &info, envp);
 			// single_child(chunk_array, &info, envp);
 			freeing_tokens(token);

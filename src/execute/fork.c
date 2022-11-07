@@ -6,39 +6,11 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/07 16:30:54 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/07 17:15:00 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// void	exec_handle(t_chunk	*salt, t_info *info, char	**envp)
-// {
-	// switch between the chunks
-// }
-
-// void	from_infile(t_chunk	*salt, t_info *info, char	**envp)
-// {
-// 	int	infile;
-// 	int	pid;
-
-// 	// printf("salt->next->arguments : %s", *salt->next->arguments);
-// 	// return ;
-// 	infile = open(*(salt->next->arguments), O_RDONLY);
-// 	pid = fork();
-// 	if (pid < 0)
-// 	{
-// 		freeing_chunks(&salt, info);
-// 		printf("Error: while making fork.\n");
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		dup2(infile, STDIN_FILENO);
-// 		close(infile);
-// 		run(salt, info, envp);
-// 	}
-// 	waitpid(pid, NULL, 0);
-// }
 
 void	input_first(int *fd, t_chunk	*salt, t_info *info, char	**envp)
 {
@@ -109,30 +81,27 @@ void	first_child(t_chunk	*salt, t_info *info, char	**envp)
 	waitpid(pid, NULL, 0);
 }
 
-void	input_first_exp(int **fd, t_chunk	*salt, t_info *info, char	**envp)
+void	input_output(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 {
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	free(fd);
-	run(salt, info, envp);
-}
-
-void	output_first_exp(int **fd, t_chunk	*salt, t_info *info, char	**envp)
-{
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
-	free_fd(fd)
+	dup2(fd[0][INPUT], STDIN_FILENO);
+	close(fd[0][INPUT]);
+	dup2(fd[0][OUTPUT], STDOUT_FILENO);
+	close(fd[0][OUTPUT]);
+	free_fd(fd);
 	run(salt, info, envp);
 }
 
 void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 {
-	if (salt->indentifier == CMD_BLOCK && salt->next->indentifier == INPUT_F)
-		input_first(fd, salt, info, envp);
+	if (salt->indentifier == CMD_BLOCK && salt->next->indentifier == INPUT_F && salt->next->next->indentifier == OUTPUT_F)
+		input_output(fd, salt, info, envp);
 }
 
 void	free_fd(int **fd)
 {
+	int	i;
+
+	i = 0;
 	while(i < 3)
 	{
 		free(fd[i]);
@@ -144,21 +113,19 @@ void	free_fd(int **fd)
 void	second_child(t_chunk	*salt, t_info *info, char	**envp)
 {
 	int	pid;
-	int	second_pid;
 	int	**fd;
 	int i;
 
 	i = 0;
-	fd = (int**)malloc(2 *sizeof(int*));
+	fd = (int**)malloc(1 *sizeof(int*));
 	while(i < 3)
 	{
 		fd[i] = (int*)malloc(2 * sizeof(int));
 		i++;
 	}
 	//infile
-	fd[0][LEFT] = open(salt->next->arguments[0], O_RDONLY);
-	fd[0][RIGHT] = open(salt->next->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	fd[1][LEFT] = open(salt->next->next->arguments[0], O_RDONLY);
+	fd[0][INPUT] = open(salt->next->arguments[0], O_RDONLY);
+	fd[0][OUTPUT] = open(salt->next->next->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -170,17 +137,8 @@ void	second_child(t_chunk	*salt, t_info *info, char	**envp)
 	{
 		roles_expanded(fd, salt, info, envp);
 	}
-	second_pid = fork();
-	if (second_pid < 0)
-	{
-		freeing_chunks(&salt, info);
-		printf("Error: while forking single child process.\n");
-		return ;
-	}
-	if (second_pid == 0)
-	{
-		roles_expanded(fd, salt, info, envp);
-	}
+	close(fd[0][INPUT]);
+	close(fd[0][OUTPUT]);
 	free_fd(fd);
 	waitpid(pid, NULL, 0);
 }
