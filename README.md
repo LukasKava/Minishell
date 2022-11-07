@@ -35,4 +35,12 @@ ls -l > output.txt\
 cat < lexer.c ls -l | > output.txt ! Check why I dont get the error\
 cat < lexer.c ls -l > output.txt\
 
+From Pete with <3
+
+Need ifile in the second position. Basically: wc -l < test.txt.
+Indentifiers:
+
+
+
 Error handling
+There is a leak when wrong command.

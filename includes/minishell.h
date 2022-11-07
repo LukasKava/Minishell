@@ -6,6 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
+/*   Updated: 2022/11/04 12:52:09 by pbiederm         ###   ########.fr       */
 /*   Updated: 2022/11/07 09:42:34 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -116,9 +117,9 @@ void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
-void	single_child(t_chunk	*salt, char	**envp);
+void	single_child(t_chunk	*salt, t_info *info, char	**envp);
 /*----	run.c	-------------*/
-void	run(t_chunk	*salt, char	**envp);
+void	run(t_chunk	*salt, t_info *info, char	**envp);
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9
