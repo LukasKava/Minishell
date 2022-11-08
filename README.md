@@ -34,6 +34,34 @@ ls -l < input.txt\
 ls -l > output.txt\
 cat < lexer.c ls -l | > output.txt ! Check why I dont get the error\
 cat < lexer.c ls -l > output.txt\
+<f0 echo hi >f1 how >f2 >f3 are you >f4
+echo hi  how   are you
+ echo hi  how   are you
+  echo hi  how   are you
+<f0 echo hi >f1 how >f2 >f3 are you >f4 |>f7 >f8 grep hi <f9
+echo hi how are you|grep hi
+<f0 echo hi >f1 how >f2 >f3 are you  >f4 |>f7 >f8 grep hi <f9 "hh$USER" << mj to
+"hi from test"|'|"'
+"hi from test"|'|"'
+"h"|'|"'
+echo hi | grep how | <<mj cat "$USERj"| also $PAT"$PATH"
+echo hi >f1"how$USER"
+
+echo "$USER" hi"$USER"       nhj | sdf dfgh
+
+echo "$USER" hi"$USER"       nhj | sdf dfgh
+
+<<mj cat > f1| grep hi
+
+echo -n hi"how are" you    j
+echo "$USER" hi"$USER"       nhj$USER"$USER""$USER"$USER
+echo "$USER" hi"$USER"       nhj$USER"$USER""$USER"$USER"$USER""$USER$PATH"
+
+export ab=cho
+e$ab hi
+ <f4 cat <<mj hi >f1 how >f2 >f3 are you >f4
+
+ echo "hi | ||" | | you know you are a pie "|" | << hi | to you
 
 From Pete with <3
 
