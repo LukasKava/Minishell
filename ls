@@ -1,0 +1,25 @@
+total 3165992
+drwxr-xr-x  24 pbiederm  2022_wolfsburg         768 Nov  9 18:32 .
+drwxr-xr-x  17 pbiederm  2022_wolfsburg         544 Nov  9 16:46 ..
+drwxr-xr-x  13 pbiederm  2022_wolfsburg         416 Nov  9 17:02 .git
+-rw-r--r--   1 pbiederm  2022_wolfsburg          20 Nov  9 16:46 .gitignore
+-rwxr-xr-x   1 pbiederm  2022_wolfsburg        2409 Nov  9 16:46 README.md
+-rw-r--r--   1 pbiederm  2022_wolfsburg   534729906 Nov  9 17:14 fox.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg        1439 Nov  9 17:32 fox_ace.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg        1520 Nov  9 17:34 fox_acolyte.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg        1600 Nov  9 17:35 fox_archer.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg  1069459812 Nov  9 17:15 fox_blue.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg        1679 Nov  9 18:23 fox_chief.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg         822 Nov  9 16:51 fox_domesticated.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg         822 Nov  9 16:51 fox_grey.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg        2466 Nov  9 17:18 fox_healer.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg           0 Nov  9 16:51 fox_red.txt
+-rw-r--r--   1 pbiederm  2022_wolfsburg         822 Nov  9 16:52 giraffe.txt
+drwxr-xr-x   3 pbiederm  2022_wolfsburg          96 Nov  9 16:46 includes
+drwxr-xr-x  73 pbiederm  2022_wolfsburg        2336 Nov  9 18:32 libft
+-rw-r--r--   1 pbiederm  2022_wolfsburg           0 Nov  9 18:32 ls
+-rw-r--r--   1 pbiederm  2022_wolfsburg           0 Nov  9 18:32 make
+-rw-r--r--   1 pbiederm  2022_wolfsburg        1022 Nov  9 16:46 makefile
+-rwxr-xr-x   1 pbiederm  2022_wolfsburg       76000 Nov  9 18:32 minishell
+drwxr-xr-x   3 pbiederm  2022_wolfsburg          96 Nov  9 16:46 minishell.dSYM
+drwxr-xr-x   4 pbiederm  2022_wolfsburg         128 Nov  9 16:46 src

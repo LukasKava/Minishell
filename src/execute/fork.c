@@ -6,26 +6,52 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/09 16:46:59 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/09 18:39:51 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	input_first(int *fd, t_chunk	*salt, t_info *info, char	**envp)
+void	input_first(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 {
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	free(fd);
+	t_chunk	*local_chunk;
+
+	local_chunk = *(&salt);
+	dup2(fd[0][INPUT], STDIN_FILENO);
+	while(local_chunk != NULL)
+	{	
+		if (local_chunk->indentifier== INPUT_F)
+			close(fd[0][INPUT]);
+		if (local_chunk->indentifier == OUTPUT_F)
+			close(fd[0][OUTPUT]);
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+			close(fd[0][OUTPUT]);
+		local_chunk = local_chunk->next;
+	}
+	close(fd[0][INPUT]);
+	free_fd(fd);
 	run(salt, info, envp);
 }
 
 
-void	output_first(int *fd, t_chunk	*salt, t_info *info, char	**envp)
+void	output_first(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 {
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
-	free(fd);
+	t_chunk	*local_chunk;
+
+	local_chunk = *(&salt);
+	dup2(fd[0][OUTPUT], STDOUT_FILENO);
+	while(local_chunk != NULL)
+	{	
+		if (local_chunk->indentifier== INPUT_F)
+			close(fd[0][INPUT]);
+		if (local_chunk->indentifier == OUTPUT_F)
+			close(fd[0][OUTPUT]);
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+			close(fd[0][OUTPUT]);
+		local_chunk = local_chunk->next;
+	}
+	close(fd[0][OUTPUT]);
+	free_fd(fd);
 	run(salt, info, envp);
 }
 
@@ -42,6 +68,8 @@ void	input_output(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 			close(fd[0][INPUT]);
 		if (local_chunk->indentifier == OUTPUT_F)
 			close(fd[0][OUTPUT]);
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+			close(fd[0][OUTPUT]);
 		local_chunk = local_chunk->next;
 	}
 	free_fd(fd);
@@ -54,9 +82,9 @@ void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp)
 	if (salt->indentifier == CMD_BLOCK && salt->next == NULL)
 		run(salt, info, envp);
 	else if (salt->indentifier == CMD_BLOCK && salt->next->indentifier == INPUT_F && salt->next->next == NULL)
-		input_first(*fd, salt, info, envp);
-	else if (salt->indentifier == CMD_BLOCK && salt->next->indentifier == OUTPUT_F && salt->next->next == NULL)
-		output_first(*fd, salt, info, envp);
+		input_first(fd, salt, info, envp);
+	else if (salt->indentifier == CMD_BLOCK && (salt->indentifier == R_AP_OUTPUT_F||salt->next->indentifier == OUTPUT_F) && salt->next->next == NULL)
+		output_first(fd, salt, info, envp);
 	else
 		input_output(fd, salt, info, envp);
 }
@@ -91,7 +119,13 @@ void	second_child(t_chunk	**salt, t_info *info, char	**envp)
 	local_chunk = *(salt);
 	while(local_chunk != NULL)
 	{	
-		if (local_chunk->indentifier== INPUT_F)
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+		{
+			// write(1, "toto\n", 5);
+			// return ;
+			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
+		}
+		if (local_chunk->indentifier == INPUT_F)
 		{
 			fd[0][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
 		}
@@ -113,10 +147,11 @@ void	second_child(t_chunk	**salt, t_info *info, char	**envp)
 	}
 	while(local_chunk != NULL)
 	{	
-		printf("local chunk id when closing fd: %d \n", local_chunk->indentifier);
 		if (local_chunk->indentifier== INPUT_F)
 			close(fd[0][INPUT]);
 		if (local_chunk->indentifier == OUTPUT_F)
+			close(fd[0][OUTPUT]);
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
 			close(fd[0][OUTPUT]);
 		local_chunk = local_chunk->next;
 	}
