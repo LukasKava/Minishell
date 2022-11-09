@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 09:52:51 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 16:02:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
  *	x 	correct path
  *	x 	NULL if the command was not found.
  */
-static	char *find_command_path(char *s, char **envp)
+static char	*find_command_path(char *s, char **envp)
 {
 	int		i;
-	char	*path = NULL;
-	char	**splitted_path = NULL;
+	char	*path;
+	char	**splitted_path;
 
 	i = 0;
 	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
@@ -40,7 +40,8 @@ static	char *find_command_path(char *s, char **envp)
 	{
 		splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 		splitted_path[i] = ft_strjoin(splitted_path[i], s);
-		if (access(splitted_path[i], F_OK) == 0 && access(splitted_path[i], X_OK) == 0)
+		if (access(splitted_path[i], F_OK) == 0 && \
+							access(splitted_path[i], X_OK) == 0)
 		{
 			printf("command_path: %s\n", splitted_path[i]);
 			path = splitted_path[i];
@@ -73,37 +74,36 @@ static	char *find_command_path(char *s, char **envp)
  */
 static void	find_arguments(t_token *token, t_chunk **chunk)
 {
-	int	i;
-	int	length;
-	t_token *temp;
+	int		i;
+	int		length;
+	t_token	*temp;
 
 	i = 0;
 	length = 0;
 	temp = token;
-	while (token != NULL && (token->indentifier < PIPE || token->indentifier > R_AP_OUTPUT))
+	while (token != NULL && (token->name < PIPE || token->name > R_AP_OUTPUT))
 	{
-		if (token->indentifier >= COMMAND && token->indentifier <= FLAG)
+		if (token->name >= COMMAND && token->name <= FLAG)
 			length++;
 		token = token->next;
 	}
 	(*chunk)->arguments = ft_calloc(length + 1, sizeof(char *));
 	(*chunk)->arguments[length] = NULL;
 	token = temp;
-	while (token != NULL && (token->indentifier < PIPE || token->indentifier > R_AP_OUTPUT))
+	while (token != NULL && (token->name < PIPE || token->name > R_AP_OUTPUT))
 	{
-		if (token->indentifier >= COMMAND && token->indentifier <= FLAG)
+		if (token->name >= COMMAND && token->name <= FLAG)
 		{
 			(*chunk)->arguments[i] = token->token;
 			i++;
 		}
 		token = token->next;
 	}
-	token = temp;
 }
 
 /**
  * FUNCTION: (register_chunk) alocates the space for the argument and updates
- * 				the chunk indentifier accordingly.
+ * 				the chunk name accordingly.
  */
 static void	register_chunk(t_token *token, t_chunk **chunk, int indentifier, t_info *info)
 {
@@ -116,11 +116,8 @@ static void	register_chunk(t_token *token, t_chunk **chunk, int indentifier, t_i
 	(*chunk)->arguments[0] = token->token;
 	(*chunk)->arguments[1] = NULL;
 	(*chunk)->indentifier = indentifier;
-	if (token->next != NULL && (token->next->indentifier < PIPE || token->next->indentifier > R_AP_OUTPUT))
-	{
+	if (token->next != NULL && (token->next->name < PIPE || token->next->name > R_AP_OUTPUT))
 		(*chunk) = attach_chunk_end(*chunk);
-		(*chunk) = (*chunk)->next;
-	}
 }
 
 /**
@@ -139,24 +136,23 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 	temp = (*chunk);
 	while (token != NULL)
 	{
-		if (token->indentifier == INPUT_F)
+		if (token->name == INPUT_F)
 			register_chunk(token, chunk, INPUT_F, info);
-		else if (token->indentifier == OUTPUT_F)
+		else if (token->name == OUTPUT_F)
 			register_chunk(token, chunk, OUTPUT_F, info);
-		else if (token->indentifier == DELIMITOR)
+		else if (token->name == R_AP_OUTPUT_F)
+			register_chunk(token, chunk, R_AP_OUTPUT_F, info);
+		else if (token->name == DELIMITOR)
 			register_chunk(token, chunk, DELIMITOR, info);
-		else if (token->indentifier == COMMAND)
+		else if (token->name == COMMAND)
 		{
 			printf("command: %s\n", token->token);
 			(*chunk)->command_path = find_command_path(token->token, envp);
 			find_arguments(token, chunk);
 			(*chunk)->indentifier = CMD_BLOCK;
 		}
-		if (token->index != 0 && (token->indentifier >= PIPE && token->indentifier <= R_AP_OUTPUT))
-		{
+		if (token->index != 0 && (token->name >= PIPE && token->name <= R_AP_OUTPUT))
 			(*chunk) = attach_chunk_end(*chunk);
-			(*chunk) = (*chunk)->next;
-		}
 		token = token->next;
 	}
 	(*chunk)->next = NULL;

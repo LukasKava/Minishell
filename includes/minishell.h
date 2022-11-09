@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 09:55:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 15:39:31 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_token
 	bool		double_quotes;
 	bool		ignore;
 	int			index;
-	int 		indentifier;
+	int 		name;
 	struct 		s_token *next;
 }	t_token;
 
@@ -188,6 +188,7 @@ void	run(t_chunk	*salt, t_info *info, char	**envp);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
+#define	R_AP_OUTPUT_F 22
 
 // INPUT_F the same
 // OUTPUT_F the same

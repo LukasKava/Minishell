@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 11:30:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 15:50:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_token *initialize_token(t_token *token, t_info *info)
 	token->single_quotes = false;
 	token->double_quotes = false;
 	token->ignore = false;
-	token->indentifier = 0;
+	token->name = 0;
 	return (token);
 }
 
@@ -84,7 +84,7 @@ t_token *attach_token_end(t_token *token)
 	temp->single_quotes = false;
 	temp->ignore = false;
 	temp->index = 0;
-	temp->indentifier = 0;
+	temp->name = 0;
 	temp->next = NULL;
 	token->next = temp;
 	return (token);
@@ -111,5 +111,6 @@ t_chunk *attach_chunk_end(t_chunk *chunk)
 	newNode->next = NULL;
 	newNode->prev = temp;
 	temp->next = newNode;
+	chunk = chunk->next;
 	return (chunk);
 }

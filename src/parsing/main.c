@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 09:59:41 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 15:22:33 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv, char **envp)
 			if (info.error == false)
 			{
 				print_the_chunk_list("CHUNK LIST", chunk_array);
-				print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
+			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
 			// to_program(chunk_array, &info, envp);
@@ -134,12 +134,8 @@ int main(int argc, char **argv, char **envp)
 			freeing_chunks(&chunk_array, &info);
 		}
 		if (ft_strlen(info.readline) != 0)
-		{
 			add_history(info.readline);
-			free(info.readline);
-		}
-		else
-			free(info.readline);
+		free(info.readline);
 	}
 	return (0);
 }
