@@ -6,10 +6,10 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/04 12:52:09 by pbiederm         ###   ########.fr       */
-/*   Updated: 2022/11/07 09:42:34 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 15:39:31 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -21,6 +21,7 @@
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <unistd.h>
+#include <fcntl.h>
 # include <sys/wait.h>
 
 typedef struct s_chunk
@@ -28,6 +29,7 @@ typedef struct s_chunk
 	char	*command_path;
 	char	**arguments;
 	int		indentifier;
+	struct	s_chunk *prev;
 	struct	s_chunk	*next;
 }	t_chunk;
 
@@ -38,7 +40,7 @@ typedef struct s_token
 	bool		double_quotes;
 	bool		ignore;
 	int			index;
-	int 		indentifier;
+	int 		name;
 	struct 		s_token *next;
 }	t_token;
 
@@ -108,6 +110,7 @@ t_chunk *attach_chunk_end(t_chunk *chunk);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, char **envp);
+char	*ft_delete(char *str, char *part);
 
 /*----	parsing.c	-------------*/
 void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);
@@ -115,11 +118,13 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
+void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
 void	single_child(t_chunk	*salt, t_info *info, char	**envp);
 /*----	run.c	-------------*/
 void	run(t_chunk	*salt, t_info *info, char	**envp);
+
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9
@@ -183,6 +188,7 @@ void	run(t_chunk	*salt, t_info *info, char	**envp);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
+#define	R_AP_OUTPUT_F 22
 
 // INPUT_F the same
 // OUTPUT_F the same

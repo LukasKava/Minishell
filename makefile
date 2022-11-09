@@ -30,6 +30,9 @@ $(NAME)	:	$(SOURCES)
 
 all: $(NAME)
 
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell
+
 clean:
 	@make clean -sC ./libft
 	@echo "Removing object files..."

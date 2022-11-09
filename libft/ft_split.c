@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 10:49:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:38:09 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ s  using the char c.
 */
 
 #include "libft.h"
+
+/**
+ * ft_split.c is a file containing a split
+ * function (including its helper functions)from the libft.
+ * It is reused this way to avoid using all of the Libft library.
+ */
 
 int ft_word_count(const char *s1, char c)
 {
@@ -43,19 +49,17 @@ static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 	int x;
 
 	x = 0;
-	if (word)
-		return (NULL);
-	word[w_len] = '\0';
 	while (w_len > 0)
 	{
 		word[x] = s1[i - w_len];
 		w_len--;
 		x++;
 	}
+	word[x] = '\0';
 	return (word);
 }
 
-static void s_words(size_t w_count, char const *s1, char c, char **splitted)
+static char **s_words(size_t w_count, char const *s1, char c, char **splitted)
 {
 	size_t x;
 	size_t i;
@@ -74,11 +78,14 @@ static void s_words(size_t w_count, char const *s1, char c, char **splitted)
 			w_len++;
 		}
 		splitted[x] = malloc(sizeof(char) * (w_len + 1));
+		if (!splitted)
+			return (NULL);
 		ft_insert(splitted[x], s1, i, w_len);
 		w_len = 0;
 		x++;
 	}
-	splitted[x] = NULL;
+	splitted[x] = 0;
+	return (splitted);
 }
 
 char **ft_split(char const *s1, char c)
@@ -86,7 +93,6 @@ char **ft_split(char const *s1, char c)
 	size_t w_count;
 	char **splitted;
 
-	splitted = NULL;
 	if (!s1)
 		return (NULL);
 	w_count = ft_word_count(s1, c);

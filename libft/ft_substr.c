@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:13:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/07 12:01:43 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,18 @@ char *ft_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	if (s_l < start)
+	{
+		free((char *)s);
 		return (ft_strdup(""));
+	}
 	if (len > s_l - start)
 		len = s_l - start;
 	real_s = malloc((len + 1) * sizeof(char));
 	if (!real_s)
+	{
+		free((char *)s);
 		return (NULL);
+	}
 	ft_strlcpy(real_s, &s[start], len + 1);
 	return (real_s);
 }

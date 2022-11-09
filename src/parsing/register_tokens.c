@@ -40,7 +40,7 @@
 static void message(t_token **token, int indentifier)
 {
 	(*token)->ignore = true;
-	(*token)->indentifier = indentifier;
+	(*token)->name = indentifier;
 	printf("minishell: error unrecognised token: `%s'\n", (*token)->token);
 }
 
@@ -79,6 +79,23 @@ static bool specials_outside(t_token **token)
 	return (false);
 }
 
+static	int	check_for_spaces(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ')
+		{
+			printf("warum:");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 /**
  * FUNCTION: (check_speacials) checks for special character combinations
  * 				that are included in mandatory part of the minishell.
@@ -93,23 +110,25 @@ static void check_specials(t_token **token)
 	if (specials_outside(token) == true)
 		return;
 	if ((*token)->token[0] == '|')
-		(*token)->indentifier = PIPE;
+		(*token)->name = PIPE;
 	else if ((*token)->token[0] == '<' && (*token)->token[1] != '<')
-		(*token)->indentifier = R_INPUT;
+		(*token)->name = R_INPUT;
 	else if ((*token)->token[0] == '<' && (*token)->token[1] == '<')
-		(*token)->indentifier = R_AP_INPUT;
+		(*token)->name = R_AP_INPUT;
 	else if ((*token)->token[0] == '>' && (*token)->token[1] != '>')
-		(*token)->indentifier = R_OUTPUT;
+		(*token)->name = R_OUTPUT;
 	else if ((*token)->token[0] == '>' && (*token)->token[1] == '>')
-		(*token)->indentifier = R_AP_OUTPUT;
+		(*token)->name = R_AP_OUTPUT;
 	else if ((*token)->token[0] == '\\')
-		(*token)->indentifier = ESCAPE;
-	else if ((*token)->token[0] == '\0' || (*token)->token[0] == ' ')
-		(*token)->indentifier = SPace;
+		(*token)->name = ESCAPE;
+	else if ((*token)->token[0] == '\0')
+		(*token)->name = SPace;
+	else if (check_for_spaces((*token)->token) == 0)
+		(*token)->name = SPace;
 	else if ((*token)->token[0] == '-' && ft_isalpha((*token)->token[1]) == 1)
-		(*token)->indentifier = FLAG;
+		(*token)->name = FLAG;
 	else
-		(*token)->indentifier = ELSE;
+		(*token)->name = ELSE;
 }
 
 /**
@@ -140,7 +159,7 @@ static void recognise_builtins(t_token **token)
 	else if (ft_strcmp((*token)->token, "exit") == 0)
 		check = BUILT_IN;
 	if (check == BUILT_IN)
-		(*token)->indentifier = BUILT_IN;
+		(*token)->name = BUILT_IN;
 }
 
 /**
@@ -174,22 +193,22 @@ static void assign_indexes(t_token **token, t_info *info)
 
 /**
  * FUNCTION: (register_next_token) makes sure that in case of redirections or
- * 				heredoc the next token would get assingned the corect indentifier:
- * 		redirect input ('<') indentifier 2 -> next_indentifier = 11 input file
- * 		redirect output ('>') indentifier 3 -> next_indentifier = 12 output file
- *		Here document ('<<') indentifier 4 -> next_indentifier = 13 delimitor
- *		Redirect output append ('>>') inden.. 5 -> next_indentifier = 12 output file
+ * 				heredoc the next token would get assingned the corect name:
+ * 		redirect input ('<') name 2 -> next_name = 11 input file
+ * 		redirect output ('>') name 3 -> next_name = 12 output file
+ *		Here document ('<<') name 4 -> next_name = 13 delimitor
+ *		Redirect output append ('>>') inden.. 5 -> next_name = 12 output file
  */
 static void register_next_token(t_token **token)
 {
-	if ((*token)->indentifier == R_INPUT)		  //	Redirect input
-		(*token)->next->indentifier = INPUT_F; // Input file
-	else if ((*token)->indentifier == R_OUTPUT)  //	Redirect output
-		(*token)->next->indentifier = OUTPUT_F; // output_file
-	else if ((*token)->indentifier == R_AP_INPUT)  //	Redirect input append || here-documents
-		(*token)->next->indentifier = DELIMITOR; // delimitor
-	else if ((*token)->indentifier == R_AP_OUTPUT)  //	Redirect output append
-		(*token)->next->indentifier = OUTPUT_F; // output_file
+	if ((*token)->name == R_INPUT)
+		(*token)->next->name = INPUT_F;
+	else if ((*token)->name == R_OUTPUT)
+		(*token)->next->name = OUTPUT_F;
+	else if ((*token)->name == R_AP_INPUT)
+		(*token)->next->name = DELIMITOR;
+	else if ((*token)->name == R_AP_OUTPUT)
+		(*token)->next->name = R_AP_OUTPUT_F;
 }
 
 static void recognise_commands(t_token **token)
@@ -199,29 +218,54 @@ static void recognise_commands(t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if ((*token)->indentifier == BUILT_IN || (*token)->indentifier == ELSE)
+		if ((*token)->name == BUILT_IN || (*token)->name == ELSE)
 		{
-			if ((*token)->indentifier == ELSE) // Beggining != builtin = command
-				(*token)->indentifier = COMMAND;	 // Command
+			if ((*token)->name == ELSE) // Beggining != builtin = command
+				(*token)->name = COMMAND;	 // Command
 			(*token) = (*token)->next;
-			while ((*token) != NULL && ((*token)->indentifier == ELSE || \
-			(*token)->indentifier == SPACE || (*token)->indentifier > ESCAPE || (*token)->ignore == true))
+			while ((*token) != NULL && ((*token)->name == ELSE || \
+			(*token)->name == SPace || (*token)->name > ESCAPE || (*token)->ignore == true))
 			{
-				if ((*token)->indentifier == ELSE)
+				if ((*token)->name == ELSE)
 				{
 					printf("token token: %s\n", (*token)->token);
-					(*token)->indentifier = ARGUMENT;
+					(*token)->name = ARGUMENT;
 				}
 				(*token) = (*token)->next;
 			}
 			if ((*token) == NULL)
-				break;
+				break ;
 		}
-		if ((*token)->indentifier >= PIPE && (*token)->indentifier <= R_AP_OUTPUT)
+		if ((*token)->name >= PIPE && (*token)->name <= R_AP_OUTPUT)
 			register_next_token(token);
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
+}
+
+char *ft_delete(char *str, char *part)
+{
+	char *new_str;
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	new_str = NULL; 
+	while (part[i] != '\0')
+		i++;
+	len = ft_strlen(str) - i;
+	new_str = ft_calloc(len + 1, sizeof(char));
+	new_str[len] = '\0';
+	len = 0;
+	while (str[i] != '\0')
+	{
+		new_str[len] = str[i];
+		i++;
+		len++;
+	}
+	free(str);
+	return (new_str);
 }
 
 static void check_command_excists(t_token **token, char **envp)
@@ -237,27 +281,23 @@ static void check_command_excists(t_token **token, char **envp)
 	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
 		i++;
 	path = envp[i];
+	printf("path: %s\n", path);
 	temp = (*token);
 	i = 0;
 	while ((*token) != NULL)
 	{
-		if ((*token)->indentifier == COMMAND)
+		if ((*token)->name == COMMAND)
 		{
-			printf("path: %s\n", path);
 			splitted_path = ft_split(path, ':');
-			splitted_path[0] = ft_strtrim(splitted_path[0], "PATH=");
+			splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
 			while (splitted_path[i] != NULL)
 			{
 				splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 				splitted_path[i] = ft_strjoin(splitted_path[i], (*token)->token);
-				if (access(splitted_path[i], F_OK) == 0)
+				if (access(splitted_path[i], F_OK) == 0 && access(splitted_path[i], X_OK) == 0)
 				{
-					printf("checking the path: %s\n", splitted_path[i]);
-					if (access(splitted_path[i], X_OK) == 0)
-					{
-						printf("Command excists and can be executed!\n");
-						break;
-					}
+					printf("command: %s does excist: %s\n", (*token)->token, splitted_path[i]);
+					break ;
 				}
 				i++;
 			}
@@ -266,12 +306,14 @@ static void check_command_excists(t_token **token, char **envp)
 				printf("command: %s does not excist!\n", (*token)->token);
 				(*token)->ignore = true;
 			}
-			for (int z = 0; splitted_path[z] != NULL; z++)
-				free(splitted_path[z]);
+			i = 0;
+			while (splitted_path[i] != NULL)
+			{
+				free(splitted_path[i]);
+				i++;
+			}
 			free(splitted_path);
-			splitted_path = NULL;
 		}
-		i = 0;
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
@@ -291,7 +333,7 @@ static void	ignore(t_token **token)
 	{
 		if ((*token)->ignore == true)
 		{
-			while ((*token) != NULL && ((*token)->indentifier < PIPE || (*token)->indentifier > R_AP_OUTPUT))
+			while ((*token) != NULL && ((*token)->name < PIPE || (*token)->name > R_AP_OUTPUT))
 			{
 				printf("token->token: %s\n", (*token)->token);
 				(*token)->ignore = true;
@@ -312,7 +354,7 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
-//	print_the_list("inside", (*token));
+	print_the_list("inside", (*token));
 	if (info->error == false)
 	{
 		recognise_commands(token);
