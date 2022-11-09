@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 15:22:33 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 16:50:14 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,7 @@ int main(int argc, char **argv, char **envp)
 			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
-			// to_program(chunk_array, &info, envp);
-			// single_child(chunk_array, &info, envp);
+			second_child(&chunk_array, &info, envp);
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);
 		}

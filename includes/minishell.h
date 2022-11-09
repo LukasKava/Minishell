@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 15:39:31 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 16:49:42 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 #include <fcntl.h>
 # include <sys/wait.h>
+# include <string.h>
+# include <sys/errno.h>
 
 typedef struct s_chunk
 {
@@ -121,7 +123,8 @@ void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
-void	single_child(t_chunk	*salt, t_info *info, char	**envp);
+void	second_child(t_chunk	**salt, t_info *info, char	**envp);
+void	free_fd(int **fd);
 /*----	run.c	-------------*/
 void	run(t_chunk	*salt, t_info *info, char	**envp);
 
@@ -190,6 +193,8 @@ void	run(t_chunk	*salt, t_info *info, char	**envp);
 #define BUILT_IN_BLOCK 21
 #define	R_AP_OUTPUT_F 22
 
+#define	OUTPUT 1
+#define INPUT 0
 // INPUT_F the same
 // OUTPUT_F the same
 // DELIMITOR the same
