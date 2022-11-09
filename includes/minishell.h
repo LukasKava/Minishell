@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 17:12:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/09 11:14:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,7 @@ void	print_the_chunk_list(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
 void	first_child(t_chunk	*salt, t_info *info, char	**envp);
-void	second_child(t_chunk	*salt, t_info *info, char	**envp);
-void	from_infile(t_chunk	*salt, t_info *info, char	**envp);
+void	second_child(t_chunk	**salt, t_info *info, char	**envp);
 void	free_fd(int **fd);
 /*----	run.c	-------------*/
 void	run(t_chunk	*salt, t_info *info, char	**envp);

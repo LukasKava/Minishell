@@ -129,3 +129,35 @@ full listC: indentifier: -1: (null)
 ARGUMENTS:
 zsh: segmentation fault  ./minishell
 pbiederm@c2s16d92 Minishell % 
+
+Mini_hell🍌🐒> echo < WO.txt
+________after lexing_________________
+
+full list1[0]: indentifier: 0 echo 
+full list1[0]: indentifier: 0 < 
+full list1[0]: indentifier: 0 WO.txt 
+after recognise commands
+________register tokens check_________________
+
+full list1[0]: indentifier: 8 echo 
+full list1[1]: indentifier: 2 < 
+full list1[2]: indentifier: 11 WO.txt 
+info->info: 0
+________CHUNK LIST_________________
+full listC: indentifier: -1: (null)
+ARGUMENTS:
+zsh: segmentation fault  ./minishell
+
+Mini_hell🍌🐒> exit
+________after lexing_________________
+
+full list1[0]: indentifier: 0 exit 
+after recognise commands
+________register tokens check_________________
+
+full list1[0]: indentifier: 8 exit 
+info->info: 0
+________CHUNK LIST_________________
+full listC: indentifier: -1: (null)
+ARGUMENTS:
+zsh: segmentation fault  ./minishell
