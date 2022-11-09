@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 15:39:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 09:55:12 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_chunk
 	char	*command_path;
 	char	**arguments;
 	int		indentifier;
+	struct	s_chunk *prev;
 	struct	s_chunk	*next;
 }	t_chunk;
 
@@ -117,11 +118,13 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
+void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
 void	single_child(t_chunk	*salt, t_info *info, char	**envp);
 /*----	run.c	-------------*/
 void	run(t_chunk	*salt, t_info *info, char	**envp);
+
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/02 14:10:06 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/09 11:30:16 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_chunk *initialize_chunk(t_chunk *chunk, t_info *info)
 	chunk->arguments = NULL;
 	chunk->command_path = NULL;
 	chunk->indentifier = -1;
+	chunk->prev = NULL;
 	chunk->next = NULL;
 	return (chunk);
 }
@@ -92,18 +93,23 @@ t_token *attach_token_end(t_token *token)
 
 t_chunk *attach_chunk_end(t_chunk *chunk)
 {
-	t_chunk *temp;
+	t_chunk *newNode;
+	t_chunk	*temp;
 
-	temp = malloc(sizeof(t_chunk));
-	if (!temp)
+	newNode = malloc(sizeof(t_chunk));
+	temp = chunk;
+	if (!newNode)
 	{
 		printf("allocation failed!\n");
 		return (NULL);
 	}
-	temp->command_path = NULL;
-	temp->arguments = NULL;
-	temp->indentifier = 0;
-	temp->next = NULL;
-	chunk->next = temp;
+	while (temp->next != NULL)
+		temp = temp->next;
+	newNode->command_path = NULL;
+	newNode->arguments = NULL;
+	newNode->indentifier = 0;
+	newNode->next = NULL;
+	newNode->prev = temp;
+	temp->next = newNode;
 	return (chunk);
 }

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 15:13:31 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/08 11:55:21 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ static t_token *triggered(t_info *info, t_token *token, int i)
 	return (token);
 }
 
+/**
+ * FUNCTION: (possible_doubles) checks for the possible groups of characters.
+ * 				While a lot of them are included  some of them are not used.
+ * 				For example: "&&" ";;"
+ * RETURN_VALUE:
+ * x	True if any of the cases excist.
+ * x	False if any of them do not excist.
+ */
 static bool possible_doubles(t_info *info, int i)
 {
 	if (info->readline[i] == '>' && info->readline[i + 1] == '|')
@@ -52,6 +60,15 @@ static bool possible_doubles(t_info *info, int i)
 	return (false);
 }
 
+/**
+ * FUNCTION: (possible_metacharacters) checks for the possible
+ * 				metacharacters. Some metacharacters are not required
+ * 				by the manditory but are still included in a check.
+ * 				'(' ')' '|' '&' ';'
+ * RETURN_VALUES:
+ * 	x	True if any of ("<" ">" "(" ")" "|" "&" ";") excist.
+ * 	x	False if they do not excist.
+ */
 static bool possible_metacharacters(t_info *info, int i)
 {
 	if (info->readline[i] == '<' || info->readline[i] == '>')
