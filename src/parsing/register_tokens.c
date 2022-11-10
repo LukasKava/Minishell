@@ -87,10 +87,7 @@ static	int	check_for_spaces(char *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
-		{
-			printf("warum:");
 			return (1);
-		}
 		i++;
 	}
 	return (0);
@@ -139,7 +136,7 @@ static void check_specials(t_token **token)
  * 		pwd			*	exit
  * 		export
  */
-static void recognise_builtins(t_token **token)
+void recognise_builtins(t_token **token)
 {
 	int check;
 
@@ -160,6 +157,8 @@ static void recognise_builtins(t_token **token)
 		check = BUILT_IN;
 	if (check == BUILT_IN)
 		(*token)->name = BUILT_IN;
+	else if ((*token)->name == BUILT_IN && check == 0)
+		(*token)->name = -9;
 }
 
 /**
@@ -202,13 +201,33 @@ static void assign_indexes(t_token **token, t_info *info)
 static void register_next_token(t_token **token)
 {
 	if ((*token)->name == R_INPUT)
-		(*token)->next->name = INPUT_F;
+	{
+		if ((*token)->next->name == SPace)
+			(*token)->next->next->name = INPUT_F;
+		else
+			(*token)->next->name = INPUT_F;
+	}
 	else if ((*token)->name == R_OUTPUT)
-		(*token)->next->name = OUTPUT_F;
+	{
+		if ((*token)->next->name == SPace)
+			(*token)->next->next->name = OUTPUT_F;
+		else
+			(*token)->next->name = OUTPUT_F;
+	}
 	else if ((*token)->name == R_AP_INPUT)
-		(*token)->next->name = DELIMITOR;
+	{
+		if ((*token)->next->name == SPace)
+			(*token)->next->next->name = DELIMITOR;
+		else
+			(*token)->next->name = DELIMITOR;
+	}
 	else if ((*token)->name == R_AP_OUTPUT)
-		(*token)->next->name = R_AP_OUTPUT_F;
+	{
+		if ((*token)->next->name == SPace)
+			(*token)->next->next->name = R_AP_OUTPUT_F;
+		else
+			(*token)->next->name = R_AP_OUTPUT_F;
+	}
 }
 
 static void recognise_commands(t_token **token)
@@ -218,8 +237,10 @@ static void recognise_commands(t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
+		printf("?token->name %d token->token: %s\n", (*token)->name, (*token)->token);
 		if ((*token)->name == BUILT_IN || (*token)->name == ELSE)
 		{
+			printf("token->name %d token->token: %s\n", (*token)->name, (*token)->token);
 			if ((*token)->name == ELSE) // Beggining != builtin = command
 				(*token)->name = COMMAND;	 // Command
 			(*token) = (*token)->next;
@@ -352,16 +373,16 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 
 	temp_token = (*token);
 	assign_indexes(token, info);
+	print_the_list("inside", (*token));
+	expand_expansions(token, envp);
+	connecting_quotes(token);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
-	print_the_list("inside", (*token));
 	if (info->error == false)
 	{
 		recognise_commands(token);
 		check_command_excists(token, envp);
-//		printf("after\n");
 		ignore(token);
-//		printf("went through ignore\n");
 	}
 	printf("after recognise commands\n");
 	(*token) = temp_token;

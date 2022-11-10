@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 15:20:13 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/10 15:04:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,44 @@ void	check_quote_type(t_token **token, char c)
 	}
 	else
 		(*token)->single_quotes = true;
+}
+
+static int	connecting_quotes_cases(t_token *token)
+{
+	if (token->name != SPace && token->next->name != SPace)
+	{
+		if (token->name != SPace && (token->next->single_quotes == true || token->next->double_quotes == true))
+			return (0);
+		if (((token->single_quotes == true || token->double_quotes == true) && token->next->name != SPace))
+			return (0); 
+	}
+	return (1);
+}
+
+void	connecting_quotes(t_token **token)
+{
+	t_token	*temp;
+	t_token *delete = NULL;
+	char *temp_ptr = NULL;
+
+	temp = (*token);
+	while ((*token) != NULL)
+	{
+		if ((*token)->next != NULL)
+		{
+			if (connecting_quotes_cases(*token) == 0)
+			{
+				temp_ptr = ft_strjoin((*token)->token, (*token)->next->token);
+				(*token)->token = temp_ptr;
+				delete = (*token)->next;
+				(*token)->next = (*token)->next->next;
+				connecting_quotes(token);
+				free(delete->token);
+				free(delete);
+				recognise_builtins(token);
+			}
+		}
+		(*token) = (*token)->next;
+	}
+	(*token) = temp;
 }
