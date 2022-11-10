@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
 /*   Updated: 2022/11/10 17:14:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/10 16:05:36 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +26,7 @@
 # include <sys/wait.h>
 # include <string.h>
 # include <sys/errno.h>
+# include "./get_next_line.h"
 
 typedef struct s_chunk
 {
@@ -125,11 +127,13 @@ void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
 /*----	fork.c	-------------*/
-void	second_child(t_chunk	**salt, t_info *info, char	**envp);
+void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
+void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
+void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
 
 /*----	run.c	-------------*/
-void	run(t_chunk	*salt, t_info *info, char	**envp);
+void	run(t_chunk *salt, t_info *info, char **envp);
 
 /*----	expansions.c	------------------*/
 void	expand_expansions(t_token **token, char **envp);
@@ -201,6 +205,8 @@ void	expand_expansions(t_token **token, char **envp);
 
 #define	OUTPUT 1
 #define INPUT 0
+#define TRUE 1
+#define FALSE 0
 // INPUT_F the same
 // OUTPUT_F the same
 // DELIMITOR the same

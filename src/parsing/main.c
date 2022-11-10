@@ -128,7 +128,7 @@ int main(int argc, char **argv, char **envp)
 			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
-		//	second_child(&chunk_array, &info, envp);
+		  second_child(&chunk_array, &info, envp);
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);
 		}
