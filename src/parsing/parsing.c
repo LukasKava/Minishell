@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 16:02:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/10 13:05:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,12 +144,16 @@ void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 			register_chunk(token, chunk, R_AP_OUTPUT_F, info);
 		else if (token->name == DELIMITOR)
 			register_chunk(token, chunk, DELIMITOR, info);
-		else if (token->name == COMMAND)
+		else if (token->name == COMMAND || token->name == BUILT_IN)
 		{
 			printf("command: %s\n", token->token);
-			(*chunk)->command_path = find_command_path(token->token, envp);
+			if (token->name == COMMAND)
+				(*chunk)->command_path = find_command_path(token->token, envp);
 			find_arguments(token, chunk);
-			(*chunk)->indentifier = CMD_BLOCK;
+			if (token->name == COMMAND)
+				(*chunk)->indentifier = CMD_BLOCK;
+			else
+				(*chunk)->indentifier = BUILT_IN_BLOCK;
 		}
 		if (token->index != 0 && (token->name >= PIPE && token->name <= R_AP_OUTPUT))
 			(*chunk) = attach_chunk_end(*chunk);

@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
+/*   Updated: 2022/11/10 17:14:19 by lkavalia         ###   ########.fr       */
 /*   Updated: 2022/11/10 16:05:36 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -82,6 +83,7 @@ int		pipe_excistence(t_info *info);
 void	check_quote_type(t_token **token, char c);
 int		check_quotes(t_info *info);
 void	count_quotes(t_info *info);
+void	connecting_quotes(t_token **token);
 
 void	check_tokens(t_info *info, t_token **token);
 int 	space(t_info *info, int i, t_token **token);
@@ -114,9 +116,10 @@ t_chunk *attach_chunk_end(t_chunk *chunk);
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, char **envp);
 char	*ft_delete(char *str, char *part);
+void recognise_builtins(t_token **token);
 
 /*----	parsing.c	-------------*/
-void	get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);
+void get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);
 
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
@@ -128,9 +131,12 @@ void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
 void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
 void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
+
 /*----	run.c	-------------*/
 void	run(t_chunk *salt, t_info *info, char **envp);
 
+/*----	expansions.c	------------------*/
+void	expand_expansions(t_token **token, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**

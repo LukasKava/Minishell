@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 15:51:53 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/10 12:51:36 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void check_tokens(t_info *info, t_token **token)
 			info->error = true;
 			break;
 		}
-		else if ((*token)->name >= PIPE && (*token)->name <= R_AP_OUTPUT && ((*token)->next->name >= AMPERSAND && (*token)->next->name <= R_AP_OUTPUT))
+		else if (((*token)->name >= PIPE && (*token)->name <= R_AP_OUTPUT) && (((*token)->next->name >= FORCED_R && (*token)->next->name < SPace) || ((*token)->next->name >SPace && (*token)->next->name <= R_AP_OUTPUT)))
 		{
 			printf("bash: syntax error near unexpected token `%s'\n", (*token)->next->token);
 			info->exit_status = 2;
