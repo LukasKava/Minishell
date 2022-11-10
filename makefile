@@ -1,22 +1,24 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wextra -Werror -Wall
 
 NAME = minishell
 
-MAIN =	./src/parsing/main.c \
-		./src/parsing/utils.c \
-		./src/parsing/freeing.c \
-		./src/parsing/initialize.c \
+MAIN =	./src/parsing/main.c\
+		./src/parsing/utils.c\
+		./src/parsing/freeing.c\
+		./src/parsing/initialize.c\
 		./src/parsing/register_tokens.c\
 		./src/parsing/lexer_cases.c\
 		./src/parsing/check_tokens.c\
-		./src/parsing/check_pipes.c \
-		./src/parsing/quotes.c \
-		./src/parsing/lexer.c \
+		./src/parsing/check_pipes.c\
+		./src/parsing/quotes.c\
+		./src/parsing/lexer.c\
 		./src/parsing/parsing.c\
 		./src/parsing/debugging.c\
 		./src/execute/fork.c\
-		./src/execute/run.c
+		./src/execute/run.c\
+		get_next_line.c\
+		get_next_line_utils.c
 
 OBJS = ${SOURCES:.c=.o}
 

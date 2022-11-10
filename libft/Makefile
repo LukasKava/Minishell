@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/31 11:56:59 by lkavalia          #+#    #+#              #
-#    Updated: 2022/10/31 12:19:56 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/11/10 11:05:05 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

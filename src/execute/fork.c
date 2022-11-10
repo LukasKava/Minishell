@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/09 18:39:51 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/10 15:18:59 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void	second_child(t_chunk	**salt, t_info *info, char	**envp)
 	{	
 		if (local_chunk->indentifier == R_AP_OUTPUT_F)
 		{
-			// write(1, "toto\n", 5);
-			// return ;
 			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
 		}
 		if (local_chunk->indentifier == INPUT_F)
@@ -143,7 +141,8 @@ void	second_child(t_chunk	**salt, t_info *info, char	**envp)
 	}
 	if (pid == 0)
 	{
-		roles_expanded(fd, *salt, info, envp);
+		// roles_expanded(fd, *salt, info, envp);
+		here_doc(salt, info, envp);
 	}
 	while(local_chunk != NULL)
 	{	
@@ -157,6 +156,39 @@ void	second_child(t_chunk	**salt, t_info *info, char	**envp)
 	}
 	free_fd(fd);
 	waitpid(pid, NULL, 0);
+}
+
+// either write to a file, use get next line, either use a pipe(write to a pipe, read from a pipe), remove the file
+void	here_doc(t_chunk	**salt, t_info *info, char	**envp)
+{
+	t_chunk	*local_chunk;
+	char	*delimit;
+	int		pfd[2];
+	char*	buff;
+
+	buff = malloc(9999);
+	pipe(pfd);
+	local_chunk = *salt;
+	while(local_chunk != NULL)
+	{	
+		if (local_chunk->indentifier == DELIMITOR)
+			break ;
+		local_chunk = local_chunk->next;
+	}
+	delimit = local_chunk->arguments[0];
+		while (TRUE)
+		{
+			write(2, "> ", 2);
+			buff = get_next_line(STDIN_FILENO);
+			if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0)
+				break;
+			write(pfd[OUTPUT], buff, strlen(buff));
+		}
+		close(pfd[OUTPUT]);
+		dup2(pfd[INPUT], STDIN_FILENO);
+		close(pfd[INPUT]);
+		free(buff);
+		run(*salt, info, envp);
 }
 
 

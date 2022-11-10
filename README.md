@@ -65,6 +65,8 @@ e$ab hi
 
 From Pete with <3
 
+Added get next line. Needed it for heredoc.
+
 Need ifile in the second position. Basically: wc -l < test.txt.
 Indentifiers:
 

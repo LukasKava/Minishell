@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 17:30:43 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/10 15:14:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int main(int argc, char **argv, char **envp)
 			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
+			// here_doc(&chunk_array, &info, envp);
 			second_child(&chunk_array, &info, envp);
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);
