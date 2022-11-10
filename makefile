@@ -16,7 +16,9 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/parsing.c\
 		./src/parsing/debugging.c\
 		./src/execute/fork.c\
-		./src/execute/run.c
+		./src/execute/run.c\
+		./src/execute/get_next_line.c\
+		./src/execute/get_next_line_utils.c\
 
 OBJS = ${SOURCES:.c=.o}
 
