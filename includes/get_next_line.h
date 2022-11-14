@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 17:35:21 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/10 11:01:16 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/12 08:51:58 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 
 # define BUFFER_SIZE 1
 

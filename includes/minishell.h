@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 17:14:19 by lkavalia         ###   ########.fr       */
-/*   Updated: 2022/11/10 16:05:36 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/14 10:03:28 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #ifndef MINISHELL_H
@@ -22,11 +22,12 @@
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <unistd.h>
-#include <fcntl.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include <string.h>
 # include <sys/errno.h>
 # include "./get_next_line.h"
+# include <stdint.h>
 
 typedef struct s_chunk
 {
@@ -126,17 +127,32 @@ void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
+/*----	expansions.c	------------------*/
+void	expand_expansions(t_token **token, char **envp);
+
 /*----	fork.c	-------------*/
 void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
+
+/*----	here_doc.c	-------------*/
 void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
 void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
+void	here_doc_multi(t_chunk	**salt);
+int		find_delim(t_chunk ** salt);
 
 /*----	run.c	-------------*/
 void	run(t_chunk *salt, t_info *info, char **envp);
 
-/*----	expansions.c	------------------*/
-void	expand_expansions(t_token **token, char **envp);
+/*----	input_output.c	-------------*/
+void	input_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+void	output_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+void	input_output(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+
+/*----	cleaner.c	-------------*/
+void	free_fd(int **fd);
+
+/*----	roles.c	-------------*/
+void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 
 //INDENTIFIER EXPLANATION:
 /**
@@ -205,6 +221,8 @@ void	expand_expansions(t_token **token, char **envp);
 
 #define	OUTPUT 1
 #define INPUT 0
+#define	WRITE 1
+#define READ 0
 #define TRUE 1
 #define FALSE 0
 // INPUT_F the same
