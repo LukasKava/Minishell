@@ -16,6 +16,8 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/parsing.c\
 		./src/parsing/debugging.c\
 		./src/parsing/expansions.c\
+		./src/parsing/expansions_utils.c\
+		./src/parsing/expansions_two.c\
 		./src/execute/fork.c\
 		./src/execute/run.c
 

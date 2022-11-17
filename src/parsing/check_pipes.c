@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:05 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 15:17:20 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/17 04:00:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@
  *	1	-In case in the given input the current pipe match any requirements
  *			function fails.
  */
-int pipe_cases(t_info *info)
+int	pipe_cases(t_info *info)
 {
-	int i;
-	int pipe;
+	int	i;
+	int	pipe;
 
 	i = 0;
 	pipe = 0;
@@ -42,7 +42,8 @@ int pipe_cases(t_info *info)
 	{
 		if (info->readline[i] == '"' || info->readline[i] == 39)
 			i = skip_quotes(info->readline, info->readline[i], i + 1);
-		if (info->readline[i] == '|' && info->readline[skip_white_sp(info->readline, i + 1)] == '|' )
+		if (info->readline[i] == '|' \
+			&& info->readline[skip_white_sp(info->readline, i + 1)] == '|' )
 			return (1);
 		if (info->readline[i] == '|')
 			pipe = 1;
@@ -63,9 +64,9 @@ int pipe_cases(t_info *info)
  * 		sintaxicly possible or not.
  *	1 -if there are no pipes in a given input.
  */
-int pipe_excistence(t_info *info)
+int	pipe_excistence(t_info *info)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (info->readline[i] != '\0')

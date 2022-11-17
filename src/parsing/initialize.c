@@ -6,13 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 14:38:13 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/17 04:58:23 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void initialize_info(t_info *info)
+void	initialize_info(t_info *info)
 {
 	info->exit_status = 0;
 	info->s_quotes = 0;
@@ -29,9 +29,9 @@ void initialize_info(t_info *info)
 	info->error = false;
 }
 
-t_token *initialize_token(t_token *token, t_info *info)
+t_token	*initialize_token(t_token *token, t_info *info)
 {
-	token = ft_calloc(1, sizeof(t_token)); // This could be a function initialize first token
+	token = ft_calloc(1, sizeof(t_token));
 	if (!token)
 	{
 		printf("ERROR(initialize_token): malloc has failed!\n");
@@ -47,7 +47,7 @@ t_token *initialize_token(t_token *token, t_info *info)
 	return (token);
 }
 
-t_chunk *initialize_chunk(t_chunk *chunk, t_info *info)
+t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 {
 	chunk = ft_calloc(1, sizeof(t_chunk));
 	if (!chunk)
@@ -70,9 +70,9 @@ t_chunk *initialize_chunk(t_chunk *chunk, t_info *info)
  * RETURN:
  *	-- (token) is current node.
  */
-t_token *attach_token_end(t_token *token)
+t_token	*attach_token_end(t_token *token)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = malloc(sizeof(t_token));
 	if (!temp)
@@ -90,27 +90,26 @@ t_token *attach_token_end(t_token *token)
 	return (token);
 }
 
-
-t_chunk *attach_chunk_end(t_chunk *chunk)
+t_chunk	*attach_chunk_end(t_chunk *chunk)
 {
-	t_chunk *newNode;
+	t_chunk	*newnode;
 	t_chunk	*temp;
 
-	newNode = malloc(sizeof(t_chunk));
+	newnode = malloc(sizeof(t_chunk));
 	temp = chunk;
-	if (!newNode)
+	if (!newnode)
 	{
 		printf("allocation failed!\n");
 		return (NULL);
 	}
 	while (temp->next != NULL)
 		temp = temp->next;
-	newNode->command_path = NULL;
-	newNode->arguments = NULL;
-	newNode->indentifier = 0;
-	newNode->next = NULL;
-	newNode->prev = temp;
-	temp->next = newNode;
+	newnode->command_path = NULL;
+	newnode->arguments = NULL;
+	newnode->indentifier = 0;
+	newnode->next = NULL;
+	newnode->prev = temp;
+	temp->next = newnode;
 	chunk = chunk->next;
 	return (chunk);
 }

@@ -257,8 +257,10 @@ static void recognise_commands(t_token **token)
 			if ((*token) == NULL)
 				break ;
 		}
+		printf("AFTER HUGE IF!\n");
 		if ((*token)->name >= PIPE && (*token)->name <= R_AP_OUTPUT)
 			register_next_token(token);
+		printf("AFTER small IF!\n");
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
@@ -372,9 +374,9 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	t_token *temp_token;
 
 	temp_token = (*token);
+	expand_expansions(token, envp);
 	assign_indexes(token, info);
 	print_the_list("inside", (*token));
-	expand_expansions(token, envp);
 	connecting_quotes(token);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW

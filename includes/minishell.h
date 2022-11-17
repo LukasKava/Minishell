@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 17:14:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/17 03:45:17 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,19 @@ void	run(t_chunk	*salt, t_info *info, char	**envp);
 
 /*----	expansions.c	------------------*/
 void	expand_expansions(t_token **token, char **envp);
+
+/*----	expansions_utils.c	------------------*/
+size_t	ft_case(char c);
+char	*ft_strtrim_beginning(char *s1, char *s2);
+void	ft_cut_exp(t_token **token);
+char	*save_the_front(char *token);
+char	*save_the_tail(char *token, char *current);
+
+/*----	expansions_utils.c	------------------*/
+size_t	exp_count(char *str);
+int		find_expansion(char *str);
+char	*save_var(char *token);
+size_t	env_var_excists(char *str, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**
