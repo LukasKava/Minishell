@@ -19,7 +19,9 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\
 		./src/execute/fork.c\
-		./src/execute/run.c
+		./src/execute/run.c\
+		./src/execute/get_next_line.c\
+		./src/execute/get_next_line_utils.c\
 
 OBJS = ${SOURCES:.c=.o}
 
