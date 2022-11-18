@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/18 14:08:25 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/18 15:52:37 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 {
 	int		i;
 	int		num_pipes;
-	int 	pids[9999];
-	int		pipes[9999][2];
+	int 	pids[2];
+	int		pipes[2][2];
 	// int		fd[2];
 	t_chunk	*local_chunk;
 	t_vars	vars;
@@ -95,6 +95,7 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 				printf("Error with creating pipe\n");
 				return ;
 			}
+			printf("Created pipe[%d] \n", num_pipes);
 			num_pipes++;
 		}
 		local_chunk = local_chunk->next;
@@ -122,58 +123,67 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 			if (pids[i] == 0)
 			{
 				//closing all efdees of pipes
-				while(num_pipes--)
+				// num_pipes = 0;
+				// while(num_pipes < vars.num_pipes)
+				// {
+				// 	if(num_pipes != i)
+				// 		close(pipes[num_pipes][0]);
+				// 	if(num_pipes + 1 != i)
+				// 		close(pipes[num_pipes][1]);
+				// 	num_pipes++;
+				// }
+				fprintf(stderr, "I am child of number %d\n", i);
+				//file des configuration here
+				if (i == 0)
 				{
-					if(num_pipes != i)
-						close(pipes[num_pipes][0]);
-					if(num_pipes + 1 != i)
-						close(pipes[num_pipes][1]);
+					close(pipes[0][0]);
+					close(pipes[1][0]);
+					// close(pipes[i][0]);
+					// dup2(fd[0], STDIN_FILENO);
+					// close(fd[0]);
 				}
-				num_pipes = vars.num_pipes;
-				if(pids[i] == 0)
+				else
 				{
-					fprintf(stderr, "I am child of number %d\n", i);
-					//file des configuration here
-					if (i == 0)
-					// {
-						close(pipes[i][0]);
-					// 	dup2(fd[0], STDIN_FILENO);
-					// 	close(fd[0]);
-					}
-					else
-					{
-						// close(fd[0]);
-						dup2(pipes[i][0], STDIN_FILENO);
-						close(pipes[i][0]);
-					}
-					fprintf (stderr, "num pipes %d\n", num_pipes);
-					if (i == num_pipes - 1)
-					{
-						close(pipes[i + 1][1]);
-						// dup2(fd[1], STDOUT_FILENO);
-						// close(fd[1]);
-					}
-					else
-					{
-						// close(fd[1]);
-						dup2(pipes[i + 1][1], STDOUT_FILENO);
-						close(pipes[i + 1][1]);
-					}
+					dup2(pipes[1][0], STDIN_FILENO);
+					close(pipes[1][0]);
+					// close(fd[0]);
+					// dup2(pipes[i][0], STDIN_FILENO);
+					// close(pipes[i][0]);
+				}
+				fprintf (stderr, "num pipes %d\n", vars.num_pipes);
+				if (i == vars.num_pipes - 1)
+				{
+					close(pipes[1][1]);
+					// dup2(fd[1], STDOUT_FILENO);
+					// close(fd[1]);
+				}
+				else
+				{
+					// close(fd[1]);
+					dup2(pipes[1][1], STDOUT_FILENO);
+					close(pipes[1][1]);
+				}
 				run(local_chunk, info, envp);
 			}
 		}	
 		local_chunk = local_chunk->next;
 	}
 	fprintf(stderr, "Parent process here \n");
-	while(num_pipes--)
-	{
-			close(pipes[num_pipes][0]);
-			close(pipes[num_pipes][1]);
-			// num_pipes--;
-	}
-	while(i>=0)
+	num_pipes = vars.num_pipes;
+	// while(num_pipes)
+	// {
+	// 		num_pipes--;
+	// 		close(pipes[num_pipes][0]);
+	// 		close(pipes[num_pipes][1]);
+	// }
+				close(pipes[0][0]);
+			close(pipes[0][1]);
+				close(pipes[1][0]);
+			close(pipes[1][1]);
+	num_pipes = vars.num_pipes;
+	while(num_pipes > 0)
 	{
 		wait(NULL);
-		i--;
+		num_pipes--;
 	}
 }
