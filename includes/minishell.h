@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/14 10:03:28 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/18 13:16:37 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,9 @@ void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 void	expand_expansions(t_token **token, char **envp);
 
 /*----	fork.c	-------------*/
-void	second_child(t_chunk **salt, t_info *info, char **envp);
+// void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
-
+void	third_child(t_chunk **salt, t_info *info, char	**envp);
 /*----	here_doc.c	-------------*/
 void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
 void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
