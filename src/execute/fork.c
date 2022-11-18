@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/18 15:52:37 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/18 17:10:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 {
 	int		i;
 	int		num_pipes;
-	int 	pids[2];
-	int		pipes[2][2];
+	int 	pids[9999];
+	int		pipes[9999][2];
 	// int		fd[2];
 	t_chunk	*local_chunk;
 	t_vars	vars;
@@ -123,15 +123,15 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 			if (pids[i] == 0)
 			{
 				//closing all efdees of pipes
-				// num_pipes = 0;
-				// while(num_pipes < vars.num_pipes)
-				// {
-				// 	if(num_pipes != i)
-				// 		close(pipes[num_pipes][0]);
-				// 	if(num_pipes + 1 != i)
-				// 		close(pipes[num_pipes][1]);
-				// 	num_pipes++;
-				// }
+				num_pipes = 0;
+				while(num_pipes < vars.num_pipes)
+				{
+					if(num_pipes != i)
+						close(pipes[num_pipes][0]);
+					if(i + 1 != num_pipes)
+						close(pipes[num_pipes][1]);
+					num_pipes++;
+				}
 				fprintf(stderr, "I am child of number %d\n", i);
 				//file des configuration here
 				if (i == 0)
@@ -144,11 +144,11 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 				}
 				else
 				{
-					dup2(pipes[1][0], STDIN_FILENO);
-					close(pipes[1][0]);
+					// dup2(pipes[1][0], STDIN_FILENO);
+					// close(pipes[1][0]);
 					// close(fd[0]);
-					// dup2(pipes[i][0], STDIN_FILENO);
-					// close(pipes[i][0]);
+					dup2(pipes[i][0], STDIN_FILENO);
+					close(pipes[i][0]);
 				}
 				fprintf (stderr, "num pipes %d\n", vars.num_pipes);
 				if (i == vars.num_pipes - 1)
@@ -160,8 +160,8 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 				else
 				{
 					// close(fd[1]);
-					dup2(pipes[1][1], STDOUT_FILENO);
-					close(pipes[1][1]);
+					dup2(pipes[i + 1][1], STDOUT_FILENO);
+					close(pipes[i + 1][1]);
 				}
 				run(local_chunk, info, envp);
 			}
@@ -170,16 +170,16 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 	}
 	fprintf(stderr, "Parent process here \n");
 	num_pipes = vars.num_pipes;
-	// while(num_pipes)
-	// {
-	// 		num_pipes--;
-	// 		close(pipes[num_pipes][0]);
-	// 		close(pipes[num_pipes][1]);
-	// }
-				close(pipes[0][0]);
-			close(pipes[0][1]);
-				close(pipes[1][0]);
-			close(pipes[1][1]);
+	while(num_pipes)
+	{
+			num_pipes--;
+			close(pipes[num_pipes][0]);
+			close(pipes[num_pipes][1]);
+	}
+			// 	close(pipes[0][0]);
+			// close(pipes[0][1]);
+			// 	close(pipes[1][0]);
+			// close(pipes[1][1]);
 	num_pipes = vars.num_pipes;
 	while(num_pipes > 0)
 	{
