@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/18 17:10:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/20 16:04:55 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,47 @@ void	second_child(t_chunk **salt, t_info *info, char	**envp)
 
 typedef struct s_vars
 {
-	int	num_pipes;
+	int		num_pipes;
+	int		fd[2];
+	t_chunk	*run_chunk;
 }t_vars;
 
 void	third_child(t_chunk **salt, t_info *info, char	**envp)
 {
 	int		i;
+	int		j;
 	int		num_pipes;
 	int 	pids[9999];
 	int		pipes[9999][2];
-	// int		fd[2];
+	int		**fd;
 	t_chunk	*local_chunk;
 	t_vars	vars;
 
 	// fd[0] = open("unbroken_circle.txt", O_RDONLY);
 	// fd[1] = open("copy_dog.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	j = 0;
+	fd = (int**)malloc(1000 * sizeof(int*));
+	while(j < 2)
+	{
+		fd[j] = (int*)malloc(2 * sizeof(int));
+		j++;
+	}
+	// fd[j] = NULL;
+	local_chunk = *(salt);
+	while(local_chunk != NULL)
+	{	
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+		{
+			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
+		}
+		else if (local_chunk->indentifier == INPUT_F)
+		{
+			fd[0][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
+		}
+		else if (local_chunk->indentifier == OUTPUT_F)
+			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		local_chunk = local_chunk->next;
+	}
 	num_pipes = 0;
 	local_chunk = *salt;
 	while(local_chunk != NULL)
@@ -102,18 +128,27 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 	}
 	vars.num_pipes = num_pipes;
 	local_chunk = *salt;
-	// if (pipe(pipes[num_pipes]) == -1) 
-	// {
-	// 	printf("Error with creating pipe\n");
-	// 	return 1;
-	// }
 	i = -1;
-	local_chunk = *salt;
 	while (local_chunk != NULL)
 	{	
 		if (local_chunk->indentifier == CMD_BLOCK)
 		{
 			i++;
+			vars.run_chunk = local_chunk;
+			// if (find_red == NULL)
+			// 	break ;
+			// // here I an traverse the nodes in search for the redirections
+			// return ;
+			// local_chunk = vars.run_chunk;
+			// fprintf(stderr, "after rewriting local chunk id: %d\n", vars.run_chunk->indentifier);
+			// vars.fd[0] = 15;
+			// vars.fd[1] = 16;
+			// if (i == 1)
+			// {
+			// 	vars.fd[0]++;
+			// 	vars.fd[1]++;
+			// }
+			// fprintf(stderr, "local chunk identifier %d\n", vars.run_chunk->indentifier);
 			pids[i] = fork();
 			if (pids[i] == -1)
 			{
@@ -132,40 +167,39 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 						close(pipes[num_pipes][1]);
 					num_pipes++;
 				}
-				fprintf(stderr, "I am child of number %d\n", i);
+				// fprintf(stderr, "I am child of number %d fd[1] = %d, fd[0] = %d\n", i, vars.fd[0], vars.fd[1]);
+				fprintf(stderr, "I am child of number %d", i);
 				//file des configuration here
+				// traverse and see what other redirections are here
+				// but do so in a diff
+				// Below is input side
 				if (i == 0)
 				{
+					dup2(fd[0][INPUT], STDIN_FILENO);
+					close(fd[0][INPUT]);
 					close(pipes[0][0]);
 					close(pipes[1][0]);
-					// close(pipes[i][0]);
-					// dup2(fd[0], STDIN_FILENO);
-					// close(fd[0]);
 				}
 				else
 				{
-					// dup2(pipes[1][0], STDIN_FILENO);
-					// close(pipes[1][0]);
-					// close(fd[0]);
 					dup2(pipes[i][0], STDIN_FILENO);
 					close(pipes[i][0]);
 				}
 				fprintf (stderr, "num pipes %d\n", vars.num_pipes);
 				if (i == vars.num_pipes - 1)
 				{
+					dup2(fd[0][OUTPUT], STDOUT_FILENO);
+					close(fd[0][OUTPUT]);
 					close(pipes[1][1]);
-					// dup2(fd[1], STDOUT_FILENO);
-					// close(fd[1]);
 				}
 				else
 				{
-					// close(fd[1]);
 					dup2(pipes[i + 1][1], STDOUT_FILENO);
 					close(pipes[i + 1][1]);
 				}
-				run(local_chunk, info, envp);
+				run(vars.run_chunk, info, envp);
 			}
-		}	
+		}
 		local_chunk = local_chunk->next;
 	}
 	fprintf(stderr, "Parent process here \n");
@@ -176,10 +210,6 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 			close(pipes[num_pipes][0]);
 			close(pipes[num_pipes][1]);
 	}
-			// 	close(pipes[0][0]);
-			// close(pipes[0][1]);
-			// 	close(pipes[1][0]);
-			// close(pipes[1][1]);
 	num_pipes = vars.num_pipes;
 	while(num_pipes > 0)
 	{
