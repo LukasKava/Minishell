@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/20 16:04:55 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/21 19:14:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,34 @@ typedef struct s_vars
 	t_chunk	*run_chunk;
 }t_vars;
 
+// void pipe_creation(t_chunk **salt)
+// {
+// 	t_vars	vars;
+// 	t_chunk	*local_chunk;
+
+// 	local_chunk = *salt;
+// 	while(local_chunk != NULL)
+// 	{
+// 		if (local_chunk->indentifier == CMD_BLOCK)
+// 		{
+// 			if (pipe(pipes[num_pipes]) == -1) 
+// 			{
+// 				printf("Error with creating pipe\n");
+// 				return ;
+// 			}
+// 			printf("Created pipe[%d] \n", num_pipes);
+// 			num_pipes++;
+// 		}
+// 		local_chunk = local_chunk->next;
+// 	}
+// 	vars.num_pipes = num_pipes;
+// }
+
 void	third_child(t_chunk **salt, t_info *info, char	**envp)
 {
 	int		i;
 	int		j;
+	int		s;
 	int		num_pipes;
 	int 	pids[9999];
 	int		pipes[9999][2];
@@ -85,8 +109,6 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 	t_chunk	*local_chunk;
 	t_vars	vars;
 
-	// fd[0] = open("unbroken_circle.txt", O_RDONLY);
-	// fd[1] = open("copy_dog.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	j = 0;
 	fd = (int**)malloc(1000 * sizeof(int*));
 	while(j < 2)
@@ -95,21 +117,7 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 		j++;
 	}
 	// fd[j] = NULL;
-	local_chunk = *(salt);
-	while(local_chunk != NULL)
-	{	
-		if (local_chunk->indentifier == R_AP_OUTPUT_F)
-		{
-			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
-		}
-		else if (local_chunk->indentifier == INPUT_F)
-		{
-			fd[0][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
-		}
-		else if (local_chunk->indentifier == OUTPUT_F)
-			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		local_chunk = local_chunk->next;
-	}
+	s = 0;
 	num_pipes = 0;
 	local_chunk = *salt;
 	while(local_chunk != NULL)
@@ -127,28 +135,37 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 		local_chunk = local_chunk->next;
 	}
 	vars.num_pipes = num_pipes;
+	while (s < 1000)
+	{
+		fd[s][OUTPUT] = 1;
+		fd[s][INPUT] = 0
+	}
+	s = 0;
+	local_chunk = *salt;
+	while(local_chunk != NULL)
+	{	
+		if (local_chunk->indentifier == R_AP_OUTPUT_F)
+		{
+			fd[s][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
+		}
+		else if (local_chunk->indentifier == INPUT_F)
+		{
+			fd[s][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
+		}
+		else if (local_chunk->indentifier == OUTPUT_F)
+			fd[s][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		else if (local_chunk->indentifier == CMD_BLOCK)
+			s++;
+		local_chunk = local_chunk->next;
+	}
 	local_chunk = *salt;
 	i = -1;
 	while (local_chunk != NULL)
-	{	
+	{
 		if (local_chunk->indentifier == CMD_BLOCK)
 		{
 			i++;
 			vars.run_chunk = local_chunk;
-			// if (find_red == NULL)
-			// 	break ;
-			// // here I an traverse the nodes in search for the redirections
-			// return ;
-			// local_chunk = vars.run_chunk;
-			// fprintf(stderr, "after rewriting local chunk id: %d\n", vars.run_chunk->indentifier);
-			// vars.fd[0] = 15;
-			// vars.fd[1] = 16;
-			// if (i == 1)
-			// {
-			// 	vars.fd[0]++;
-			// 	vars.fd[1]++;
-			// }
-			// fprintf(stderr, "local chunk identifier %d\n", vars.run_chunk->indentifier);
 			pids[i] = fork();
 			if (pids[i] == -1)
 			{
@@ -169,10 +186,7 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 				}
 				// fprintf(stderr, "I am child of number %d fd[1] = %d, fd[0] = %d\n", i, vars.fd[0], vars.fd[1]);
 				fprintf(stderr, "I am child of number %d", i);
-				//file des configuration here
-				// traverse and see what other redirections are here
-				// but do so in a diff
-				// Below is input side
+				// input filr descriptor, output file descriptor
 				if (i == 0)
 				{
 					dup2(fd[0][INPUT], STDIN_FILENO);
