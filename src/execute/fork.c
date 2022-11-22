@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:43:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/21 19:14:56 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/22 11:41:17 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,33 +69,11 @@ void	second_child(t_chunk **salt, t_info *info, char	**envp)
 
 typedef struct s_vars
 {
+	int		pipes[9999][2];
 	int		num_pipes;
-	int		fd[2];
+	int		exec_fd[2];
 	t_chunk	*run_chunk;
 }t_vars;
-
-// void pipe_creation(t_chunk **salt)
-// {
-// 	t_vars	vars;
-// 	t_chunk	*local_chunk;
-
-// 	local_chunk = *salt;
-// 	while(local_chunk != NULL)
-// 	{
-// 		if (local_chunk->indentifier == CMD_BLOCK)
-// 		{
-// 			if (pipe(pipes[num_pipes]) == -1) 
-// 			{
-// 				printf("Error with creating pipe\n");
-// 				return ;
-// 			}
-// 			printf("Created pipe[%d] \n", num_pipes);
-// 			num_pipes++;
-// 		}
-// 		local_chunk = local_chunk->next;
-// 	}
-// 	vars.num_pipes = num_pipes;
-// }
 
 void	third_child(t_chunk **salt, t_info *info, char	**envp)
 {
@@ -113,11 +91,10 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 	fd = (int**)malloc(1000 * sizeof(int*));
 	while(j < 2)
 	{
-		fd[j] = (int*)malloc(2 * sizeof(int));
+		fd[j] = (int*)malloc(1 * sizeof(int));
 		j++;
 	}
 	// fd[j] = NULL;
-	s = 0;
 	num_pipes = 0;
 	local_chunk = *salt;
 	while(local_chunk != NULL)
@@ -135,27 +112,35 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 		local_chunk = local_chunk->next;
 	}
 	vars.num_pipes = num_pipes;
-	while (s < 1000)
-	{
-		fd[s][OUTPUT] = 1;
-		fd[s][INPUT] = 0
-	}
+	// while (s < 1000)
+	// {
+	// 	fd[s][OUTPUT] = 1;
+	// 	fd[s][INPUT] = 0;
+	// }
 	s = 0;
 	local_chunk = *salt;
 	while(local_chunk != NULL)
 	{	
 		if (local_chunk->indentifier == R_AP_OUTPUT_F)
 		{
-			fd[s][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
+			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_APPEND, 0664);
 		}
 		else if (local_chunk->indentifier == INPUT_F)
 		{
-			fd[s][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
+			fd[0][INPUT] = open(local_chunk->arguments[0], O_RDONLY);
 		}
 		else if (local_chunk->indentifier == OUTPUT_F)
-			fd[s][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		{
+			fd[0][OUTPUT] = open(local_chunk->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			// fprintf(stderr, "the s equals %d", s);
+			// fd[1][OUTPUT] = 33;
+		}
 		else if (local_chunk->indentifier == CMD_BLOCK)
+		{
 			s++;
+		}
+
+		fprintf(stderr, "S value equals %d\n", s);
 		local_chunk = local_chunk->next;
 	}
 	local_chunk = *salt;
@@ -184,26 +169,30 @@ void	third_child(t_chunk **salt, t_info *info, char	**envp)
 						close(pipes[num_pipes][1]);
 					num_pipes++;
 				}
-				// fprintf(stderr, "I am child of number %d fd[1] = %d, fd[0] = %d\n", i, vars.fd[0], vars.fd[1]);
-				fprintf(stderr, "I am child of number %d", i);
-				// input filr descriptor, output file descriptor
+				// fprintf(stderr, "I am child of number %d the Fd[1][OUT]: %d\n", i, fd[1][OUTPUT]);
+
 				if (i == 0)
 				{
-					dup2(fd[0][INPUT], STDIN_FILENO);
-					close(fd[0][INPUT]);
+					// dup2(fd[0][INPUT], STDIN_FILENO);
+					// close(fd[0][INPUT]);
 					close(pipes[0][0]);
 					close(pipes[1][0]);
 				}
 				else
 				{
+					// dup2(pipes[i][0], STDIN_FILENO);
+					// close(pipes[i][0]);
 					dup2(pipes[i][0], STDIN_FILENO);
 					close(pipes[i][0]);
 				}
 				fprintf (stderr, "num pipes %d\n", vars.num_pipes);
 				if (i == vars.num_pipes - 1)
 				{
-					dup2(fd[0][OUTPUT], STDOUT_FILENO);
-					close(fd[0][OUTPUT]);
+					fprintf(stderr, "the i equals %d\n",i );
+					// dup2(fd[i+1][OUTPUT], STDOUT_FILENO);
+					// close(fd[i+1][OUTPUT]);
+					// dup2(fd[0][OUTPUT], STDOUT_FILENO);
+					// close(fd[0][OUTPUT]);
 					close(pipes[1][1]);
 				}
 				else
