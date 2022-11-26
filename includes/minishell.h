@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/18 13:16:37 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/24 13:17:11 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,25 @@
 # include "./get_next_line.h"
 # include <stdint.h>
 
+
+
 typedef struct s_chunk
 {
 	char	*command_path;
 	char	**arguments;
 	int		indentifier;
+	int		exec_fd[2];
 	struct	s_chunk *prev;
 	struct	s_chunk	*next;
 }	t_chunk;
+
+typedef struct s_vars
+{
+	int		pipes[9999][2];
+	int		num_pipes;
+	
+	t_chunk	*run_chunk;
+}t_vars;
 
 typedef struct s_token
 {
@@ -153,6 +164,8 @@ void	free_fd(int **fd);
 
 /*----	roles.c	-------------*/
 void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+
+void	fourth_child(t_chunk **salt, t_info *info, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**
