@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/27 17:21:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/27 19:58:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,31 @@ void overseer_closing_pipe(int **pipes, t_vars *vars)
 	
 }
 
+int	is_output_redirection(t_chunk **salt, t_vars *vars)
+{
+	t_chunk	*elements;
+	int		write_fd;
+	int		flag;
+
+	flag = 0;
+	elements = *salt;
+	if(elements && elements->indentifier == CMD_BLOCK)
+		elements = elements->next;
+	while(elements)
+	{
+		if (elements->indentifier == OUTPUT_F)
+		{
+			write_fd = open(elements->arguments[0], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			flag = 1;
+		}
+		if (elements->indentifier == CMD_BLOCK)
+			break;
+		elements = elements->next;
+	}
+	vars->write_fd = write_fd;
+	return(flag);
+	
+}
 void	execute(t_chunk **salt, t_info *info, char	**envp)
 {
 	t_chunk	*elements;
@@ -92,6 +117,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		**pipes;
 	int		pids[9999];
 	int		i;
+	int		write_fd;
+	int		read_fd;
 
 	i = 0;
 	vars = malloc(sizeof(vars));
@@ -100,8 +127,10 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
 	while(elements)
 	{
+		//or redirections here
 		if(elements->indentifier == CMD_BLOCK)
 		{
+			//redirections here
 			pids[i] = fork();
 			if (pids[i] == 0)
 			{
@@ -127,7 +156,6 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					dup2(pipes[i + 1][1], STDOUT_FILENO);
 					close(pipes[i + 1][1]);
 					fprintf(stderr, "Sent data through pipe\n");
-
 				}
 				run(elements, info, envp);
 			}

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/27 14:32:05 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/27 18:43:05 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_chunk
 
 typedef struct s_vars
 {
-	int		pipes[9999][2];
+	int		read_fd;
+	int		write_fd;
 	int		num_cmd;
 	t_chunk	*run_chunk;
 }t_vars;
