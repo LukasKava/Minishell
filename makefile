@@ -16,14 +16,15 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/parsing.c\
 		./src/parsing/debugging.c\
 		./src/parsing/expansions.c\
-		./src/execute/fork.c\
 		./src/execute/run.c\
-		./src/execute/get_next_line.c\
-		./src/execute/get_next_line_utils.c\
-		./src/execute/here_doc.c\
-		./src/execute/input_output.c\
-		./src/execute/cleaner.c\
-		./src/execute/roles.c
+		./src/execute/new_fork.c
+		# ./src/execute/fork.c\
+		# ./src/execute/get_next_line.c\
+		# ./src/execute/get_next_line_utils.c\
+		# ./src/execute/here_doc.c\
+		# ./src/execute/input_output.c\
+		# ./src/execute/cleaner.c\
+		# ./src/execute/roles.c
 
 OBJS = ${SOURCES:.c=.o}
 
