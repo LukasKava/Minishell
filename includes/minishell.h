@@ -6,12 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/11/17 14:20:22 by lkavalia         ###   ########.fr       */
-=======
-/*   Updated: 2022/11/10 17:14:19 by lkavalia         ###   ########.fr       */
-/*   Updated: 2022/11/10 16:05:36 by pbiederm         ###   ########.fr       */
->>>>>>> 89ffca29375d14d9d242cf57063044af5c2ea44d
+/*   Updated: 2022/11/28 20:12:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +18,41 @@
 # include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stddef.h>
+# include <string.h>
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <unistd.h>
-#include <fcntl.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include <string.h>
 # include <sys/errno.h>
+# include <signal.h>
 # include "./get_next_line.h"
+#include <linux/limits.h>
+#include <errno.h>
+
+typedef struct s_env
+{
+	char	*var;
+	char	*var_name;
+	struct	s_env *next;
+}	t_env;
+
+typedef struct s_redirection
+{
+	char	*name;
+	int		type;
+} t_redir;
 
 typedef struct s_chunk
 {
 	char	*command_path;
 	char	**arguments;
+	t_redir	*in_f;
+	t_redir	*out_f;
+	int		fd_in;
+	int		fd_out;
 	int		indentifier;
 	struct	s_chunk *prev;
 	struct	s_chunk	*next;
@@ -155,6 +172,41 @@ int		find_expansion(char *str);
 char	*save_var(char *token);
 size_t	env_var_excists(char *str, char **envp);
 
+/*----	../signals.c	------------------*/
+void	handle_sigint(int sig);
+void	handle_sigint_child(int num);
+
+/*----	../builtins/builtins_utils.c	------------------*/
+void	create_e_list(t_env **e_list, char **env);
+void	freeing_e_list(t_env **e_list);
+int		valid_name(char *name);
+t_env	*attach_end(t_env *token);
+char	*save_name(char *str);
+
+/*----	../builtins/cd.c	------------------*/
+int builtins_cd(char **line, t_env **e_list);
+
+/*----	../builtins/env.c	------------------*/
+int		builtins_env(char **arguments, t_env *e_list);
+
+/*----	../builtins/pwd.c	------------------*/
+int		ft_pwd(int fd);
+
+/*----	../builtins/echo.c	------------------*/
+int		builtins_echo(int fd, char **line);
+
+/*----	../builtins/exit.c	------------------*/
+int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+
+/*----	../builtins/export.c	------------------*/
+int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
+
+/*----	../builtins/pwd.c	------------------*/
+int		ft_pwd(int fd);
+
+/*----	../builtins/unset.c	------------------*/
+int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
+
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9
@@ -202,8 +254,8 @@ size_t	env_var_excists(char *str, char **envp);
 #define SPace 0
 #define PIPE 1
 #define R_INPUT 2
-#define R_OUTPUT 3
-#define R_AP_INPUT 4
+#define R_AP_INPUT 3
+#define R_OUTPUT 4
 #define R_AP_OUTPUT 5
 #define ESCAPE 6
 #define COMMAND 7
@@ -211,14 +263,14 @@ size_t	env_var_excists(char *str, char **envp);
 #define ARGUMENT 9
 #define FLAG 10
 #define INPUT_F 11
-#define OUTPUT_F 12
-#define DELIMITOR 13
+#define DELIMITOR 12
+#define OUTPUT_F 13
+#define	R_AP_OUTPUT_F 14
 
 // USEFULL FOR THE EXECUTION
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
-#define	R_AP_OUTPUT_F 22
 
 #define	OUTPUT 1
 #define INPUT 0

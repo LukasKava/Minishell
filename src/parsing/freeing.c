@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 04:55:45 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/28 21:03:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ void	freeing_chunks(t_chunk **chunk, t_info *info)
 		printf("command path: %s\n", (*chunk)->command_path);
 		free((*chunk)->command_path);
 		free((*chunk)->arguments);
+		if ((*chunk)->in_f != NULL)
+			free((*chunk)->in_f);
+		if ((*chunk)->out_f != NULL)
+			free((*chunk)->out_f);
 		(*chunk) = (*chunk)->next;
 		free(free_token);
 		printf("chunk freed succesfully!\n");

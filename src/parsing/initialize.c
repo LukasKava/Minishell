@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 04:58:23 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/28 19:56:25 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,11 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 	}
 	chunk->arguments = NULL;
 	chunk->command_path = NULL;
+	chunk->in_f = NULL;
+	chunk->out_f = NULL;
 	chunk->indentifier = -1;
+	chunk->fd_in = 0;
+	chunk->fd_out = 0;
 	chunk->prev = NULL;
 	chunk->next = NULL;
 	return (chunk);
@@ -107,6 +111,10 @@ t_chunk	*attach_chunk_end(t_chunk *chunk)
 	newnode->command_path = NULL;
 	newnode->arguments = NULL;
 	newnode->indentifier = 0;
+	newnode->in_f = NULL;
+	newnode->out_f = NULL;
+	newnode->fd_in = 0;
+	newnode->fd_out = 0;
 	newnode->next = NULL;
 	newnode->prev = temp;
 	temp->next = newnode;

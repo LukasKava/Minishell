@@ -22,6 +22,15 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/run.c\
 		./src/execute/get_next_line.c\
 		./src/execute/get_next_line_utils.c\
+		./src/signals.c\
+		./src/builtins/builtins_utils.c\
+		./src/builtins/cd.c\
+		./src/builtins/echo.c\
+		./src/builtins/env.c\
+		./src/builtins/exit.c\
+		./src/builtins/export.c\
+		./src/builtins/pwd.c\
+		./src/builtins/unset.c\
 
 OBJS = ${SOURCES:.c=.o}
 
