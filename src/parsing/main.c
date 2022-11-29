@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 17:38:53 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/28 15:12:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,19 +97,30 @@ int main(int argc, char **argv, char **envp)
 	t_info info;
 	t_token *token;
 	t_chunk	*chunk_array;
-	
+	//t_env	*e_l;
+	//t_env	*exp_l;
 
-	printf("envp %s\n", envp[1]);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	token = NULL;
 	chunk_array = NULL;
+	//e_l = NULL;
+	//exp_l = NULL;
 	if (argc != 1)
 	{
 		printf("%s doesn't need more arguments.\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
+	//create_e_list(&e_l, envp);
+	//create_e_list(&exp_l, envp);
 	while (1)
 	{
 		info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
+		if (!info.readline)
+		{
+			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
+			break ;
+		}
 		initialize_info(&info);
 		errors_before(&info);
 		if (info.error == false)
@@ -128,7 +139,7 @@ int main(int argc, char **argv, char **envp)
 			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
-		  second_child(&chunk_array, &info, envp);
+		  //second_child(&chunk_array, &info, envp);
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);
 		}
@@ -136,5 +147,7 @@ int main(int argc, char **argv, char **envp)
 			add_history(info.readline);
 		free(info.readline);
 	}
+	//freeing_e_list(e_l);
+	//freeing_e_list(exp_l);
 	return (0);
 }

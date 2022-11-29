@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/14 10:03:28 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/29 14:01:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -19,6 +17,8 @@
 # include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stddef.h>
+# include <string.h>
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <unistd.h>
@@ -26,13 +26,33 @@
 # include <sys/wait.h>
 # include <string.h>
 # include <sys/errno.h>
+# include <signal.h>
 # include "./get_next_line.h"
+# include <linux/limits.h>
+# include <errno.h>
 # include <stdint.h>
+
+typedef struct s_env
+{
+	char	*var;
+	char	*var_name;
+	struct	s_env *next;
+}	t_env;
+
+typedef struct s_redirection
+{
+	char	*name;
+	int		type;
+} t_redir;
 
 typedef struct s_chunk
 {
 	char	*command_path;
 	char	**arguments;
+	t_redir	*in_f;
+	t_redir	*out_f;
+	int		fd_in;
+	int		fd_out;
 	int		indentifier;
 	struct	s_chunk *prev;
 	struct	s_chunk	*next;
@@ -154,6 +174,54 @@ void	free_fd(int **fd);
 /*----	roles.c	-------------*/
 void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 
+/*----	expansions_utils.c	------------------*/
+size_t	ft_case(char c);
+char	*ft_strtrim_beginning(char *s1, char *s2);
+void	ft_cut_exp(t_token **token);
+char	*save_the_front(char *token);
+char	*save_the_tail(char *token, char *current);
+
+/*----	expansions_utils.c	------------------*/
+size_t	exp_count(char *str);
+int		find_expansion(char *str);
+char	*save_var(char *token);
+size_t	env_var_excists(char *str, char **envp);
+
+/*----	../signals.c	------------------*/
+void	handle_sigint(int sig);
+void	handle_sigint_child(int num);
+
+/*----	../builtins/builtins_utils.c	------------------*/
+void	create_e_list(t_env **e_list, char **env);
+void	freeing_e_list(t_env **e_list);
+int		valid_name(char *name);
+t_env	*attach_end(t_env *token);
+char	*save_name(char *str);
+
+/*----	../builtins/cd.c	------------------*/
+int builtins_cd(char **line, t_env **e_list);
+
+/*----	../builtins/env.c	------------------*/
+int		builtins_env(char **arguments, t_env *e_list);
+
+/*----	../builtins/pwd.c	------------------*/
+int		ft_pwd(int fd);
+
+/*----	../builtins/echo.c	------------------*/
+int		builtins_echo(int fd, char **line);
+
+/*----	../builtins/exit.c	------------------*/
+int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+
+/*----	../builtins/export.c	------------------*/
+int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
+
+/*----	../builtins/pwd.c	------------------*/
+int		ft_pwd(int fd);
+
+/*----	../builtins/unset.c	------------------*/
+int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
+
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9
@@ -201,8 +269,8 @@ void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 #define SPace 0
 #define PIPE 1
 #define R_INPUT 2
-#define R_OUTPUT 3
-#define R_AP_INPUT 4
+#define R_AP_INPUT 3
+#define R_OUTPUT 4
 #define R_AP_OUTPUT 5
 #define ESCAPE 6
 #define COMMAND 7
@@ -210,14 +278,14 @@ void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 #define ARGUMENT 9
 #define FLAG 10
 #define INPUT_F 11
-#define OUTPUT_F 12
-#define DELIMITOR 13
+#define DELIMITOR 12
+#define OUTPUT_F 13
+#define	R_AP_OUTPUT_F 14
 
 // USEFULL FOR THE EXECUTION
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
-#define	R_AP_OUTPUT_F 22
 
 #define	OUTPUT 1
 #define INPUT 0

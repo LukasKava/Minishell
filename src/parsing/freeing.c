@@ -6,26 +6,24 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 11:56:06 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/28 21:03:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void freeing_tokens(t_token *token)
+void	freeing_tokens(t_token *token)
 {
-	printf("\n");
-	t_token *temp;
+	t_token	*temp;
 
 	temp = token;
+	printf("\n");
 	while (token != NULL)
 	{
-
 		temp = token;
 		printf("[%s] ---> ", temp->token);
 		free(token->token);
 		token = token->next;
-		//	free(free_token->token);
 		free(temp);
 		printf("token freed succesfully!\n");
 	}
@@ -34,9 +32,9 @@ void freeing_tokens(t_token *token)
 	printf("HEY1!\n");
 }
 
-void freeing_chunks(t_chunk **chunk, t_info *info)
+void	freeing_chunks(t_chunk **chunk, t_info *info)
 {
-	t_chunk *free_token;
+	t_chunk	*free_token;
 
 	free_token = (*chunk);
 	while ((*chunk) != NULL)
@@ -45,6 +43,10 @@ void freeing_chunks(t_chunk **chunk, t_info *info)
 		printf("command path: %s\n", (*chunk)->command_path);
 		free((*chunk)->command_path);
 		free((*chunk)->arguments);
+		if ((*chunk)->in_f != NULL)
+			free((*chunk)->in_f);
+		if ((*chunk)->out_f != NULL)
+			free((*chunk)->out_f);
 		(*chunk) = (*chunk)->next;
 		free(free_token);
 		printf("chunk freed succesfully!\n");

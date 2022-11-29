@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 17:35:21 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/12 08:51:58 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/11/29 14:01:00 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+#ifndef	BUFFER_SIZE
+# define BUFFER_SIZE 1
+#endif
 
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -20,8 +23,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
-
-# define BUFFER_SIZE 1
+# include <stddef.h>
 
 void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *s, size_t n);

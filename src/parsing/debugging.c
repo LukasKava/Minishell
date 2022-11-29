@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/09 15:51:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/28 21:00:16 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,28 @@ void print_the_chunk_list(char *message, t_chunk *chunk)
 		{
 			printf("%s ", chunk->arguments[i]);
 			i++;
+		}
+		printf("\n");
+		i = 0;
+		if (chunk->in_f != NULL)
+		{
+			printf("INFILES:\n");
+			while (chunk->in_f[i].name != NULL)
+			{
+				printf("[%s]: %d ", chunk->in_f[i].name, chunk->in_f[i].type);
+				i++;
+			}
+			printf("\n");
+		}
+		i = 0;
+		if (chunk->out_f != NULL)
+		{
+			printf("OUTFILES:\n");
+			while (chunk->out_f[i].name != NULL)
+			{
+				printf("[%s]: %d ", chunk->out_f[i].name, chunk->out_f[i].type);
+				i++;
+			}
 		}
 		i = 0;
 		printf("\n\n");

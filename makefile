@@ -16,10 +16,21 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/parsing.c\
 		./src/parsing/debugging.c\
 		./src/parsing/expansions.c\
+		./src/parsing/expansions_utils.c\
+		./src/parsing/expansions_two.c\
 		./src/execute/fork.c\
 		./src/execute/run.c\
 		./src/execute/get_next_line.c\
 		./src/execute/get_next_line_utils.c\
+		./src/signals.c\
+		./src/builtins/builtins_utils.c\
+		./src/builtins/cd.c\
+		./src/builtins/echo.c\
+		./src/builtins/env.c\
+		./src/builtins/exit.c\
+		./src/builtins/export.c\
+		./src/builtins/pwd.c\
+		./src/builtins/unset.c\
 		./src/execute/here_doc.c\
 		./src/execute/input_output.c\
 		./src/execute/cleaner.c\
