@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 20:59:13 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/29 13:54:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 		}
 		token = token->next;
 	}
-	printf("checking the last place of arguments: %s\n\n\n", token->token);
 	return (token);
 }
 
@@ -228,7 +227,6 @@ void get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk
 			else
 				(*chunk)->indentifier = BUILT_IN_BLOCK;
 			token = find_arguments(token, chunk);
-			printf("token name: %d\n", token->name);
 			if (token != NULL && (token->name > PIPE && token->name <= R_AP_OUTPUT))
 			{
 				printf("inside register the redirections!: %s\n", token->token);
