@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 17:35:21 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/11/17 14:56:00 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/29 14:01:00 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <stddef.h>
-
 
 void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *s, size_t n);

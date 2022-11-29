@@ -6,10 +6,9 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 20:12:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/11/29 14:01:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -29,8 +28,9 @@
 # include <sys/errno.h>
 # include <signal.h>
 # include "./get_next_line.h"
-#include <linux/limits.h>
-#include <errno.h>
+# include <linux/limits.h>
+# include <errno.h>
+# include <stdint.h>
 
 typedef struct s_env
 {
@@ -147,17 +147,32 @@ void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
+/*----	expansions.c	------------------*/
+void	expand_expansions(t_token **token, char **envp);
+
 /*----	fork.c	-------------*/
 void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
+
+/*----	here_doc.c	-------------*/
 void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
 void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
+void	here_doc_multi(t_chunk	**salt);
+int		find_delim(t_chunk ** salt);
 
 /*----	run.c	-------------*/
 void	run(t_chunk *salt, t_info *info, char **envp);
 
-/*----	expansions.c	------------------*/
-void	expand_expansions(t_token **token, char **envp);
+/*----	input_output.c	-------------*/
+void	input_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+void	output_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+void	input_output(int **fd, t_chunk	*salt, t_info *info, char	**envp);
+
+/*----	cleaner.c	-------------*/
+void	free_fd(int **fd);
+
+/*----	roles.c	-------------*/
+void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 
 /*----	expansions_utils.c	------------------*/
 size_t	ft_case(char c);
@@ -274,6 +289,8 @@ int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
 
 #define	OUTPUT 1
 #define INPUT 0
+#define	WRITE 1
+#define READ 0
 #define TRUE 1
 #define FALSE 0
 // INPUT_F the same
