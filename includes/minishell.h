@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/29 14:01:22 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:33:44 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,14 @@ typedef struct s_info
 	int		start;
 	int		exit_status;
 }	t_info;
+
+typedef struct s_vars
+{
+	int		read_fd;
+	int		write_fd;
+	int		num_cmd;
+	t_chunk	*run_chunk;
+}t_vars;
 
 /*----	lexer_cases.c	-----------------*/
 int		rest_of_the_cases(t_info *info, int i, t_token **token);
@@ -222,6 +230,9 @@ int		ft_pwd(int fd);
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
 
+void	execute(t_chunk **salt, t_info *info, char	**envp);
+
+// void	execute(t_chunk **salt, t_info *info, char	**envp);
 //INDENTIFIER EXPLANATION:
 /**
  *	x everything else = -9

@@ -1,6 +1,26 @@
+define IMG
+            ,
+         ,-`;
+  ,      ; ;      ,
+ ,  `'"""   """'`  ,
+, ,-'````, ,````'-, ,
+``    ,'`` ``',    ``
+     ' ,`; ;`, '
+     `,`,; ;,',`
+     ,'` ,  ,`
+-, '`,-'`; ;',`, ,
+`,,'`    ; ;  `,`,`
+         ; ;    `
+         ;  '-
+         ; '`
+         ` `
+        , '
+   ,'`:, '
+    , - `      KTJ
+endef
+export IMG
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-
 NAME = minishell
 
 MAIN =	./src/parsing/main.c \
@@ -34,7 +54,8 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/here_doc.c\
 		./src/execute/input_output.c\
 		./src/execute/cleaner.c\
-		./src/execute/roles.c
+		./src/execute/roles.c\
+		./src/execute/new_fork.c
 
 OBJS = ${SOURCES:.c=.o}
 
@@ -42,9 +63,10 @@ LIBFT = libft
 LIBFT_NAME = libft.a
 
 $(NAME)	:	$(SOURCES)
+	@echo "$$IMG" 
 	@make  -sC ./libft
 	@echo "Compiling minishell..."
-	$(CC) $(CFLAGS) $(MAIN) $(SOURCES) -L$(LIBFT) -g -lft -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(MAIN) $(SOURCES) -L$(LIBFT) -g -lft -lreadline -o $(NAME)
 
 all: $(NAME)
 

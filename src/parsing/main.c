@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 15:12:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:38:25 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,31 @@ int main(int argc, char **argv, char **envp)
 			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
 			}
 			//EXECUTION CAN BEGIN
-		  //second_child(&chunk_array, &info, envp);
+			execute(&chunk_array, &info, envp);
+			//second_child(&chunk_array, &info, envp);
+			// int number_of_infiles = 0;
+			// int number_of_outfiles = 0;
+		    // while(chunk_array)
+			// {
+			// 	while(chunk_array->in_f != NULL && chunk_array->in_f[number_of_infiles].name != NULL)
+			// 	{
+		
+			// 		fprintf(stderr, "string of files [%d]: %s\n", number_of_infiles, chunk_array->in_f[number_of_infiles].name);
+			// 		number_of_infiles++;
+			// 	}
+			// 	while(chunk_array->out_f != NULL && chunk_array->out_f[number_of_outfiles].name != NULL)
+			// 	{
+			// 		fprintf(stderr, "string of files [%d]: %s\n", number_of_outfiles, chunk_array->out_f[number_of_outfiles].name);
+			// 		number_of_outfiles++;
+			// 	}
+			// 	fprintf(stderr,"command path : %s\n", chunk_array->command_path);
+				// fprintf(stderr,"command argument : %s\n", chunk_array->arguments);
+				// number_of_infiles = 0;
+				// number_of_outfiles = 0;
+				// chunk_array->fd_in;
+				// chunk_array->fd_out;
+			// 	chunk_array = chunk_array->next;
+			// }
 			freeing_tokens(token);
 			freeing_chunks(&chunk_array, &info);
 		}
