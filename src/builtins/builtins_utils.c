@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/27 19:15:00 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 11:45:38 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	create_e_list(t_env **e_list, char **env)
 	if (!head)
 	{
 		printf("allocation has failed!\n");
+		g_exit_status = 3;
 		return;
 	}
 	while (env[i] != NULL)
@@ -80,12 +81,12 @@ void freeing_e_list(t_env **e_list)
 	while ((*e_list) != NULL)
 	{
 		free_token = (*e_list);
-		printf("env->var: %s\n", (*e_list)->var);
+		//printf("env->var: %s\n", (*e_list)->var);
 		free((*e_list)->var);
 		free((*e_list)->var_name);
 		(*e_list) = (*e_list)->next;
 		free(free_token);
-		printf("env freed succesfully!\n");
+		//printf("env freed succesfully!\n");
 	}
 	free(*e_list);
 }

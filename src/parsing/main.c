@@ -6,12 +6,14 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 15:12:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:27:39 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
+
+int g_exit_status;
 
 static void check_non_generic(t_info *info)
 {
@@ -26,28 +28,28 @@ static void check_non_generic(t_info *info)
 		{
 			printf("bash: syntax error near unexpected token `&&'\n");
 			info->error = true;
-			info->exit_status = 2;
+			g_exit_status = 2;
 			return;
 		}
 		if (info->readline[i] == ';' && info->readline[i + 1] == ';')
 		{
 			printf("bash: syntax error near unexpected token `;;'\n");
 			info->error = true;
-			info->exit_status = 2;
+			g_exit_status = 2;
 			return;
 		}
 		if (info->readline[i] == ';' && info->readline[i + 1] != ';')
 		{
 			printf("bash: syntax error near unexpected token `;'\n");
 			info->error = true;
-			info->exit_status = 2;
+			g_exit_status = 2;
 			return;
 		}
 		if (info->readline[i] == '&' && info->readline[i + 1] != '&')
 		{
 			printf("bash: syntax error near unexpected token `&'\n");
 			info->error = true;
-			info->exit_status = 2;
+			g_exit_status = 2;
 			return;
 		}
 		if (info->readline[i] == '(' || info->readline[i] == ')')
@@ -62,7 +64,7 @@ static void check_non_generic(t_info *info)
 			{
 				printf("bash: syntax error near unexpected token `)'\n");
 				info->error = true;
-				info->exit_status = 2;
+				g_exit_status = 2;
 				return;
 			}
 		}
@@ -78,6 +80,7 @@ void errors_before(t_info *info)
 		{
 			info->error = true;
 			printf("Quotes are not closed!\n");
+			g_exit_status = 2;
 		}
 	}
 	if (pipe_excistence(info) == 0) // Checks if there are pipes and there are no problems with them.
@@ -92,62 +95,77 @@ void errors_before(t_info *info)
 	check_dollar_signs(info);
 }
 
+static void	initialize_hive(t_data *h, char **envp)
+{
+	h->env = NULL;
+	h->exp_l = NULL;
+	h->c_arr = NULL;
+	h->token = NULL;
+	create_e_list(&h->env, envp);
+	create_e_list(&h->exp_l, envp);
+}
+
+//  void print_env_list(t_env *env)
+//  {
+//  	int	i;
+//  	i = 0;
+//  	while (env->next != NULL)
+//  	{
+//  		printf("PRINTING: %s\n", env->var);
+//  		env = env->next;
+//  		i++;
+//  	}
+//  	printf("EX i: %d\n", i);
+//  }
+
+static void	parsing_and_execution(t_data *hive)
+{
+	if (hive->info.error == false)
+	{
+		hive->token = initialize_token(hive->token, &hive->info);
+		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
+		lexer(&hive->info, &hive->token);
+		print_the_list("after lexing", hive->token);
+		register_tokens(&hive->info, &hive->token, hive->env);
+		print_the_list("register tokens check", hive->token);
+		get_the_commands(&hive->info, hive->token, hive->env, &hive->c_arr);
+		if (hive->info.error == false)
+			print_the_chunk_list("CHUNK LIST", hive->c_arr);
+		// EXECUTION CAN BEGIN
+		// second_child(&chunk_array, &info, envp);
+		freeing_tokens(hive->token);
+		freeing_chunks(&hive->c_arr, &hive->info);
+	}
+	if (ft_strlen(hive->info.readline) != 0)
+		add_history(hive->info.readline);
+	free(hive->info.readline);
+}
+
+//Command not found 127
+
 int main(int argc, char **argv, char **envp)
 {
-	t_info info;
-	t_token *token;
-	t_chunk	*chunk_array;
-	//t_env	*e_l;
-	//t_env	*exp_l;
+	t_data	hive;
 
+	if (argc != 1)
+		return (1);
+	(void)argv;
+	initialize_hive(&hive, envp);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	token = NULL;
-	chunk_array = NULL;
-	//e_l = NULL;
-	//exp_l = NULL;
-	if (argc != 1)
-	{
-		printf("%s doesn't need more arguments.\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	//create_e_list(&e_l, envp);
-	//create_e_list(&exp_l, envp);
 	while (1)
 	{
-		info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
-		if (!info.readline)
+		hive.info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
+		if (!hive.info.readline)
 		{
-			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
+			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);		
 			break ;
 		}
-		initialize_info(&info);
-		errors_before(&info);
-		if (info.error == false)
-		{
-			//PARSING
-			token = initialize_token(token, &info);
-			chunk_array = initialize_chunk(chunk_array, &info);
-			lexer(&info, &token);
-			print_the_list("after lexing", token);
-			register_tokens(&info, &token, envp);
-			print_the_list("register tokens check", token);
-			get_the_commands(&info, token, envp, &chunk_array);
-			if (info.error == false)
-			{
-				print_the_chunk_list("CHUNK LIST", chunk_array);
-			//	print_the_chunk_list_backwards("CHUNK LIST BACWARDS", chunk_array);
-			}
-			//EXECUTION CAN BEGIN
-		  //second_child(&chunk_array, &info, envp);
-			freeing_tokens(token);
-			freeing_chunks(&chunk_array, &info);
-		}
-		if (ft_strlen(info.readline) != 0)
-			add_history(info.readline);
-		free(info.readline);
+		initialize_info(&hive.info);
+		errors_before(&hive.info);
+		parsing_and_execution(&hive);
 	}
-	//freeing_e_list(e_l);
-	//freeing_e_list(exp_l);
+	freeing_e_list(&(&hive)->env);
+	freeing_e_list(&(&hive)->exp_l);
 	return (0);
 }

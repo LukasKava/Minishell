@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 19:56:25 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 10:01:46 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	initialize_info(t_info *info)
 {
-	info->exit_status = 0;
 	info->s_quotes = 0;
 	info->d_quotes = 0;
 	info->pipes = 0;

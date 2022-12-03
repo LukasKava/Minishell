@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:32:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 03:50:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 15:28:36 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	combine_everything(char *tail, char *middle, t_token **token)
 	(*token)->token = ft_strjoin((*token)->token, tail);
 }
 
-static void	expand_env(t_token **token, char **envp)
+static void	expand_env(t_token **token, t_env *env)
 {
 	char	*env_var;
 	char	*end_var;
@@ -53,13 +53,13 @@ static void	expand_env(t_token **token, char **envp)
 	i = 0;
 	env_var = save_var((*token)->token);
 	tail = save_the_tail((*token)->token, env_var);
-	while (envp[i] != NULL \
-			&& envp[i] != ft_strnstr(envp[i], env_var, ft_strlen(env_var)))
+	while (env != NULL \
+			&& env->var != ft_strnstr(env->var_name, env_var, ft_strlen(env_var)))
 		i++;
-	if (envp[i] != NULL)
+	if (env != NULL)
 	{
 		env_var = ft_strjoin(env_var, "=");
-		end_var = ft_strtrim_beginning(envp[i], env_var);
+		end_var = ft_strtrim_beginning(env->var, env_var);
 		combine_everything(tail, end_var, token);
 	}
 	free(tail);
@@ -67,7 +67,7 @@ static void	expand_env(t_token **token, char **envp)
 	free(end_var);
 }
 
-static void	taking_care_of_block(t_token **token, t_token *temp, char **envp)
+static void	taking_care_of_block(t_token **token, t_token *temp, t_env *env)
 {
 	int	env_count;	
 	int	env_excistence;
@@ -79,8 +79,8 @@ static void	taking_care_of_block(t_token **token, t_token *temp, char **envp)
 		env_excistence = find_expansion((*token)->token);
 		if (env_excistence == 0)
 		{
-			if (env_var_excists((*token)->token, envp) == 0)
-				expand_env(token, envp);
+			if (env_var_excists((*token)->token, env) == 0)
+				expand_env(token, env);
 			else
 				(*token) = get_rid_of_garbage(token, temp);
 		}
@@ -98,7 +98,7 @@ static void	taking_care_of_block(t_token **token, t_token *temp, char **envp)
 //			and its value.
 //	x	A variable name can have letter/s.
 //	X	A variable name can have numbers, underscores and digits.
-void	expand_expansions(t_token **token, char **envp)
+void	expand_expansions(t_token **token, t_env *env)
 {
 	t_token	*temp;
 
@@ -106,7 +106,7 @@ void	expand_expansions(t_token **token, char **envp)
 	while ((*token) != NULL)
 	{
 		if ((*token)->single_quotes == false)
-			taking_care_of_block(token, temp, envp);
+			taking_care_of_block(token, temp, env);
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
