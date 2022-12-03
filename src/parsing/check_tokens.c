@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 04:52:44 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/03 14:02:33 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool	error_message(t_info *info, char *var, int exit_s)
 		printf("bash: syntax error near unexpected token `newline'\n");
 	else
 		printf("bash: syntax error near unexpected token `%s'\n", var);
-	info->exit_status = exit_s;
+	g_exit_status = exit_s;
 	info->error = true;
 	return (true);
 }
@@ -58,8 +58,7 @@ void	check_tokens(t_info *info, t_token **token)
 				&& (*token)->name <= R_AP_OUTPUT) \
 				&& (((*token)->next->name >= FORCED_R \
 				&& (*token)->next->name < SPace) \
-				|| ((*token)->next->name > SPace \
-				&& (*token)->next->name <= R_AP_OUTPUT)))
+				|| ((*token)->next->name == PIPE)))
 			error = error_message(info, (*token)->next->token, 2);
 		(*token) = (*token)->next;
 	}

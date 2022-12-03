@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 15:04:47 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 09:45:00 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,7 @@ int check_quotes(t_info *info)
 void	check_quote_type(t_token **token, char c)
 {
 	if (c == '"')
-	{
 		(*token)->double_quotes = true;
-		// Later include expansion variable check
-	}
 	else
 		(*token)->single_quotes = true;
 }

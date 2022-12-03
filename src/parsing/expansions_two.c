@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:39:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 03:54:03 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 15:09:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,21 @@ char	*save_var(char *token)
 	return (env_var);
 }
 
-size_t	env_var_excists(char *str, char **envp)
+size_t	env_var_excists(char *str, t_env *env)
 {
 	int		i;
 	char	*env_var;
 
 	i = 0;
 	env_var = save_var(str);
-	while (envp[i] != NULL \
-			&& envp[i] != ft_strnstr(envp[i], env_var, ft_strlen(env_var)))
+	while (env != NULL \
+			&& env->var != ft_strnstr(env->var, env_var, ft_strlen(env_var)))
 		i++;
-	if (envp[i] == NULL || envp[i][ft_strlen(env_var)] != '=')
+	if (env == NULL || env->var[ft_strlen(env_var)] != '=')
 	{
 		printf("VAR does not excist!\n");
 		free(env_var);
+		g_exit_status = 127;
 		return (1);
 	}
 	free(env_var);

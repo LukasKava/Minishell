@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 17:28:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/27 19:28:46 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 10:52:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void write_name(char *str, int fd)
 {
 	int i;
+
 	i = 0;
 	while (str[i] != '\0' && str[i] != '=')
 	{
@@ -40,7 +41,7 @@ void write_name(char *str, int fd)
 
 void print_export_l(t_env *ex_l, int fd)
 {
-	while (ex_l != NULL)
+	while (ex_l->next != NULL)
 	{
 		ft_putstr_fd("declare -x ", fd);
 		write_name(ex_l->var, fd);

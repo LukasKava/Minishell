@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/29 14:01:22 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:25:40 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <linux/limits.h>
 # include <errno.h>
 # include <stdint.h>
+
+extern int	g_exit_status;
 
 typedef struct s_env
 {
@@ -84,8 +86,16 @@ typedef struct s_info
 	bool	error;
 	int		trigger;
 	int		start;
-	int		exit_status;
 }	t_info;
+
+typedef struct	s_struct_holder
+{
+	t_env	*env;
+	t_env	*exp_l;
+	t_token *token;
+	t_chunk *c_arr;
+	t_info	info;
+}	t_data;
 
 /*----	lexer_cases.c	-----------------*/
 int		rest_of_the_cases(t_info *info, int i, t_token **token);
@@ -135,12 +145,12 @@ t_token *attach_token_end(t_token *token);
 t_chunk *attach_chunk_end(t_chunk *chunk);
 
 /*----	register_tokens.c	-------------*/
-void	register_tokens(t_info *info, t_token **token, char **envp);
+void	register_tokens(t_info *info, t_token **token, t_env *env);
 char	*ft_delete(char *str, char *part);
 void recognise_builtins(t_token **token);
 
 /*----	parsing.c	-------------*/
-void get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk);
+void	get_the_commands(t_info *info, t_token *token, t_env *env, t_chunk **chunk);
 
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
@@ -148,7 +158,7 @@ void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
 /*----	expansions.c	------------------*/
-void	expand_expansions(t_token **token, char **envp);
+void	expand_expansions(t_token **token, t_env *env);
 
 /*----	fork.c	-------------*/
 void	second_child(t_chunk **salt, t_info *info, char **envp);
@@ -185,7 +195,7 @@ char	*save_the_tail(char *token, char *current);
 size_t	exp_count(char *str);
 int		find_expansion(char *str);
 char	*save_var(char *token);
-size_t	env_var_excists(char *str, char **envp);
+size_t	env_var_excists(char *str, t_env *env);
 
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);
@@ -215,9 +225,10 @@ int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
 
 /*----	../builtins/export.c	------------------*/
 int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
+void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/
-int		ft_pwd(int fd);
+int ft_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);

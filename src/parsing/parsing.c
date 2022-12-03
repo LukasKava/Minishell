@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/29 13:54:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/03 14:04:32 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,24 @@
  *	x 	correct path
  *	x 	NULL if the command was not found.
  */
-static char	*find_command_path(char *s, char **envp)
+static char	*find_command_path(char *s, t_env *env)
 {
 	int		i;
 	char	*path;
 	char	**splitted_path;
 
 	i = 0;
-	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
-		i++;
-	path = envp[i];
+	path = NULL;
+	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
+		env = env->next;
+	if (env ==  NULL)
+	{
+		printf("ERRROR  ind parsing.c PATH is not excistent!\n");
+		g_exit_status = 127;
+		return (NULL);
+	}
+	else
+		path = env->var;
 	splitted_path = ft_split(path, ':');
 	splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
 	i = 0;
@@ -43,7 +51,6 @@ static char	*find_command_path(char *s, char **envp)
 		if (access(splitted_path[i], F_OK) == 0 && \
 							access(splitted_path[i], X_OK) == 0)
 		{
-			printf("command_path: %s\n", splitted_path[i]);
 			path = splitted_path[i];
 			break ;
 		}
@@ -53,6 +60,7 @@ static char	*find_command_path(char *s, char **envp)
 	if (splitted_path[i] == NULL)
 	{
 		printf("ERROR (find_command_path): could not find the command!\n");
+		g_exit_status = 127;
 		return (NULL);
 	}
 	i++;
@@ -81,7 +89,7 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 	i = 0;
 	length = 0;
 	temp = token;
-	while (token != NULL && (token->name < PIPE || token->name > R_AP_OUTPUT))
+	while (token != NULL && token->name != PIPE)
 	{
 		if (token->name >= COMMAND && token->name <= FLAG)
 			length++;
@@ -90,7 +98,7 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 	(*chunk)->arguments = ft_calloc(length + 1, sizeof(char *));
 	(*chunk)->arguments[length] = NULL;
 	token = temp;
-	while (token != NULL && (token->name < PIPE || token->name > R_AP_OUTPUT))
+	while (token != NULL && token->name != PIPE)
 	{
 		if (token->name >= COMMAND && token->name <= FLAG)
 		{
@@ -120,7 +128,6 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 // 	if (token->next != NULL && (token->next->name < PIPE || token->next->name > R_AP_OUTPUT))
 // 		(*chunk) = attach_chunk_end(*chunk);
 // }
-
 
 static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 {
@@ -177,11 +184,9 @@ static	void count_inputs(t_token *token, t_chunk **chunk, int id)
 		save_the_files(count + ap_count, id, token, &(*chunk)->in_f);
 	else if ((count + ap_count) != 0 && id == R_OUTPUT)
 		save_the_files(count + ap_count, id, token, &(*chunk)->out_f);
-	printf("input_count: %d\n", count);
-	printf("input_ap_count: %d\n", ap_count);
 }
 
-static t_token	*register_the_redirections(t_token *token, t_chunk **chunk)
+static void	register_the_redirections(t_token *token, t_chunk **chunk)
 {
 	int	registered_input;
 	int	registered_output;
@@ -190,7 +195,8 @@ static t_token	*register_the_redirections(t_token *token, t_chunk **chunk)
 	registered_output = 0;
 	while (token != NULL && token->name != PIPE)
 	{
-		if (registered_input != 1 && (token->name == R_INPUT || token->name == R_AP_INPUT))
+		printf("checking: [%s]\n", token->token);
+		if (registered_input != 1 && (token->name == R_INPUT || token->name == R_AP_INPUT) && (token))
 		{
 			registered_input = 1;
 			printf("inside register redirections!\n");
@@ -204,34 +210,31 @@ static t_token	*register_the_redirections(t_token *token, t_chunk **chunk)
 		}
 		token = token->next;
 	}
-	return (token);
 }
 
-void get_the_commands(t_info *info, t_token *token, char **envp, t_chunk **chunk)
+void get_the_commands(t_info *info, t_token *token, t_env *env, t_chunk **chunk)
 {
 	t_chunk *temp;
-	int		command;
 
 	temp = (*chunk);
-	command = 0;
 	while (token != NULL)
 	{
-		if (token->name == COMMAND || token->name == BUILT_IN)
+		register_the_redirections(token, chunk);
+		while (token != NULL && token->name != PIPE)
 		{
-			printf("command: %s\n", token->token);
-			command = token->name;
-			if (command == COMMAND)
-				(*chunk)->command_path = find_command_path(token->token, envp);
-			if (command == COMMAND)
-				(*chunk)->indentifier = CMD_BLOCK;
-			else
-				(*chunk)->indentifier = BUILT_IN_BLOCK;
-			token = find_arguments(token, chunk);
-			if (token != NULL && (token->name > PIPE && token->name <= R_AP_OUTPUT))
+			if (token->name == COMMAND)
 			{
-				printf("inside register the redirections!: %s\n", token->token);
-				token = register_the_redirections(token, chunk);
+				(*chunk)->indentifier = CMD_BLOCK;
+				(*chunk)->command_path = find_command_path(token->token, env);
+				token = find_arguments(token, chunk);
 			}
+			else if (token->name == BUILT_IN)
+			{
+				(*chunk)->indentifier = BUILT_IN_BLOCK;
+				token = find_arguments(token, chunk);
+			}
+			if (token != NULL && token->name != PIPE)
+				token = token->next;
 		}
 		if (token != NULL && token->index != 0 && token->name == PIPE)
 			(*chunk) = attach_chunk_end(*chunk);

@@ -180,7 +180,7 @@ static void assign_indexes(t_token **token, t_info *info)
 		if ((*token)->ignore == true)
 		{
 			info->error = true;
-			info->exit_status = 2;
+			g_exit_status = 2;
 			break;
 		}
 		(*token)->index = i;
@@ -291,7 +291,7 @@ char *ft_delete(char *str, char *part)
 	return (new_str);
 }
 
-static void check_command_excists(t_token **token, char **envp)
+static void check_command_excists(t_token **token, t_env *env)
 {
 	int i;
 	char *path;
@@ -301,9 +301,16 @@ static void check_command_excists(t_token **token, char **envp)
 	i = 0;
 	path = NULL;
 	splitted_path = NULL;
-	while (envp[i] != ft_strnstr(envp[i], "PATH", 5))
-		i++;
-	path = envp[i];
+	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
+		env = env->next;
+	if (env == NULL)
+	{
+		printf("ERRROR in find path path is not excistent!\n");
+		g_exit_status = 127;
+		return ;
+	}
+	else
+		path = env->var;
 	printf("path: %s\n", path);
 	temp = (*token);
 	i = 0;
@@ -369,12 +376,12 @@ static void	ignore(t_token **token)
 	(*token) = temp;
 }
 
-void register_tokens(t_info *info, t_token **token, char **envp)
+void register_tokens(t_info *info, t_token **token, t_env *env)
 {
 	t_token *temp_token;
 
 	temp_token = (*token);
-	expand_expansions(token, envp);
+	expand_expansions(token, env);
 	assign_indexes(token, info);
 	print_the_list("inside", (*token));
 	connecting_quotes(token);
@@ -383,7 +390,7 @@ void register_tokens(t_info *info, t_token **token, char **envp)
 	if (info->error == false)
 	{
 		recognise_commands(token);
-		check_command_excists(token, envp);
+		check_command_excists(token, env);
 		ignore(token);
 	}
 	printf("after recognise commands\n");
