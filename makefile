@@ -53,7 +53,6 @@ MAIN =	./src/parsing/main.c \
 		./src/builtins/pwd.c\
 		./src/builtins/unset.c\
 		./src/execute/here_doc.c\
-		./src/execute/input_output.c\
 		./src/execute/cleaner.c\
 		./src/execute/new_fork.c
 

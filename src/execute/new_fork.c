@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/03 19:27:04 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/03 20:08:31 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,17 +123,10 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				number_of_infiles++;
 			}
 			number_of_infiles = 0;
-			// while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
-			// {
-			// 	elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-			// 	// elements->fd_in = open(elements->in_f[number_of_infiles].name, O_RDONLY);
-			// 	fprintf(stderr, "string of files [%d]: %s\n", number_of_infiles, elements->in_f[number_of_infiles].name);
-			// }
-			// number_of_infiles = 0;
 		}
 		else
 		{
-			while(elements->in_f != NULL && elements->in_f[number_of_infiles].name != NULL)
+			while(elements->in_f != NULL && elements->in_f[number_of_infiles].name != NULL && elements->in_f[number_of_infiles].type == INPUT_F)
 			{
 				elements->fd_in = open(elements->in_f[number_of_infiles].name, O_RDONLY);
 				fprintf(stderr, "string of files [%d]: %s\n", number_of_infiles, elements->in_f[number_of_infiles].name);
@@ -155,21 +148,16 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				number_of_outfiles++;
 			}
 			number_of_outfiles = 0;
+			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == R_AP_OUTPUT_F)
+			{
+				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
+				number_of_outfiles++;
+			}
+			number_of_outfiles = 0;
 		}
 		else
 		{
-			// while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL)
-			// {
-			// 	elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			// 	number_of_outfiles++;
-			// }
-			// if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
-			// {
-			// 	elements->fd_out = dup(pipes[i + 1][1]);
-				// close(pipes[i + 1][1]);
-			// }
-			// number_of_outfiles = 0;
-			
+			/*place for all output except for last one*/
 		}
 		if(elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
 		{
@@ -179,13 +167,6 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				miner_closing_pipe(pipes, vars, i);
 				if (i == 0)
 				{
-					// while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
-					// {
-					// 	elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-					// 	number_of_infiles++;
-					// }
-					// number_of_infiles = 0;
-					//put heredoc here
 					dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
 					close(pipes[0][0]);
@@ -212,11 +193,18 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				}
 				else
 				{
-					while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL)
+					while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == OUTPUT_F)
 					{
 						elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 						number_of_outfiles++;
 					}
+					number_of_infiles = 0;
+					while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == R_AP_OUTPUT_F)
+					{
+						elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
+						number_of_outfiles++;
+					}
+					number_of_outfiles = 0;
 					if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
 					{
 						elements->fd_out = dup(pipes[i + 1][1]);
