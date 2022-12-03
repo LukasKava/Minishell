@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 16:27:39 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/03 14:51:05 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static void	initialize_hive(t_data *h, char **envp)
 //  	printf("EX i: %d\n", i);
 //  }
 
-static void	parsing_and_execution(t_data *hive)
+static void	parsing_and_execution(t_data *hive, char** envp)
 {
 	if (hive->info.error == false)
 	{
@@ -131,8 +131,7 @@ static void	parsing_and_execution(t_data *hive)
 		get_the_commands(&hive->info, hive->token, hive->env, &hive->c_arr);
 		if (hive->info.error == false)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
-		// EXECUTION CAN BEGIN
-		// second_child(&chunk_array, &info, envp);
+		execute(&hive->c_arr, &hive->info, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr, &hive->info);
 	}
@@ -163,7 +162,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		initialize_info(&hive.info);
 		errors_before(&hive.info);
-		parsing_and_execution(&hive);
+		parsing_and_execution(&hive, envp);
 	}
 	freeing_e_list(&(&hive)->env);
 	freeing_e_list(&(&hive)->exp_l);
