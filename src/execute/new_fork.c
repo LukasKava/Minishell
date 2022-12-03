@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/02 17:20:14 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/03 11:45:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		pids;
 	int		i;
 	int		read_fd;
-	int		write_fd;
+	// int		write_fd;
 	int		number_of_infiles;
 	int		number_of_outfiles;
 	// int		number_of_pipes;
@@ -103,15 +103,15 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	i = 0;
 	number_of_infiles = 0;
 	number_of_outfiles = 0;
-	// number_of_pipes = 0;
 	read_fd = dup(0);
-	write_fd = dup(1);
+	// write_fd = dup(1);
 	vars = malloc(sizeof(*vars));
 	elements = *salt;
 	pipes = create_pipes(salt, vars);
 	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
 	while(elements)
 	{
+		elements->fd_out = dup(1);
 		//or redirections here
 		if (i == 0)
 		{
@@ -139,13 +139,14 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		{
 			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL)
 			{
-				write_fd = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 				number_of_outfiles++;
 			}
 			number_of_outfiles = 0;
 		}
 		if(elements->indentifier == CMD_BLOCK)
 		{
+			//check if the command is valid before forking using access
 			pids = fork();
 			if (pids == 0)
 			{
@@ -169,27 +170,25 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				if (i == vars->num_cmd - 1)
 				{
 					// redirection check in the last one
-					dup2(write_fd, STDOUT_FILENO);
-					close(write_fd);
+					dup2(elements->fd_out, STDOUT_FILENO);
+					close(elements->fd_out);
 				}
 				else
 				{
 					while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL)
 					{
-						pipes[i + 1][1] = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+						elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 						number_of_outfiles++;
 					}
+					if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
+					{
+						elements->fd_out = dup(pipes[i + 1][1]);
+					}
 					number_of_outfiles = 0;
-					dup2(pipes[i + 1][1], STDOUT_FILENO);
-					close(pipes[i + 1][1]);
+					dup2(elements->fd_out, STDOUT_FILENO);
+					close(elements->fd_out);
 					fprintf(stderr, "Sent data through pipe\n");
 				}
-				// while(pipes[number_of_pipes])
-				// {
-				// 	free(pipes[number_of_pipes]);
-				// 	number_of_pipes++;
-				// }
-				// free(pipes);
 				run(elements, info, envp);
 			}
 			elements=elements->next;
@@ -197,13 +196,6 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		}
 	}
 	overseer_closing_pipe(pipes, vars);
-	// while(pipes[number_of_pipes])
-	// {
-	// 	fprintf(stderr,"number of pipes %d", pipes[number_of_pipes]);
-	// 	free(pipes[number_of_pipes]);
-	// 	number_of_pipes++;
-	// }
-	// free(pipes);
 	i = 0;
 	while(i < vars->num_cmd)
 	{
@@ -211,6 +203,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		i++;
 		fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
 	}
+	// number_of_pipes = 0;
+	// while(pipes)
+	// {
+	// 	free(pipes[number_of_pipes]);
+	// 	number_of_pipes++;
+	// }
+	// free(pipes)
 }
 					
 				

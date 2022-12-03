@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 19:56:25 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/03 11:05:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 	chunk->in_f = NULL;
 	chunk->out_f = NULL;
 	chunk->indentifier = -1;
-	chunk->fd_in = 0;
-	chunk->fd_out = 0;
+	chunk->fd_in = dup(0);
+	chunk->fd_out = dup(1);
 	chunk->prev = NULL;
 	chunk->next = NULL;
 	return (chunk);
