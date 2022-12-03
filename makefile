@@ -40,7 +40,6 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions.c\
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\
-		./src/execute/fork.c\
 		./src/execute/run.c\
 		./src/execute/get_next_line.c\
 		./src/execute/get_next_line_utils.c\
@@ -56,7 +55,6 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/here_doc.c\
 		./src/execute/input_output.c\
 		./src/execute/cleaner.c\
-		./src/execute/roles.c\
 		./src/execute/new_fork.c
 
 OBJS = ${SOURCES:.c=.o}

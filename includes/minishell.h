@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/03 14:39:15 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/03 18:02:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	second_child(t_chunk **salt, t_info *info, char **envp);
 void	free_fd(int **fd);
 
 /*----	here_doc.c	-------------*/
-void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
+int		here_doc(char	*delimit);
 void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
 void	here_doc_multi(t_chunk	**salt);
 int		find_delim(t_chunk ** salt);
@@ -218,7 +218,7 @@ t_env	*attach_end(t_env *token);
 char	*save_name(char *str);
 
 /*----	../builtins/cd.c	------------------*/
-int builtins_cd(char **line, t_env **e_list);
+int 	builtins_cd(char **line, t_env **e_list);
 
 /*----	../builtins/env.c	------------------*/
 int		builtins_env(char **arguments, t_env *e_list);
@@ -237,7 +237,7 @@ int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/
-int ft_pwd(int fd);
+int 	ft_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
