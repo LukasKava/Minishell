@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/03 14:04:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/03 15:12:21 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,38 +110,18 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 	return (token);
 }
 
-/**
- * FUNCTION: (register_chunk) alocates the space for the argument and updates
- * 				the chunk name accordingly.
- */
-// static void	register_chunk(t_token *token, t_chunk **chunk, int indentifier, t_info *info)
-// {
-// 	(*chunk)->arguments = ft_calloc(2, sizeof(char *));
-// 	if ((*chunk)->arguments == NULL)
-// 	{
-// 		printf("ERROR (get_the_commands): calloc has failed!\n");
-// 		info->error = true;
-// 	}
-// 	(*chunk)->arguments[0] = token->token;
-// 	(*chunk)->arguments[1] = NULL;
-// 	(*chunk)->indentifier = indentifier;
-// 	if (token->next != NULL && (token->next->name < PIPE || token->next->name > R_AP_OUTPUT))
-// 		(*chunk) = attach_chunk_end(*chunk);
-// }
 
 static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 {
 	int	i;
 
 	i = 0;
-	printf("amount: %d\n", amount);
 	(*red) = ft_calloc(amount + 1, sizeof(t_redir));
 	(*red)[amount].name = NULL;
 	while (token != NULL && token->name != PIPE && amount >= 0)
 	{
 		if ((token->name == id || token->name == id + 1)  && (token->next != NULL && (token->next->name == id + 9 || token->next->name == id + 10)))
 		{
-			printf("indentifier: %d\n", token->name);
 			token = token->next;
 			(*red)[i].name = token->token;
 			(*red)[i].type = token->name;
@@ -151,13 +131,6 @@ static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 		token = token->next;
 	}
 	i = 0;
-	printf("INFILE NAMES: ");
-	while ((*red)[i].name != NULL)
-	{
-		printf("[%s]: %d ", (*red)[i].name, (*red)[i].type);
-		i++;
-	}
-	printf("\n\n");
 }
 
 static	void count_inputs(t_token *token, t_chunk **chunk, int id)
@@ -212,7 +185,7 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 	}
 }
 
-void get_the_commands(t_info *info, t_token *token, t_env *env, t_chunk **chunk)
+void get_the_commands(t_token *token, t_env *env, t_chunk **chunk)
 {
 	t_chunk *temp;
 
@@ -243,5 +216,4 @@ void get_the_commands(t_info *info, t_token *token, t_env *env, t_chunk **chunk)
 	}
 	(*chunk)->next = NULL;
 	(*chunk) = temp;
-	printf("info: %d\n", info->dollar_sign);
 }

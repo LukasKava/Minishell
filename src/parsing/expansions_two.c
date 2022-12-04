@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:39:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 15:09:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/04 21:34:32 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,47 +21,33 @@ size_t	exp_count(char *str)
 	count = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1] != '\0' && ((str[i + 1] >= 'a' && str[i + 1] <= 'z') || \
+			(str[i + 1] >= 'A' && str[i + 1] <= 'Z') || \
+			(str[i + 1] >= '0' && str[i + 1] <= '9') || str[i + 1] == '_'))
 			count++;
 		i++;
 	}
 	return (count);
 }
 
-int	find_expansion(char *str)
+size_t en_excists(char *str, t_env *env)
 {
-	int		i;
-	bool	expansion_found;
-
-	i = 0;
-	expansion_found = false;
-	while (str[i] != '\0')
+	while (env != NULL && env->var != ft_strnstr(env->var, str, ft_strlen(str)))
+		env = env->next;
+	if (env == NULL || (env->var[ft_strlen(str)] != '=' && env->var[ft_strlen(str)] != '\0'))
 	{
-		if (str[i] == '$' && str[i + 1] != '\0')
-		{
-			i++;
-			expansion_found = true;
-			while (str[i] != '\0' && str[i] != ' ' && str[i] != '$')
-			{
-				if (ft_case(str[i]) == 1 \
-						|| str[i] == '_' || (str[i] >= '0' && str[i] <= '9'))
-					i++;
-				else
-					return (2);
-			}
-			if (expansion_found == true)
-				return (0);
-		}
-		i++;
+		printf("VAR does not excist!\n");
+		g_exit_status = 127;
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
-char	*save_var(char *token)
+char *save_ex_var(char *token)
 {
-	int		i;
-	int		len;
-	char	*env_var;
+	int i;
+	int len;
+	char *env_var;
 
 	i = 0;
 	len = 0;
@@ -69,7 +55,8 @@ char	*save_var(char *token)
 	while (token[i] != '$')
 		i++;
 	i++;
-	while (token[i] != '\0' && (token[i] != ' ' && token[i] != '$'))
+	while (token[i] != '\0' && ((token[i] >= 'a' && token[i] <= 'z') ||
+								(token[i] >= 'A' && token[i] <= 'Z') || (token[i] >= '0' && token[i] <= '9') || token[i] == '_'))
 	{
 		len++;
 		i++;
@@ -81,25 +68,4 @@ char	*save_var(char *token)
 	while (len >= 0)
 		env_var[len--] = token[i--];
 	return (env_var);
-}
-
-size_t	env_var_excists(char *str, t_env *env)
-{
-	int		i;
-	char	*env_var;
-
-	i = 0;
-	env_var = save_var(str);
-	while (env != NULL \
-			&& env->var != ft_strnstr(env->var, env_var, ft_strlen(env_var)))
-		i++;
-	if (env == NULL || env->var[ft_strlen(env_var)] != '=')
-	{
-		printf("VAR does not excist!\n");
-		free(env_var);
-		g_exit_status = 127;
-		return (1);
-	}
-	free(env_var);
-	return (0);
 }
