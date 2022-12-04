@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/03 20:05:49 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/03 20:41:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	here_doc(char	*delimit)
 	int		pfd[2];
 	char*	buff;
 
-	buff = malloc(9999);
 	pipe(pfd);
 	while (TRUE)
 	{
