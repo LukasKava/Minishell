@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 16:25:40 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/04 21:34:49 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,18 +147,16 @@ t_chunk *attach_chunk_end(t_chunk *chunk);
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
 char	*ft_delete(char *str, char *part);
-void recognise_builtins(t_token **token);
+void	recognise_builtins(t_token **token);
 
 /*----	parsing.c	-------------*/
-void	get_the_commands(t_info *info, t_token *token, t_env *env, t_chunk **chunk);
+void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk);
 
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
-/*----	expansions.c	------------------*/
-void	expand_expansions(t_token **token, t_env *env);
 
 /*----	fork.c	-------------*/
 void	second_child(t_chunk **salt, t_info *info, char **envp);
@@ -185,17 +183,17 @@ void	free_fd(int **fd);
 void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 
 /*----	expansions_utils.c	------------------*/
-size_t	ft_case(char c);
 char	*ft_strtrim_beginning(char *s1, char *s2);
-void	ft_cut_exp(t_token **token);
 char	*save_the_front(char *token);
-char	*save_the_tail(char *token, char *current);
+char	*save_tail(char *str);
 
-/*----	expansions_utils.c	------------------*/
+/*----	expansions_two.c	------------------*/
 size_t	exp_count(char *str);
-int		find_expansion(char *str);
-char	*save_var(char *token);
-size_t	env_var_excists(char *str, t_env *env);
+size_t	en_excists(char *str, t_env *env);
+char	*save_ex_var(char *token);
+
+/*----	expansions.c	------------------*/
+void expand_expansions(t_token **token, t_env *env);
 
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);

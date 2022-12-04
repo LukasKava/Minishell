@@ -6,20 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:26:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 03:56:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/04 21:35:23 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-size_t	ft_case(char c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (0);
-	else if (c >= 'A' && c <= 'Z')
-		return (1);
-	return (2);
-}
 
 char	*ft_strtrim_beginning(char *s1, char *s2)
 {
@@ -44,35 +35,6 @@ char	*ft_strtrim_beginning(char *s1, char *s2)
 	return (final);
 }
 
-void	ft_cut_exp(t_token **token)
-{
-	int		i;
-	char	*tail;
-	char	*front;
-	int		tail_len;
-
-	i = 0;
-	tail = NULL;
-	tail_len = 0;
-	front = save_the_front((*token)->token);
-	while ((*token)->token[i] != '\0' && (*token)->token[i] != '$')
-		i++;
-	i++;
-	while ((*token)->token[i] != '\0' \
-				&& (*token)->token[i] != '$' && (*token)->token[i] != ' ')
-		i++;
-	while ((*token)->token[i++] != '\0')
-		tail_len++;
-	tail = ft_calloc(tail_len + 1, sizeof(char));
-	tail[tail_len] = '\0';
-	i--;
-	while (tail_len >= 0)
-		tail[tail_len--] = (*token)->token[i--];
-	free((*token)->token);
-	(*token)->token = ft_strjoin(front, tail);
-	free(tail);
-}
-
 char	*save_the_front(char *token)
 {
 	char	*front;
@@ -93,14 +55,30 @@ char	*save_the_front(char *token)
 	return (front);
 }
 
-char	*save_the_tail(char *token, char *current)
+char	*save_tail(char *str)
 {
-	char	*tail;
-	char	*front;
+	char *tail;
+	int i;
+	int len;
 
-	front = ft_strjoin(save_the_front(token), "$");
-	front = ft_strjoin(front, current);
-	tail = ft_strtrim_beginning(token, front);
-	free(front);
+	tail = NULL;
+	i = 0;
+	len = 0;
+	while (str[i] != '\0' && str[i] != '$')
+		i++;
+	i++;
+	while (str[i] != '\0' && ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || str[i] == '_'))
+		i++;
+	while (str[i] != '\0')
+	{
+		len++;
+		i++;
+	}
+	tail = ft_calloc(len + 1, sizeof(char));
+	tail[len] = '\0';
+	len--;
+	i--;
+	while (len >= 0)
+		tail[len--] = str[i--];
 	return (tail);
 }

@@ -6,107 +6,120 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:32:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 15:28:36 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/04 21:34:24 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static	t_token	*get_rid_of_garbage(t_token **token, t_token *temp)
+static char *return_ex_value(char *var, t_env *env)
 {
-	t_token	*temp_token;
+	char *full_var;
 
-	temp_token = temp;
-	if ((*token)->double_quotes == true)
+	while (env != NULL && env->var != ft_strnstr(env->var, var, ft_strlen(var)))
+		env = env->next;
+	if (env == NULL || (env->var[ft_strlen(var)] != '=' && env->var[ft_strlen(var)] != '\0'))
 	{
-		ft_cut_exp(token);
-		temp_token = (*token);
+		printf("VAR does not excist!\n");
+		g_exit_status = 127;
+		free(var);
+		return (NULL);
 	}
-	else
-	{
-		while (temp_token->next->index != (*token)->index)
-			temp_token = temp_token->next;
-		free((*token)->token);
-		temp_token->next = (*token)->next;
-		free(*token);
-	}
-	return (temp_token);
+	if (env->var[ft_strlen(var)] == '=')
+		var = ft_strjoin(var, "=");
+	full_var = env->var;
+	full_var = ft_strtrim_beginning(full_var, var);
+	free(var);
+	return (full_var);
 }
 
-static void	combine_everything(char *tail, char *middle, t_token **token)
+static void combine_everything(t_token **token, char *var, t_env *env)
 {
-	char	*front;
-
-	front = save_the_front((*token)->token);
-	free((*token)->token);
-	(*token)->token = ft_strjoin(front, middle);
-	(*token)->token = ft_strjoin((*token)->token, tail);
-}
-
-static void	expand_env(t_token **token, t_env *env)
-{
-	char	*env_var;
-	char	*end_var;
+	char	*beginning;
 	char	*tail;
-	int		i;
+	
+	beginning = save_the_front((*token)->token);
+	tail = save_tail((*token)->token);
+	var = return_ex_value(var, env);
+	free((*token)->token);
+	(*token)->token = ft_strjoin(beginning, var);
+	(*token)->token = ft_strjoin((*token)->token, tail);
+	free(var);
+	free(tail);
+}
+
+static void	cut_bad_fruit(t_token **token)
+{
+	char *beginning;
+	char *tail;
+	
+	beginning = save_the_front((*token)->token);
+	tail = save_tail((*token)->token);
+	free((*token)->token);
+	(*token)->token = ft_strjoin(beginning, tail);
+	free(tail);
+}
+
+static int	confirm_expansion(t_token *token)
+{
+	int	i;
 
 	i = 0;
-	env_var = save_var((*token)->token);
-	tail = save_the_tail((*token)->token, env_var);
-	while (env != NULL \
-			&& env->var != ft_strnstr(env->var_name, env_var, ft_strlen(env_var)))
-		i++;
-	if (env != NULL)
+	while (token->token[i] != '\0')
 	{
-		env_var = ft_strjoin(env_var, "=");
-		end_var = ft_strtrim_beginning(env->var, env_var);
-		combine_everything(tail, end_var, token);
-	}
-	free(tail);
-	free(env_var);
-	free(end_var);
-}
-
-static void	taking_care_of_block(t_token **token, t_token *temp, t_env *env)
-{
-	int	env_count;	
-	int	env_excistence;
-
-	env_excistence = 0;
-	env_count = exp_count((*token)->token);
-	while (env_count != 0)
-	{
-		env_excistence = find_expansion((*token)->token);
-		if (env_excistence == 0)
+		if (token->token[i] == '$')
 		{
-			if (env_var_excists((*token)->token, env) == 0)
-				expand_env(token, env);
-			else
-				(*token) = get_rid_of_garbage(token, temp);
+			i++;
+			if (token->token[i] == '\0')
+				return (1);
+			if ((token->token[i] >= 'a' && token->token[i] <= 'z') ||\
+			 	(token->token[i] >= 'A' && token->token[i] <= 'Z') ||\
+				(token->token[i] >= '0' && token->token[i] <= '9') ||\
+				token->token[i] == '_')
+				return (0);
 		}
-		if (env_excistence == 2)
-			(*token) = get_rid_of_garbage(token, temp);
-		env_count--;
+		i++;
+	}
+	return (1);
+}
+
+static void	take_care_of_block(t_token **token, t_env *env)
+{
+	int	exp_c;
+	char *var;
+
+	exp_c = exp_count((*token)->token);
+	var = NULL;
+	while (exp_c != 0)
+	{
+		if (confirm_expansion((*token)) == 0)
+		{
+			var = save_ex_var((*token)->token);
+			if (en_excists(var, env) == 0)
+				combine_everything(token, var, env);
+			else
+			{
+				cut_bad_fruit(token);
+				free(var);
+			}
+			exp_c--;
+		}
 	}
 }
 
-//Legal rules of naming Variables in bash:
-//	x	The variable name must be in the upper case as it is considered
-//			good practise in bash scripting.
-//	x	Insert the dolar sign "$" before the var name.
-//	x	Do not use spaces after the initialiazation of the variable name
-//			and its value.
-//	x	A variable name can have letter/s.
-//	X	A variable name can have numbers, underscores and digits.
+
 void	expand_expansions(t_token **token, t_env *env)
 {
-	t_token	*temp;
+	t_token *temp;
 
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if ((*token)->single_quotes == false)
-			taking_care_of_block(token, temp, env);
+		if ((*token)->single_quotes == false && confirm_expansion(*token) == 0)
+		{
+			take_care_of_block(token, env);
+			(*token) = temp;
+		}
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
