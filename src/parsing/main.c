@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/03 15:12:34 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/05 15:18:45 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,23 @@ static void	initialize_hive(t_data *h, char **envp)
 //  	printf("EX i: %d\n", i);
 //  }
 
+void	checker_before(t_data *hive)
+{
+	int i;
+
+	i = 0;
+	while (hive->info.readline[i] != '\0' && hive->info.readline[i] == ' ')
+		i++;
+	if (hive->info.readline[i] == '\0' || (hive->info.readline[i] >= '\a' && hive->info.readline[i] <= '\r'))
+	{
+			hive->info.error = true;
+			g_exit_status = 0;
+	}
+}
+
 static void	parsing_and_execution(t_data *hive)
 {
+	checker_before(hive);
 	if (hive->info.error == false)
 	{
 		hive->token = initialize_token(hive->token, &hive->info);
@@ -129,6 +144,7 @@ static void	parsing_and_execution(t_data *hive)
 		register_tokens(&hive->info, &hive->token, hive->env);
 		print_the_list("register tokens check", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr);
+		check_for_executables(&hive->c_arr);
 		if (hive->info.error == false)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		// EXECUTION CAN BEGIN

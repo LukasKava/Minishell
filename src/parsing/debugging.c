@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/28 21:00:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/04 21:58:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void print_the_chunk_list(char *message, t_chunk *chunk)
 	{
 		printf("full listC: indentifier: %d: %s\n", chunk->indentifier, chunk->command_path);
 		printf("ARGUMENTS:\n");
-		while (chunk->arguments[i] != NULL)
+		while (chunk->arguments != NULL && chunk->arguments[i] != NULL)
 		{
 			printf("%s ", chunk->arguments[i]);
 			i++;
