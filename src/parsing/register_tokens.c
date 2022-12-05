@@ -395,4 +395,5 @@ void register_tokens(t_info *info, t_token **token, t_env *env)
 	}
 	printf("after recognise commands\n");
 	(*token) = temp_token;
+	
 }

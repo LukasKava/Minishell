@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:34:49 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/05 15:18:38 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,10 @@ size_t	en_excists(char *str, t_env *env);
 char	*save_ex_var(char *token);
 
 /*----	expansions.c	------------------*/
-void expand_expansions(t_token **token, t_env *env);
+void	expand_expansions(t_token **token, t_env *env);
+
+/*----	final_check.c	------------------*/
+void	check_for_executables(t_chunk **chunk);
 
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);
@@ -207,7 +210,7 @@ t_env	*attach_end(t_env *token);
 char	*save_name(char *str);
 
 /*----	../builtins/cd.c	------------------*/
-int builtins_cd(char **line, t_env **e_list);
+int		builtins_cd(char **line, t_env **e_list);
 
 /*----	../builtins/env.c	------------------*/
 int		builtins_env(char **arguments, t_env *e_list);
