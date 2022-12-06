@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/05 16:48:26 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:29:05 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	**create_pipes(t_chunk **salt, t_info *info, t_vars	*vars)
 		}
 		elements = elements->next;
 	}
+	fprintf(stderr, "num pipes %d",num_pipes);
 	vars->num_cmd = num_pipes;
 	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
 	elements = *salt;
@@ -112,6 +113,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	{
 		save_std_out = dup(STDOUT_FILENO);
 		save_std_in = dup(STDIN_FILENO);
+		elements->fd_in = dup(STDIN_FILENO);
+		elements->fd_out = dup(STDOUT_FILENO);
 		fprintf(stderr, "Number of assignment 1Ama Assigning fd_out, fd_out: %d\n", elements->fd_out);
 		if (i == 0)
 		{
@@ -223,10 +226,11 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 						fprintf(stderr, "Number of assignment 10 Assigning fd_out, fd_out: %d\n", elements->fd_out);
 						elements->fd_in = dup(pipes[i][0]);
 						// dup2(pipes[i][0], elements->fd_in);
-						close(pipes[i][0]);
 					}
-					dup2(elements->fd_in, STDIN_FILENO);
+					if(elements->prev != NULL && elements->prev->out_f == NULL)
+						dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
+					close(pipes[i][0]);
 					fprintf(stderr, "Should recieve data through pipe\n");	
 				}
 				if (i == vars->num_cmd - 1)
@@ -241,13 +245,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 						fprintf(stderr, "Number of assignment 11 Assigning fd_out, fd_out: %d\n", elements->fd_out);
 						elements->fd_out = dup(pipes[i + 1][1]);
 						// dup2(pipes[i + 1][1], elements->fd_out);
-						close(pipes[i + 1][1]);
 					}
 					number_of_outfiles = 0;
 					fprintf(stderr, "elements->fd_out %d\n", elements->fd_out);
 					dup2(elements->fd_out, STDOUT_FILENO);
 					fprintf(stderr, "elements->fd_out after dup 2%d\n", elements->fd_out);
 					close(elements->fd_out);
+					close(pipes[i + 1][1]);
 				}
 				if(elements->indentifier == CMD_BLOCK)
 					run(elements, info, envp);
@@ -264,7 +268,9 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);
+		close(save_std_in);
 		dup2(save_std_out, STDOUT_FILENO);
+		close(save_std_out);
 		elements=elements->next;
 		i++;
 	}
