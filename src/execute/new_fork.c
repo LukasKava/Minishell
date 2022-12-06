@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/06 18:29:05 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/06 19:12:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
-	int		**pipes;
+	// int		**pipes;
+	int		pipe_fd[2];
 	int		pids;
 	int		i;
 	int		number_of_infiles;
@@ -100,21 +101,27 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		status;
 	int		save_std_out;
 	int		save_std_in;
+	int		read_end_of_pipe;
 
+	read_end_of_pipe = 0;
 	elements = *salt;
 	fprintf(stderr, "the command path%s\n", (*salt)->command_path);
 	i = 0;
 	number_of_infiles = 0;
 	number_of_outfiles = 0;
 	vars = malloc(sizeof(*vars));
-	pipes = create_pipes(salt, info, vars);
+	// pipes = create_pipes(salt, info, vars);
 	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
 	while(elements)
 	{
 		save_std_out = dup(STDOUT_FILENO);
 		save_std_in = dup(STDIN_FILENO);
-		elements->fd_in = dup(STDIN_FILENO);
-		elements->fd_out = dup(STDOUT_FILENO);
+		elements->fd_in = save_std_in;
+		elements->fd_out = save_std_out;
+		if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
+		{
+			pipe(pipe_fd);
+		}
 		fprintf(stderr, "Number of assignment 1Ama Assigning fd_out, fd_out: %d\n", elements->fd_out);
 		if (i == 0)
 		{
@@ -209,13 +216,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 			if (pids == 0)
 			{
-				miner_closing_pipe(pipes, vars, i);
+				// miner_closing_pipe(pipes, vars, i);
 				if (i == 0)
 				{
 					dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
-					close(pipes[0][0]);
-					close(pipes[0][1]); // this may be interesting
+					// close(pipes[0][0]);
+					// close(pipes[0][1]); // this may be interesting
 					fprintf(stderr, "Sent data through pipe\n");
 				}
 				else
@@ -224,13 +231,14 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					if(elements->prev != NULL && elements->prev->out_f == NULL && elements->in_f == NULL)
 					{
 						fprintf(stderr, "Number of assignment 10 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-						elements->fd_in = dup(pipes[i][0]);
+						// elements->fd_in = dup(pipes[i][0]);
+						elements->fd_in = (dup(read_end_of_pipe));
 						// dup2(pipes[i][0], elements->fd_in);
 					}
-					if(elements->prev != NULL && elements->prev->out_f == NULL)
-						dup2(elements->fd_in, STDIN_FILENO);
+					// if(elements->prev != NULL && elements->prev->out_f == NULL)
+					dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
-					close(pipes[i][0]);
+					// close(pipes[i][0]);
 					fprintf(stderr, "Should recieve data through pipe\n");	
 				}
 				if (i == vars->num_cmd - 1)
@@ -243,51 +251,54 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
 					{
 						fprintf(stderr, "Number of assignment 11 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-						elements->fd_out = dup(pipes[i + 1][1]);
-						// dup2(pipes[i + 1][1], elements->fd_out);
+						// elements->fd_out = dup(pipe_fd[1]);
+						dup2(pipe_fd[1], STDOUT_FILENO);
 					}
-					number_of_outfiles = 0;
-					fprintf(stderr, "elements->fd_out %d\n", elements->fd_out);
-					dup2(elements->fd_out, STDOUT_FILENO);
-					fprintf(stderr, "elements->fd_out after dup 2%d\n", elements->fd_out);
-					close(elements->fd_out);
-					close(pipes[i + 1][1]);
+					else
+					{
+						fprintf(stderr, "elements->fd_out %d\n", elements->fd_out);
+						dup2(elements->fd_out, STDOUT_FILENO);
+						close(elements->fd_out);
+					}
+					// close(pipes[i + 1][1]);
 				}
-				if(elements->indentifier == CMD_BLOCK)
-					run(elements, info, envp);
-				else if(elements->indentifier == BUILT_IN_BLOCK)
-				{
+				// if(elements->indentifier == CMD_BLOCK)
+				run(elements, info, envp);
+				// else if(elements->indentifier == BUILT_IN_BLOCK)
+				// {
 					// if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
 					// {
 					// 	// elements->fd_out = dup(1);
 					// 	fprintf(stderr, "******using echo****** \nfd_out: %d\n first argument: %s\n", STDOUT_FILENO, elements->arguments[1]);
 					// 	builtins_echo(elements->fd_out, elements->arguments);
 					// }
-					exit(EXIT_SUCCESS);
-				}
+				// 	exit(EXIT_SUCCESS);
+				// }
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);
 		close(save_std_in);
 		dup2(save_std_out, STDOUT_FILENO);
 		close(save_std_out);
+		waitpid(-1, &status, 0);
+		close(pipe_fd[1]);
+		read_end_of_pipe = pipe_fd[0];
 		elements=elements->next;
 		i++;
 	}
 	
-	overseer_closing_pipe(pipes, vars);
-	i = 0;
-	while(i < vars->num_cmd)
-	{
-		// If a command is not found, the child process created to execute it 
-		// returns a status of 127. If a command is found but is not executable, 
-		// the return status is 126.
-		waitpid(-1, &status, 0);
-		g_exit_status = WEXITSTATUS(status);
-		fprintf(stderr,"exit status: %d\n", g_exit_status);
-		i++;
-		fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
-	}
+	// overseer_closing_pipe(pipes, vars);
+	// i = 0;
+	// while(i < vars->num_cmd)
+	// {
+	// 	// If a command is not found, the child process created to execute it 
+	// 	// returns a status of 127. If a command is found but is not executable, 
+	// 	// the return status is 126.
+	// 	g_exit_status = WEXITSTATUS(status);
+	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
+	// 	i++;
+	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
+	// }
 }
 	
 					
