@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/05 15:18:38 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 12:56:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <string.h>
 # include <sys/errno.h>
 # include <signal.h>
-# include "./get_next_line.h"
 # include <linux/limits.h>
 # include <errno.h>
 # include <stdint.h>
@@ -97,6 +96,14 @@ typedef struct	s_struct_holder
 	t_info	info;
 }	t_data;
 
+typedef struct s_vars
+{
+	int		read_fd;
+	int		write_fd;
+	int		num_cmd;
+	t_chunk	*run_chunk;
+}t_vars;
+
 /*----	lexer_cases.c	-----------------*/
 int		rest_of_the_cases(t_info *info, int i, t_token **token);
 int		quotes(t_info *info, int i, t_token **token);
@@ -157,16 +164,8 @@ void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
-
-/*----	fork.c	-------------*/
-void	second_child(t_chunk **salt, t_info *info, char **envp);
-void	free_fd(int **fd);
-
 /*----	here_doc.c	-------------*/
-void	here_doc(t_chunk	**salt, t_info *info, char	**envp);
-void	here_doc_run(t_chunk	*salt, t_info *info, char	**envp);
-void	here_doc_multi(t_chunk	**salt);
-int		find_delim(t_chunk ** salt);
+int		here_doc(char	*delimit);
 
 /*----	run.c	-------------*/
 void	run(t_chunk *salt, t_info *info, char **envp);
@@ -233,6 +232,9 @@ int ft_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
+
+/*----	../builtins/unset.c	------------------*/
+void	execute(t_chunk **salt, t_info *info, char	**envp);
 
 //INDENTIFIER EXPLANATION:
 /**

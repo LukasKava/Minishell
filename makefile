@@ -1,3 +1,25 @@
+define IMG
+            ,
+         ,-`;
+  ,      ; ;      ,
+ ,  `'"""   """'`  ,
+, ,-'````, ,````'-, ,
+``    ,'`` ``',    ``
+     ' ,`; ;`, '
+     `,`,; ;,',`
+     ,'` ,  ,`
+-, '`,-'`; ;',`, ,
+`,,'`    ; ;  `,`,`
+         ; ;    `
+         ;  '-
+         ; '`
+         ` `
+        , '
+   ,'`:, '
+    , - `      KTJ
+endef
+export IMG
+
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
@@ -19,10 +41,7 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\
 		./src/parsing/final_check.c\
-		./src/execute/fork.c\
 		./src/execute/run.c\
-		./src/execute/get_next_line.c\
-		./src/execute/get_next_line_utils.c\
 		./src/signals.c\
 		./src/builtins/builtins_utils.c\
 		./src/builtins/cd.c\
@@ -33,9 +52,8 @@ MAIN =	./src/parsing/main.c \
 		./src/builtins/pwd.c\
 		./src/builtins/unset.c\
 		./src/execute/here_doc.c\
-		./src/execute/input_output.c\
-		./src/execute/cleaner.c\
-		./src/execute/roles.c
+		./src/execute/new_fork.c
+
 
 OBJS = ${SOURCES:.c=.o}
 
@@ -43,9 +61,10 @@ LIBFT = libft
 LIBFT_NAME = libft.a
 
 $(NAME)	:	$(SOURCES)
+	@echo "$$IMG" 
 	@make  -sC ./libft
 	@echo "Compiling minishell..."
-	$(CC) $(CFLAGS) $(MAIN) $(SOURCES) -L$(LIBFT) -g -lft -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(MAIN) $(SOURCES) -L$(LIBFT) -g -lft -lreadline -o $(NAME)
 
 all: $(NAME)
 
