@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 12:56:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/07 19:33:52 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,9 @@ typedef struct	s_struct_holder
 
 typedef struct s_vars
 {
-	int		read_fd;
-	int		write_fd;
+	int		number_of_infiles;
+	int		number_of_outfiles;
 	int		num_cmd;
-	t_chunk	*run_chunk;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -164,22 +163,10 @@ void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
-/*----	here_doc.c	-------------*/
-int		here_doc(char	*delimit);
-
-/*----	run.c	-------------*/
-void	run(t_chunk *salt, t_info *info, char **envp);
-
 /*----	input_output.c	-------------*/
 void	input_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 void	output_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 void	input_output(int **fd, t_chunk	*salt, t_info *info, char	**envp);
-
-/*----	cleaner.c	-------------*/
-void	free_fd(int **fd);
-
-/*----	roles.c	-------------*/
-void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 
 /*----	expansions_utils.c	------------------*/
 char	*ft_strtrim_beginning(char *s1, char *s2);
@@ -233,8 +220,14 @@ int ft_pwd(int fd);
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
 
-/*----	../builtins/unset.c	------------------*/
+/*----	../src/new_fork.c	------------------*/
 void	execute(t_chunk **salt, t_info *info, char	**envp);
+
+/*----	../src/here_doc.c	-------------*/
+int		here_doc(char	*delimit);
+
+/*----	../src/run.c	-------------*/
+void	run(t_chunk *salt, t_info *info, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**

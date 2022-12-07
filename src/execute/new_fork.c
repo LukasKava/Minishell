@@ -6,198 +6,131 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/05 16:48:26 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/07 19:41:34 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../../includes/minishell.h"
 
-int	**create_pipes(t_chunk **salt, t_info *info, t_vars	*vars)
+void	get_exit_status(t_vars vars,  int status);
+int		count_command_number(t_chunk **salt);
+t_vars	*initialize_vars(t_vars	vars);
+
+t_vars	*initialize_vars(t_vars	*vars)
+{
+	vars = malloc(sizeof(*vars));
+	vars->num_cmd = count_command_number(salt);
+	vars->number_of_infiles = 0;
+	vars->number_of_outfiles = 0;
+	return(vars);
+}
+
+int	count_command_number(t_chunk **salt)
 {
 	t_chunk	*elements;
-	int		num_pipes;
-	int		**ret_table;
-
-	num_pipes = 0;
-	ret_table = calloc(9999, sizeof(int*));
-	while (num_pipes < 9999)
-	{
-		ret_table[num_pipes] = calloc(2, sizeof(int));
-		num_pipes++;
-	}
-	num_pipes = 0;
+	int		num_cmds;
+	
 	elements = *salt;
-	while (elements)
+	num_cmds = 0;
+	while(elements)
 	{
 		if(elements->indentifier == CMD_BLOCK)
-		{
-			if(pipe(ret_table[num_pipes]) == -1)
-			{
-				freeing_chunks(salt, info);
-				write(2, "Error while making pipes\n", 25);
-				return(NULL);
-			}
-			fprintf(stderr, "created pipes[%d]\n", num_pipes);
-		num_pipes++;
-		}
-		elements = elements->next;
+			num_cmds++;
 	}
-	vars->num_cmd = num_pipes;
-	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
-	elements = *salt;
-	return(ret_table);
+	return(num_cmds);
 }
-
-void miner_closing_pipe(int **pipes, t_vars *vars, int i)
-{
-	int	j;
-
-	j = 0;
-	while (j < vars->num_cmd)
-	{
-		if (i != j)
-		{
-			close(pipes[j][0]);
-			fprintf(stderr, "closed pipes[%d][0]\n", j);
-		}
-		if(i + 1 != j)
-		{
-			close(pipes[j][1]);
-			fprintf(stderr, "closed pipes[%d][1]\n", j);
-		}
-		j++;
-	}
-}
-
-void overseer_closing_pipe(int **pipes, t_vars *vars)
-{
-	int	k;
-
-	k = 0;
-	while (k < vars->num_cmd)
-	{
-		close(pipes[k][0]);
-		fprintf(stderr, "parrent closed pipes[%d][0]\n", k);
-		close(pipes[k][1]);
-		fprintf(stderr, "parrent closed pipes[%d][1]\n", k);
-		k++;
-	}
-	
-}
-
-// void	file_descriptor_table(int i, t_chunk **salt, )
 
 void	execute(t_chunk **salt, t_info *info, char	**envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
-	int		**pipes;
+
 	int		pids;
 	int		i;
-	int		number_of_infiles;
-	int		number_of_outfiles;
 	int		status;
 	int		save_std_out;
 	int		save_std_in;
-
+	int		fd[9999][2];
+	
 	elements = *salt;
-	fprintf(stderr, "the command path%s\n", (*salt)->command_path);
+	initialize_vars(vars);
+	
 	i = 0;
-	number_of_infiles = 0;
-	number_of_outfiles = 0;
-	vars = malloc(sizeof(*vars));
-	pipes = create_pipes(salt, info, vars);
-	fprintf(stderr,"vars.num_cmd = %d\n", vars->num_cmd);
 	while(elements)
 	{
 		save_std_out = dup(STDOUT_FILENO);
 		save_std_in = dup(STDIN_FILENO);
-		fprintf(stderr, "Number of assignment 1Ama Assigning fd_out, fd_out: %d\n", elements->fd_out);
+		elements->fd_in = save_std_out;
+		elements->fd_out = save_std_in;
+		if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
+		{
+			pipe(pipe_fd);
+		}
+
 		if (i == 0)
 		{
 			
-			while(elements->in_f != NULL && elements->in_f[number_of_infiles].name != NULL && elements->in_f[number_of_infiles].type == INPUT_F)
+			while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 2 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_in = open(elements->in_f[number_of_infiles].name, O_RDONLY);
-				fprintf(stderr, "string of files [%d]: %s\n", number_of_infiles, elements->in_f[number_of_infiles].name);
-				number_of_infiles++;
+				elements->fd_in = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
+				vars->number_of_infiles++;
 			}
-			number_of_infiles = 0;
-			while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
+			vars->number_of_infiles = 0;
+			while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].type == DELIMITOR)
 			{
-				fprintf(stderr, "Number of assignment 3 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-				number_of_infiles++;
+				elements->fd_in = dup(here_doc(elements->in_f[vars->number_of_infiles].name));
+				vars->number_of_infiles++;
 			}
-			number_of_infiles = 0;
+			vars->number_of_infiles = 0;
 		}
 		else
 		{
-			while(elements->in_f != NULL && elements->in_f[number_of_infiles].name != NULL && elements->in_f[number_of_infiles].type == INPUT_F)
+			while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 4 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_in = open(elements->in_f[number_of_infiles].name, O_RDONLY);
-				fprintf(stderr, "string of files [%d]: %s\n", number_of_infiles, elements->in_f[number_of_infiles].name);
-				number_of_infiles++;
+				elements->fd_in = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
+				vars->number_of_infiles++;
 			}
-			number_of_infiles = 0;
-			while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
+			vars->number_of_infiles = 0;
+			while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].type == DELIMITOR)
 			{
-				fprintf(stderr, "Number of assignment 5 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-				number_of_infiles++;
+				elements->fd_in = dup(here_doc(elements->in_f[vars->number_of_infiles].name));
+				vars->number_of_infiles++;
 			}
-			number_of_infiles = 0;
+			vars->number_of_infiles = 0;
 		}
 		if (i == vars->num_cmd - 1)
 		{
-			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == OUTPUT_F)
+			while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 6 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-				number_of_outfiles++;
+				elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+				vars->number_of_outfiles++;
 			}
-			number_of_outfiles = 0;
-			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == R_AP_OUTPUT_F)
+			vars->number_of_outfiles = 0;
+			while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 7 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
-				number_of_outfiles++;
+				elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
+				vars->number_of_outfiles++;
 			}
-			number_of_outfiles = 0;
-			// if(elements->indentifier == BUILT_IN_BLOCK)
-			// {
-			// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-			// 	{
-			// 		// elements->fd_out = dup(1);
-			// 		fprintf(stderr, "******using echo****** \nfd_out: %d\n first argument: %s\n", STDOUT_FILENO, elements->arguments[1]);
-			// 		builtins_echo(elements->fd_out, elements->arguments);
-			// 	}
-			// }
+			vars->number_of_outfiles = 0;
 		}
 		else
 		{
 			/*place for all output except for last one*/
-			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == OUTPUT_F)
+			while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 8 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-				number_of_outfiles++;
+				elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+				vars->number_of_outfiles++;
 			}
-			number_of_infiles = 0;
-			while(elements->out_f != NULL && elements->out_f[number_of_outfiles].name != NULL && elements->out_f[number_of_outfiles].type == R_AP_OUTPUT_F)
+			vars->number_of_infiles = 0;
+			while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 			{
-				fprintf(stderr, "Number of assignment 9 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-				elements->fd_out = open(elements->out_f[number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
-				number_of_outfiles++;
+				elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
+				vars->number_of_outfiles++;
 			}
-			number_of_outfiles = 0;
+			vars->number_of_outfiles = 0;
 		}
-		if(elements->indentifier == BUILT_IN_BLOCK || (elements->indentifier == CMD_BLOCK && elements->command_path != NULL))
-		// if(elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
+		if(elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
 		{
-			fprintf(stderr, "Command execution\n");
 			pids = fork();
 			if (pids == -1)
 			{
@@ -206,14 +139,10 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 			if (pids == 0)
 			{
-				miner_closing_pipe(pipes, vars, i);
 				if (i == 0)
 				{
 					dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
-					close(pipes[0][0]);
-					close(pipes[0][1]); // this may be interesting
-					fprintf(stderr, "Sent data through pipe\n");
 				}
 				else
 				{
@@ -221,12 +150,14 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					if(elements->prev != NULL && elements->prev->out_f == NULL && elements->in_f == NULL)
 					{
 						fprintf(stderr, "Number of assignment 10 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-						elements->fd_in = dup(pipes[i][0]);
+						// elements->fd_in = dup(pipes[i][0]);
+						elements->fd_in = (dup(read_end_of_pipe));
 						// dup2(pipes[i][0], elements->fd_in);
-						close(pipes[i][0]);
 					}
+					// if(elements->prev != NULL && elements->prev->out_f == NULL)
 					dup2(elements->fd_in, STDIN_FILENO);
 					close(elements->fd_in);
+					// close(pipes[i][0]);
 					fprintf(stderr, "Should recieve data through pipe\n");	
 				}
 				if (i == vars->num_cmd - 1)
@@ -239,50 +170,85 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
 					{
 						fprintf(stderr, "Number of assignment 11 Assigning fd_out, fd_out: %d\n", elements->fd_out);
-						elements->fd_out = dup(pipes[i + 1][1]);
-						// dup2(pipes[i + 1][1], elements->fd_out);
-						close(pipes[i + 1][1]);
+						// elements->fd_out = dup(pipe_fd[1]);
+						dup2(pipe_fd[1], STDOUT_FILENO);
 					}
-					number_of_outfiles = 0;
-					fprintf(stderr, "elements->fd_out %d\n", elements->fd_out);
-					dup2(elements->fd_out, STDOUT_FILENO);
-					fprintf(stderr, "elements->fd_out after dup 2%d\n", elements->fd_out);
-					close(elements->fd_out);
+					else
+					{
+						fprintf(stderr, "elements->fd_out %d\n", elements->fd_out);
+						dup2(elements->fd_out, STDOUT_FILENO);
+						close(elements->fd_out);
+					}
+					// close(pipes[i + 1][1]);
 				}
-				if(elements->indentifier == CMD_BLOCK)
-					run(elements, info, envp);
-				else if(elements->indentifier == BUILT_IN_BLOCK)
-				{
-					// if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-					// {
-					// 	// elements->fd_out = dup(1);
-					// 	fprintf(stderr, "******using echo****** \nfd_out: %d\n first argument: %s\n", STDOUT_FILENO, elements->arguments[1]);
-					// 	builtins_echo(elements->fd_out, elements->arguments);
-					// }
-					exit(EXIT_SUCCESS);
-				}
+				run(elements, info, envp);
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);
+		close(save_std_in);
 		dup2(save_std_out, STDOUT_FILENO);
+		close(save_std_out);
+		waitpid(-1, &status, 0);
 		elements=elements->next;
 		i++;
 	}
-	
-	overseer_closing_pipe(pipes, vars);
+	get_exit_status(vars, status)
+}
+
+	// 	// If a command is not found, the child process created to execute it 
+	// 	// returns a status of 127. If a command is found but is not executable, 
+	// 	// the return status is 126.
+	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
+	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
+void	get_exit_status(t_vars vars,  int status)
+{
+	int	i;
+
 	i = 0;
 	while(i < vars->num_cmd)
 	{
-		// If a command is not found, the child process created to execute it 
-		// returns a status of 127. If a command is found but is not executable, 
-		// the return status is 126.
-		waitpid(-1, &status, 0);
 		g_exit_status = WEXITSTATUS(status);
-		fprintf(stderr,"exit status: %d\n", g_exit_status);
 		i++;
-		fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
 	}
 }
-	
+
+// execute_enchanced(t_chunk **salt, t_info *info, char	**envp)
+// {
+// 	int fd[10][2],i,pc;
+// 	char *argv[100];
+
+// 	for(i=0;i<nr;i++){
+// 		tokenize_buffer(argv,&pc,buf[i]," ");
+// 		if(i!=nr-1){
+// 			if(pipe(fd[i])<0){
+// 				perror("pipe creating was not successfull\n");
+// 				return;
+// 			}
+// 		}
+// 		if(fork()==0){//child1
+// 			if(i!=nr-1){
+// 				dup2(fd[i][1],1);
+// 				close(fd[i][0]);
+// 				close(fd[i][1]);
+// 			}
+
+// 			if(i!=0){
+// 				dup2(fd[i-1][0],0);
+// 				close(fd[i-1][1]);
+// 				close(fd[i-1][0]);
+// 			}
+// 			execvp(argv[0],argv);
+// 			perror("invalid input ");
+// 			exit(1);//in case exec is not successfull, exit
+// 		}
+// 		//parent
+// 		if(i!=0){//second process
+// 			close(fd[i-1][0]);
+// 			close(fd[i-1][1]);
+// 		}
+// 		waitpid(NULL);
+// 	}
+
+// }
 					
 				
