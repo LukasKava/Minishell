@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/06 19:12:35 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/07 19:23:43 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		save_std_out;
 	int		save_std_in;
 	int		read_end_of_pipe;
-
+	
 	read_end_of_pipe = 0;
 	elements = *salt;
 	fprintf(stderr, "the command path%s\n", (*salt)->command_path);
