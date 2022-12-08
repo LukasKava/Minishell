@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 10:01:46 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/08 12:30:44 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
