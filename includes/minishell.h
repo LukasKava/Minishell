@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 12:56:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/08 12:16:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ typedef struct s_chunk
 	char	**arguments;
 	t_redir	*in_f;
 	t_redir	*out_f;
-	int		fd_in;
-	int		fd_out;
+	int		fd[2];
 	int		indentifier;
 	struct	s_chunk *prev;
 	struct	s_chunk	*next;
@@ -185,11 +184,13 @@ void	roles_expanded(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 char	*ft_strtrim_beginning(char *s1, char *s2);
 char	*save_the_front(char *token);
 char	*save_tail(char *str);
+int		confirm_expansion(t_token *token);
 
 /*----	expansions_two.c	------------------*/
 size_t	exp_count(char *str);
 size_t	en_excists(char *str, t_env *env);
 char	*save_ex_var(char *token);
+char	*return_ex_value(char *var, t_env *env);
 
 /*----	expansions.c	------------------*/
 void	expand_expansions(t_token **token, t_env *env);
@@ -235,6 +236,9 @@ int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
 
 /*----	../builtins/unset.c	------------------*/
 void	execute(t_chunk **salt, t_info *info, char	**envp);
+
+/*----	../parsing/errors.c	------------------*/
+void	simple_err_message(t_info *info, char *message, int exit_status);
 
 //INDENTIFIER EXPLANATION:
 /**

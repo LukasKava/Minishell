@@ -6,18 +6,15 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/03 14:02:33 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:45:15 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static bool	error_message(t_info *info, char *var, int exit_s)
+static bool	error_message(t_info *info, int exit_s)
 {
-	if (var == NULL)
-		printf("bash: syntax error near unexpected token `newline'\n");
-	else
-		printf("bash: syntax error near unexpected token `%s'\n", var);
+	printf("Syntax error\n");
 	g_exit_status = exit_s;
 	info->error = true;
 	return (true);
@@ -53,13 +50,13 @@ void	check_tokens(t_info *info, t_token **token)
 		if (((*token)->name >= PIPE \
 				&& (*token)->name <= R_AP_OUTPUT) \
 				&& (*token)->next == NULL)
-			error = error_message(info, NULL, 2);
+			error = error_message(info, 2);
 		else if (((*token)->name >= PIPE \
 				&& (*token)->name <= R_AP_OUTPUT) \
 				&& (((*token)->next->name >= FORCED_R \
 				&& (*token)->next->name < SPace) \
 				|| ((*token)->next->name == PIPE)))
-			error = error_message(info, (*token)->next->token, 2);
+			error = error_message(info, 2);
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;

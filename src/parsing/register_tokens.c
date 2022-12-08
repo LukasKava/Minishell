@@ -37,12 +37,12 @@
  *	delimitor = 13
  */
 
-static void message(t_token **token, int indentifier)
-{
-	(*token)->ignore = true;
-	(*token)->name = indentifier;
-	printf("minishell: error unrecognised token: `%s'\n", (*token)->token);
-}
+// static void message(t_token **token, int indentifier)
+// {
+// 	(*token)->ignore = true;
+// 	(*token)->name = indentifier;
+// 	printf("minishell: error unrecognised token: `%s'\n", (*token)->token);
+// }
 
 /**
  * FUNCTION: (check_specials_outside) checks for special character combitions
@@ -56,28 +56,28 @@ static void message(t_token **token, int indentifier)
  *	x right_bracket (')') = -1			//Cast an error because its not manditory.
  *	x escape_char	('\') = 6			//Cast an error because its not manditory.
  */
-static bool specials_outside(t_token **token)
-{
-	if ((*token)->token[0] == '>' && (*token)->token[1] == '|')
-		message(token, FORCED_R);
-	else if ((*token)->token[0] == '&' && (*token)->token[1] != '&')
-		message(token, AMPERSAND);
-	else if ((*token)->token[0] == '&' && (*token)->token[1] == '&')
-		message(token, DOUBLE_AMPERSAND);
-	else if ((*token)->token[0] == ';' && (*token)->token[1] != ';')
-		message(token, SEMICOLON);
-	else if ((*token)->token[0] == ';' && (*token)->token[1] == ';')
-		message(token, DOUBLE_SEMICOLON);
-	else if ((*token)->token[0] == '(')
-		message(token, L_BRACKET);
-	else if ((*token)->token[0] == ')')
-		message(token, R_BRACKET);
-	else if ((*token)->token[0] == '\\')
-		message(token, ESCAPE);
-	if ((*token)->ignore == true)
-		return (true);
-	return (false);
-}
+// static bool specials_outside(t_token **token)
+// {
+// 	if ((*token)->token[0] == '>' && (*token)->token[1] == '|')
+// 		message(token, FORCED_R);
+// 	else if ((*token)->token[0] == '&' && (*token)->token[1] != '&')
+// 		message(token, AMPERSAND);
+// 	else if ((*token)->token[0] == '&' && (*token)->token[1] == '&')
+// 		message(token, DOUBLE_AMPERSAND);
+// 	else if ((*token)->token[0] == ';' && (*token)->token[1] != ';')
+// 		message(token, SEMICOLON);
+// 	else if ((*token)->token[0] == ';' && (*token)->token[1] == ';')
+// 		message(token, DOUBLE_SEMICOLON);
+// 	else if ((*token)->token[0] == '(')
+// 		message(token, L_BRACKET);
+// 	else if ((*token)->token[0] == ')')
+// 		message(token, R_BRACKET);
+// 	else if ((*token)->token[0] == '\\')
+// 		message(token, ESCAPE);
+// 	if ((*token)->ignore == true)
+// 		return (true);
+// 	return (false);
+// }
 
 static	int	check_for_spaces(char *str)
 {
@@ -104,8 +104,8 @@ static	int	check_for_spaces(char *str)
  */
 static void check_specials(t_token **token)
 {
-	if (specials_outside(token) == true)
-		return;
+	// if (specials_outside(token) == true)
+	// 	return;
 	if ((*token)->token[0] == '|')
 		(*token)->name = PIPE;
 	else if ((*token)->token[0] == '<' && (*token)->token[1] != '<')
@@ -237,30 +237,23 @@ static void recognise_commands(t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		printf("?token->name %d token->token: %s\n", (*token)->name, (*token)->token);
 		if ((*token)->name == BUILT_IN || (*token)->name == ELSE)
 		{
-			printf("token->name %d token->token: %s\n", (*token)->name, (*token)->token);
-			if ((*token)->name == ELSE) // Beggining != builtin = command
-				(*token)->name = COMMAND;	 // Command
+			if ((*token)->name == ELSE)
+				(*token)->name = COMMAND;
 			(*token) = (*token)->next;
 			while ((*token) != NULL && ((*token)->name == ELSE || \
 			(*token)->name == SPace || (*token)->name > ESCAPE || (*token)->ignore == true))
 			{
 				if ((*token)->name == ELSE)
-				{
-					printf("token token: %s\n", (*token)->token);
 					(*token)->name = ARGUMENT;
-				}
 				(*token) = (*token)->next;
 			}
 			if ((*token) == NULL)
 				break ;
 		}
-		printf("AFTER HUGE IF!\n");
 		if ((*token)->name >= PIPE && (*token)->name <= R_AP_OUTPUT)
 			register_next_token(token);
-		printf("AFTER small IF!\n");
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
@@ -383,7 +376,7 @@ void register_tokens(t_info *info, t_token **token, t_env *env)
 	temp_token = (*token);
 	expand_expansions(token, env);
 	assign_indexes(token, info);
-	print_the_list("inside", (*token));
+	//print_the_list("inside", (*token));
 	connecting_quotes(token);
 	if (info->error == false)
 		check_tokens(info, token); // WORKS NEEDS REVIEW
@@ -393,7 +386,5 @@ void register_tokens(t_info *info, t_token **token, t_env *env)
 		check_command_excists(token, env);
 		ignore(token);
 	}
-	printf("after recognise commands\n");
 	(*token) = temp_token;
-	
 }

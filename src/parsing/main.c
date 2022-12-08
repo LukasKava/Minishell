@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 13:01:50 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:41:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,61 +15,42 @@
 
 int g_exit_status;
 
-static void check_non_generic(t_info *info)
-{
-	int i;
+// static void check_non_generic(t_info *info)
+// {
+// 	int i;
 
-	i = 0;
-	if (ft_strlen(info->readline) > 0)
-	{
-		while (info->readline[i] == ' ' && info->readline[i] != '\0')
-			i++;
-		if (info->readline[i] == '&' && info->readline[i + 1] == '&')
-		{
-			printf("bash: syntax error near unexpected token `&&'\n");
-			info->error = true;
-			g_exit_status = 2;
-			return;
-		}
-		if (info->readline[i] == ';' && info->readline[i + 1] == ';')
-		{
-			printf("bash: syntax error near unexpected token `;;'\n");
-			info->error = true;
-			g_exit_status = 2;
-			return;
-		}
-		if (info->readline[i] == ';' && info->readline[i + 1] != ';')
-		{
-			printf("bash: syntax error near unexpected token `;'\n");
-			info->error = true;
-			g_exit_status = 2;
-			return;
-		}
-		if (info->readline[i] == '&' && info->readline[i + 1] != '&')
-		{
-			printf("bash: syntax error near unexpected token `&'\n");
-			info->error = true;
-			g_exit_status = 2;
-			return;
-		}
-		if (info->readline[i] == '(' || info->readline[i] == ')')
-		{
-			printf("in\n");
-			i++;
-			while (info->readline[i] == ' ' && info->readline[i] != '\0')
-				i++;
-			if (i > 0)
-				i--;
-			if (info->readline[i + 1] == '(' || info->readline[i + 1] == ')')
-			{
-				printf("bash: syntax error near unexpected token `)'\n");
-				info->error = true;
-				g_exit_status = 2;
-				return;
-			}
-		}
-	}
-}
+// 	i = 0;
+// 	if (ft_strlen(info->readline) > 0)
+// 	{
+// 		while (info->readline[i] == ' ' && info->readline[i] != '\0')
+// 			i++;
+// 		if (info->readline[i] == '&' && info->readline[i + 1] == '&')
+// 			simple_err_message(info, "syntax_err near unexpected token &&", 2);
+// 		if (info->readline[i] == ';' && info->readline[i + 1] == ';')
+// 			simple_err_message(info, "syntax_err near unexpected token ;;", 2);
+// 		if (info->readline[i] == ';' && info->readline[i + 1] != ';')
+// 			simple_err_message((info), "syntax_err: near unexpected token ;", 2);
+// 		if (info->readline[i] == '&' && info->readline[i + 1] != '&')
+// 			simple_err_message((info), "syntax_err: near unexpected token &", 2);
+// 		if (info->readline[i] == '(' || info->readline[i] == ')')
+// 		{
+// 			printf("in\n");
+// 			i++;
+// 			while (info->readline[i] == ' ' && info->readline[i] != '\0')
+// 				i++;
+// 			if (i > 0)
+// 				i--;
+// 			if (info->readline[i + 1] == '(' || info->readline[i + 1] == ')')
+// 				printf()
+// 			{
+// 				printf("bash: syntax error near unexpected token `)'\n");
+// 				info->error = true;
+// 				g_exit_status = 2;
+// 				return ;
+// 			}
+// 		}
+// 	}
+// }
 
 void errors_before(t_info *info)
 {
@@ -81,17 +62,20 @@ void errors_before(t_info *info)
 			info->error = true;
 			printf("Quotes are not closed!\n");
 			g_exit_status = 2;
+			return ;
 		}
 	}
-	if (pipe_excistence(info) == 0) // Checks if there are pipes and there are no problems with them.
+	if (pipe_excistence(info) == 0)
 	{
 		if (pipe_cases(info) == 1)
 		{
 			info->error = true;
 			printf("Syntax error | \n");
+			g_exit_status = 2;
+			return ;
 		}
 	}
-	check_non_generic(info);
+//	check_non_generic(info);
 	check_dollar_signs(info);
 }
 
@@ -104,19 +88,6 @@ static void	initialize_hive(t_data *h, char **envp)
 	create_e_list(&h->env, envp);
 	create_e_list(&h->exp_l, envp);
 }
-
-//  void print_env_list(t_env *env)
-//  {
-//  	int	i;
-//  	i = 0;
-//  	while (env->next != NULL)
-//  	{
-//  		printf("PRINTING: %s\n", env->var);
-//  		env = env->next;
-//  		i++;
-//  	}
-//  	printf("EX i: %d\n", i);
-//  }
 
 void	checker_before(t_data *hive)
 {
@@ -134,13 +105,14 @@ void	checker_before(t_data *hive)
 
 static void	parsing_and_execution(t_data *hive, char **envp)
 {
+	(void)envp;
 	checker_before(hive);
 	if (hive->info.error == false)
 	{
 		hive->token = initialize_token(hive->token, &hive->info);
 		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
 		lexer(&hive->info, &hive->token);
-		print_the_list("after lexing", hive->token);
+	//	print_the_list("after lexing", hive->token);
 		register_tokens(&hive->info, &hive->token, hive->env);
 		print_the_list("register tokens check", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr);
@@ -149,7 +121,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		// EXECUTION CAN BEGIN
 		// second_child(&chunk_array, &info, envp);
-		execute(&hive->c_arr, &hive->info, envp);
+		//execute(&hive->c_arr, &hive->info, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr, &hive->info);
 	}
