@@ -6,32 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:32:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:34:24 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 14:45:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static char *return_ex_value(char *var, t_env *env)
-{
-	char *full_var;
-
-	while (env != NULL && env->var != ft_strnstr(env->var, var, ft_strlen(var)))
-		env = env->next;
-	if (env == NULL || (env->var[ft_strlen(var)] != '=' && env->var[ft_strlen(var)] != '\0'))
-	{
-		printf("VAR does not excist!\n");
-		g_exit_status = 127;
-		free(var);
-		return (NULL);
-	}
-	if (env->var[ft_strlen(var)] == '=')
-		var = ft_strjoin(var, "=");
-	full_var = env->var;
-	full_var = ft_strtrim_beginning(full_var, var);
-	free(var);
-	return (full_var);
-}
 
 static void combine_everything(t_token **token, char *var, t_env *env)
 {
@@ -60,29 +39,6 @@ static void	cut_bad_fruit(t_token **token)
 	free(tail);
 }
 
-static int	confirm_expansion(t_token *token)
-{
-	int	i;
-
-	i = 0;
-	while (token->token[i] != '\0')
-	{
-		if (token->token[i] == '$')
-		{
-			i++;
-			if (token->token[i] == '\0')
-				return (1);
-			if ((token->token[i] >= 'a' && token->token[i] <= 'z') ||\
-			 	(token->token[i] >= 'A' && token->token[i] <= 'Z') ||\
-				(token->token[i] >= '0' && token->token[i] <= '9') ||\
-				token->token[i] == '_')
-				return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-
 static void	take_care_of_block(t_token **token, t_env *env)
 {
 	int	exp_c;
@@ -107,6 +63,19 @@ static void	take_care_of_block(t_token **token, t_env *env)
 	}
 }
 
+static void	exit_status(t_token **token)
+{
+	if ((*token)->single_quotes == true)
+		return ;
+	if ((*token)->token[0] != '\0' && (*token)->token[0] == '$')
+	{
+		if ((*token)->token[1] != '\0' && (*token)->token[1] == '?')
+		{
+			free((*token)->token);
+			(*token)->token = ft_itoa(g_exit_status);
+		}
+	}
+}
 
 void	expand_expansions(t_token **token, t_env *env)
 {
@@ -115,6 +84,7 @@ void	expand_expansions(t_token **token, t_env *env)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
+		exit_status(token);
 		if ((*token)->single_quotes == false && confirm_expansion(*token) == 0)
 		{
 			take_care_of_block(token, env);

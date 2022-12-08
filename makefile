@@ -41,6 +41,7 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\
 		./src/parsing/final_check.c\
+		./src/parsing/errors.c\
 		./src/execute/run.c\
 		./src/signals.c\
 		./src/builtins/builtins_utils.c\

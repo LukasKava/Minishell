@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:26:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:35:23 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 14:32:20 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,27 @@ char	*save_tail(char *str)
 	while (len >= 0)
 		tail[len--] = str[i--];
 	return (tail);
+}
+
+int confirm_expansion(t_token *token)
+{
+	int i;
+
+	i = 0;
+	while (token->token[i] != '\0')
+	{
+		if (token->token[i] == '$')
+		{
+			i++;
+			if (token->token[i] == '\0')
+				return (1);
+			if ((token->token[i] >= 'a' && token->token[i] <= 'z') ||
+				(token->token[i] >= 'A' && token->token[i] <= 'Z') ||
+				(token->token[i] >= '0' && token->token[i] <= '9') ||
+				token->token[i] == '_')
+				return (0);
+		}
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/08 11:55:21 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 13:58:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static bool possible_doubles(t_info *info, int i)
 	if (info->readline[i] == '&' && info->readline[i + 1] == '&')
 		return (true);
 	if (info->readline[i] == ';' && info->readline[i + 1] == ';')
+		return (true);
+	if (info->readline[i] == '$' && info->readline[i + 1] == '?')
 		return (true);
 	return (false);
 }
