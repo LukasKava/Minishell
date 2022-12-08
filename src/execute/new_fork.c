@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/07 19:41:34 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/08 12:27:24 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		status;
 	int		save_std_out;
 	int		save_std_in;
-	int		fd[9999][2];
+ 
 	
 	elements = *salt;
 	initialize_vars(vars);
