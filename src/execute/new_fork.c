@@ -6,18 +6,19 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/08 18:04:35 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/09 19:37:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// try with 
+/*need a simple command execute, execute one command*/
 #include	"../../includes/minishell.h"
 
 void	get_exit_status(t_vars *vars,  int status);
 int		count_command_number(t_chunk **salt);
 t_vars	*initialize_vars(t_chunk **salt);
 int		pipe_this_node(t_chunk **salt);
-int		infile_in_this_node(t_chunk **salt, int number_of_infiles);
+int		in_redirection_this_node(t_chunk **salt);
+int		pipe_last_node(t_chunk **salt);
 
 
 t_vars	*initialize_vars(t_chunk **salt)
@@ -58,21 +59,74 @@ int	pipe_this_node(t_chunk **salt)
 		return(0);
 }
 
-// int	infile_in_this_node(t_chunk **salt, int number_of_infiles)
-// {
-// 	t_chunk *elements;
+int	pipe_last_node(t_chunk **salt)
+{
+	t_chunk	*elements;
+	
+	elements = *salt;
+	if(elements->prev != NULL && elements->prev->out_f == NULL && elements->in_f == NULL)
+		return(1);
+	else
+		return(0);
+}
 
-// 	elements = *salt;
-// 	if(elements->in_f != NULL && elements->in_f[number_of_infiles].name !=
-// 	 NULL && elements->in_f[number_of_infiles].type == INPUT_F)
+int in_redirection_this_node(t_chunk **salt)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if(element->in_f != NULL)
+	{
+		return(1);
+	}
+	else
+	{
+		return(0);
+	}
+}
+
+int in_redirection_next_node(t_chunk **salt)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if(element->next != NULL && element->next->in_f != NULL)
+	{
+		return(1);
+	}
+	else
+	{
+		return(0);
+	}
+}
+
+// void open_infiles(t_chunk **salt, t_vars *vars)
+// {
+// 	t_chunk	*elements;
+
+// 	elements = *salt; 
+// 	while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
 // 	{
-// 		return(1);
+// 		fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
+// 		vars->number_of_infiles++;
 // 	}
-// 	else
-// 	{
-// 		return(0);
-// 	}
+// 	vars->number_of_infiles = 0;
 // }
+
+int out_redirection_this_node(t_chunk **salt)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if (element->out_f != NULL)
+	{
+		return(1);
+	}
+	else
+	{
+		return(0);
+	}
+}
 
 void	execute(t_chunk **salt, t_info *info, char	**envp)
 {
@@ -86,29 +140,21 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		save_std_in;
 	int		fd[9999][2];
  
-	
+	// simple_execute(salt, info, envp);
 	elements = *salt;
 	vars = initialize_vars(salt);
 	i = 0;
-	while(elements)
+	while (elements)
 	{
 		save_std_out = dup(STDOUT_FILENO);
 		save_std_in = dup(STDIN_FILENO);
 		fd[i][0] = save_std_in;
 		fd[i][1] = save_std_out;
-		if(pipe_this_node(&elements))
+		if (pipe_this_node(&elements))
 		{
 			pipe(fd[i]);
 		}
-		// while(infile_in_this_node(&elements, vars->number_of_infiles))
-		while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
-		{
-			fprintf(stderr, "read infile vars->number_of_infiles %d\n", vars->number_of_infiles);
-			fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-			vars->number_of_infiles++;
-		}
-		vars->number_of_infiles = 0;
-		if(elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
+		if (elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
 		{
 			pids = fork();
 			if (pids == -1)
@@ -119,35 +165,47 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 			if (pids == 0)
 			{
-				if(i != vars->num_cmd - 1)
+				if (i != vars->num_cmd - 1 && pipe_this_node(&elements))
 				{
-					dup2(fd[i][1],STDOUT_FILENO);
+					dup2(fd[i][1], STDOUT_FILENO);
 					close(fd[i][0]);
 					close(fd[i][1]);
 				}
-				else
+				if (i != 0 && pipe_last_node(&elements))
 				{
-					dup2(fd[i][1],STDOUT_FILENO);
-				}
-				if(i != 0)
-				{
-					dup2(fd[i - 1][0],STDIN_FILENO);
+					dup2(fd[i - 1][0], STDIN_FILENO);
 					close(fd[i - 1][1]);
 					close(fd[i - 1][0]);
 				}
-				else
+				if (out_redirection_this_node(&elements))
 				{
+					while (elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
+					{
+						fd[i][1] = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+						vars->number_of_outfiles++;
+					}
+					vars->number_of_outfiles = 0;
+					dup2(fd[i][1], STDOUT_FILENO);
+					// close(fd[i][0]);
+					// close(fd[i][1]);
+				}
+				if (in_redirection_this_node(&elements))
+				{
+					while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
+					{
+						fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
+						vars->number_of_infiles++;
+					}
+					vars->number_of_infiles = 0;
 					dup2(fd[i][0], STDIN_FILENO);
+					close(fd[i][1]);
+					close(fd[i][0]);
 				}
-				if (i == vars->num_cmd -1)
-				{
-					dup2(fd)
-				}
-
 				run(elements, info, envp);
 			}
 		}
-		if(i != 0){
+		if (i != 0)
+		{
 			close(fd[i - 1][0]);
 			close(fd[i - 1][1]);
 		}
@@ -157,11 +215,6 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		close(save_std_out);
 		waitpid(-1, &status, 0);
 		get_exit_status(vars, status);
-		if(i != 0)
-		{
-			close(fd[i-1][0]);
-			close(fd[i-1][1]);
-		}
 		i++;
 		elements = elements->next;
 	}
