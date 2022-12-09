@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:39:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:34:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/06 14:30:27 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,25 @@ char *save_ex_var(char *token)
 	while (len >= 0)
 		env_var[len--] = token[i--];
 	return (env_var);
+}
+
+char *return_ex_value(char *var, t_env *env)
+{
+	char *full_var;
+
+	while (env != NULL && env->var != ft_strnstr(env->var, var, ft_strlen(var)))
+		env = env->next;
+	if (env == NULL || (env->var[ft_strlen(var)] != '=' && env->var[ft_strlen(var)] != '\0'))
+	{
+		printf("VAR does not excist!\n");
+		g_exit_status = 127;
+		free(var);
+		return (NULL);
+	}
+	if (env->var[ft_strlen(var)] == '=')
+		var = ft_strjoin(var, "=");
+	full_var = env->var;
+	full_var = ft_strtrim_beginning(full_var, var);
+	free(var);
+	return (full_var);
 }

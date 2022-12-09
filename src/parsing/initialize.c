@@ -60,8 +60,8 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 	chunk->in_f = NULL;
 	chunk->out_f = NULL;
 	chunk->indentifier = -1;
-	chunk->fd_in = 0;
-	chunk->fd_out = 0;
+	chunk->fd[0] = 0;
+	chunk->fd[1] = 0;
 	chunk->prev = NULL;
 	chunk->next = NULL;
 	return (chunk);
@@ -112,8 +112,8 @@ t_chunk	*attach_chunk_end(t_chunk *chunk)
 	newnode->indentifier = 0;
 	newnode->in_f = NULL;
 	newnode->out_f = NULL;
-	newnode->fd_in = 0;
-	newnode->fd_out = 0;
+	newnode->fd[0] = 0;
+	newnode->fd[1] = 0;
 	newnode->next = NULL;
 	newnode->prev = temp;
 	temp->next = newnode;
