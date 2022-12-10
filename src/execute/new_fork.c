@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 19:10:14 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 19:50:00 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			if (pids == 0)
 			{
 				empty_data_input(&elements, i);
+				//there is something to fix here
+				// elements->fd[1] = save_std_out;
 				empty_data_output(&elements, vars, i);
 				last_cmd_output(&elements, vars, i);
 				first_cmd_input(&elements, i);
@@ -127,8 +129,22 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				redirect_io(&elements, vars);
 				redirect_out(&elements, vars);
 				redirect_in(&elements, vars);
+				if(elements->indentifier == BUILT_IN_BLOCK)
+				{
+					fprintf(stderr, "built in scope 1\n");
+					if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
+					{
+						fprintf(stderr, "built in scope 2\n");
+						builtins_echo(elements->fd[1], elements->arguments);
+					}
+				}
 				close(elements->fd[1]);
 				close(elements->fd[0]);
+				if(elements->indentifier == BUILT_IN_BLOCK)
+				{
+					fprintf(stderr, "built in scope 3\n");
+					exit(EXIT_SUCCESS);
+				}
 				run(elements, info, envp);
 			}
 		}
@@ -157,8 +173,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
 				// 	{
 				// 		builtins_echo(elements->fd[1], elements->arguments);
-				// 	}
-				// 	close(elements->fd[1]);
-				// 	close(elements->fd[0]);
-				// 	exit(EXIT_SUCCESS);
 				// }
+
+	// if(elements->indentifier == BUILT_IN_BLOCK)
+	// 	exit(EXIT_SUCCESS);

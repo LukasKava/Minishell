@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intialise_variables.c                              :+:      :+:    :+:   */
+/*   initialize_variables.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:12:43 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 17:12:57 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 19:49:48 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	count_command_number(t_chunk **salt)
 	num_cmds = 0;
 	while(elements)
 	{
-		if(elements->indentifier == CMD_BLOCK)
+		if(elements->indentifier == CMD_BLOCK ||
+		elements->indentifier == BUILT_IN_BLOCK)
 			num_cmds++;
 		elements = elements->next;
 	}
