@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 15:45:38 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 20:14:58 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		// EXECUTION CAN BEGIN
 		// second_child(&chunk_array, &info, envp);
-		execute(&hive->c_arr, &hive->info, envp);
+		execute(&hive->c_arr, hive, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr, &hive->info);
 	}
