@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/12/09 14:27:07 by lkavalia         ###   ########.fr       */
-=======
-/*   Updated: 2022/12/08 12:30:44 by pbiederm         ###   ########.fr       */
->>>>>>> b19d5dd3abf89e53d2c609cb0e77fc753db7599e
+/*   Updated: 2022/12/10 16:32:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

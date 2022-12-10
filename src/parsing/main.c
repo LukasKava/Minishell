@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/12/09 14:35:22 by lkavalia         ###   ########.fr       */
-=======
-/*   Updated: 2022/12/10 15:45:38 by pbiederm         ###   ########.fr       */
->>>>>>> b19d5dd3abf89e53d2c609cb0e77fc753db7599e
+/*   Updated: 2022/12/10 19:41:17 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
