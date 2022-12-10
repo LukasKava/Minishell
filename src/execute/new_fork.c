@@ -6,11 +6,13 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 13:43:46 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 15:14:43 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*need a simple command execute, execute one command*/
+/*
+Needs a simple command execute, to execute one command.
+*/
 #include	"../../includes/minishell.h"
 
 void	get_exit_status(t_vars *vars,  int status);
@@ -134,12 +136,19 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	t_vars	*vars;
 
 	int		pids;
-	int		i;
+	int		i, j;
 	int		status;
 	int		save_std_out;
 	int		save_std_in;
-	int		fd[9999][2];
+	int		**fd;
 	
+	fd = calloc(9999, sizeof(int*));
+	j = 0;
+	while (j < 9999)
+	{
+		fd[j] = malloc(2 * sizeof(int));
+		j++;
+	}
 	elements = *salt;
 	vars = initialize_vars(salt);
 	i = 0;
@@ -149,8 +158,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		save_std_in = dup(STDIN_FILENO);
 		fd[i][1] = save_std_out;
 		fd[i][0] = save_std_in;
-		
-		
+	
 		if (pipe_this_node(&elements))
 		{
 			if(pipe(fd[i]) == -1)
@@ -158,8 +166,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				write(2, "Error while creating pipe\n", 27);
 			}
 		}
-		
-		if (elements->indentifier == CMD_BLOCK && elements->command_path != NULL)
+		if ((elements->indentifier == CMD_BLOCK && elements->command_path != NULL) || elements->indentifier == BUILT_IN_BLOCK)
 		{
 			pids = fork();
 			if (pids == -1)
@@ -170,6 +177,16 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 			if (pids == 0)
 			{
+				// if(elements->indentifier == BUILT_IN_BLOCK)
+				// {
+				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
+				// 	{
+				// 		builtins_echo(fd[i][1], elements->arguments);
+				// 	}
+				// 	close(fd[i][1]);
+				// 	close(fd[i][0]);
+				// 	exit(EXIT_SUCCESS);
+				// }
 				if (i != 0 && (!(in_redirection_this_node(&elements))) && (!(pipe_last_node(&elements))))
 				{
 					fd[i][0] = open("./src/execute/tmp_in.txt", O_CREAT | O_RDWR |O_TRUNC , 0644);
@@ -255,6 +272,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		elements = elements->next;
 	}
 }
+					
 
 	// 	// If a command is not found, the child process created to execute it 
 	// 	// returns a status of 127. If a command is found but is not executable, 
