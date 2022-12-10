@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/08 12:16:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/09 14:34:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,8 @@ int 	skip_quotes(char *str, char quote, int i);
 void	initialize_info(t_info *info);
 t_token *initialize_token(t_token *token, t_info *info);
 t_chunk *initialize_chunk(t_chunk *chunk, t_info *info);
-t_token *attach_token_end(t_token *token);
-t_chunk *attach_chunk_end(t_chunk *chunk);
+t_token *attach_token_end(t_token *token, t_info *info);
+t_chunk *attach_chunk_end(t_chunk *chunk, t_info *info);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
@@ -156,7 +156,7 @@ char	*ft_delete(char *str, char *part);
 void	recognise_builtins(t_token **token);
 
 /*----	parsing.c	-------------*/
-void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk);
+void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk, t_info *info);
 
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/08 12:18:06 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/09 14:27:07 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_token	*initialize_token(t_token *token, t_info *info)
 	if (!token)
 	{
 		printf("ERROR(initialize_token): malloc has failed!\n");
+		g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}
@@ -52,6 +53,7 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 	if (!chunk)
 	{
 		printf("ERROR(initialize_chunk): malloc has failed!\n");
+		g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}
@@ -73,7 +75,7 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
  * RETURN:
  *	-- (token) is current node.
  */
-t_token	*attach_token_end(t_token *token)
+t_token	*attach_token_end(t_token *token, t_info *info)
 {
 	t_token	*temp;
 
@@ -81,6 +83,8 @@ t_token	*attach_token_end(t_token *token)
 	if (!temp)
 	{
 		printf("allocation failed!\n");
+		g_exit_status = 5;
+		info->error = true;
 		return (NULL);
 	}
 	temp->double_quotes = false;
@@ -93,7 +97,7 @@ t_token	*attach_token_end(t_token *token)
 	return (token);
 }
 
-t_chunk	*attach_chunk_end(t_chunk *chunk)
+t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info)
 {
 	t_chunk	*newnode;
 	t_chunk	*temp;
@@ -103,6 +107,8 @@ t_chunk	*attach_chunk_end(t_chunk *chunk)
 	if (!newnode)
 	{
 		printf("allocation failed!\n");
+		g_exit_status = 5;
+		info->error = true;
 		return (NULL);
 	}
 	while (temp->next != NULL)
