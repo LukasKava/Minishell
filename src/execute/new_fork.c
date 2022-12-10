@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/09 20:46:41 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 12:00:50 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,11 +139,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		save_std_out;
 	int		save_std_in;
 	int		fd[9999][2];
-	// int		pipe_fd[2];
-	// int		read_from_pipe;
- 
-	// pipe(pipe_fd);
-	// simple_execute(salt, info, envp);
+	// int		testfd;
+	
 	elements = *salt;
 	vars = initialize_vars(salt);
 	i = 0;
@@ -174,7 +171,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					close(fd[i][0]);
 					close(fd[i][1]);
 				}
-				if (i != 0 && i != vars->num_cmd - 1 && pipe_last_node(&elements))
+				if (i != 0 && pipe_last_node(&elements))
 				{
 					dup2(fd[i - 1][0], STDIN_FILENO);
 					close(fd[i - 1][1]);
@@ -204,12 +201,15 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 					dup2(fd[i][0], STDIN_FILENO);
 					close(fd[i][1]);
 					close(fd[i][0]);
-					if (i == vars->num_cmd - 1)
-					{
-						dup2(zero_fd[0], STDIN_FILENO);
-						close(zero_fd[0]);
-					}
 				}
+				// if (i == vars->num_cmd - 1)
+				// {
+				// 	testfd = open("./src/execute/dummy_file", O_CREAT | O_RDWR , 0644);
+				// 	dup2(testfd, STDIN_FILENO);
+				// 	close(testfd);
+					//todo fork exeve remove this file
+					//todo cases when to use this
+				// }
 				run(elements, info, envp);
 			}
 		}
@@ -218,8 +218,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			close(fd[i - 1][0]);
 			close(fd[i - 1][1]);
 		}
-		close(zero_fd[1]);
-		close(zero_fd[0]);
+		// close(testfd);
 		dup2(save_std_in, STDIN_FILENO);
 		close(save_std_in);
 		dup2(save_std_out, STDOUT_FILENO);
