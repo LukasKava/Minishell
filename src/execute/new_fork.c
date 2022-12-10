@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 19:50:00 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 20:21:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	empty_data_input(t_chunk **salt, int i);
 void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
+void	echo_handle(t_chunk	**salt);
+void	cd_handle(t_chunk	**salt, t_env	*env);
 
 /*Function for the edge case when there is no pipe input.*/
 void empty_data_input(t_chunk	**salt, int i)
@@ -84,7 +86,36 @@ void	get_exit_status(t_vars *vars,  int status)
 	}
 }
 
-void	execute(t_chunk **salt, t_info *info, char	**envp)
+void	echo_handle(t_chunk	**salt)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if(element->indentifier == BUILT_IN_BLOCK)
+	{
+		if (strncmp(element->arguments[0],"echo", strlen("echo")) == 0)
+		{
+			builtins_echo(element->fd[1], element->arguments);
+		}
+	}	
+}
+
+void	cd_handle(t_chunk	**salt, t_env	*env)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if(element->indentifier == BUILT_IN_BLOCK)
+	{
+		if (strncmp(element->arguments[0],"cd", strlen("cd")) == 0)
+		{
+			fprintf(stderr,"elements->arguments: %s\n env: %s", element->arguments[1], env->var_name);
+			builtins_cd(element->arguments, &env);
+		}
+	}	
+}
+
+void	execute(t_chunk **salt, t_data *data, char	**envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
@@ -113,15 +144,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			pids = fork();
 			if (pids == -1)
 			{
-				freeing_chunks(salt, info);
+				freeing_chunks(salt, &data->info);
 				free(vars);
 				write(2, "Error while creating process\n", 30);
 			}
 			if (pids == 0)
 			{
 				empty_data_input(&elements, i);
-				//there is something to fix here
-				// elements->fd[1] = save_std_out;
 				empty_data_output(&elements, vars, i);
 				last_cmd_output(&elements, vars, i);
 				first_cmd_input(&elements, i);
@@ -129,23 +158,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 				redirect_io(&elements, vars);
 				redirect_out(&elements, vars);
 				redirect_in(&elements, vars);
-				if(elements->indentifier == BUILT_IN_BLOCK)
-				{
-					fprintf(stderr, "built in scope 1\n");
-					if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-					{
-						fprintf(stderr, "built in scope 2\n");
-						builtins_echo(elements->fd[1], elements->arguments);
-					}
-				}
+				echo_handle(&elements);
+				cd_handle(&elements, data->env);
 				close(elements->fd[1]);
 				close(elements->fd[0]);
 				if(elements->indentifier == BUILT_IN_BLOCK)
-				{
-					fprintf(stderr, "built in scope 3\n");
 					exit(EXIT_SUCCESS);
-				}
-				run(elements, info, envp);
+				run(elements, &data->info, envp);
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);
@@ -168,12 +187,3 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	// 	// the return status is 126.
 	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
 	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
-	// if(elements->indentifier == BUILT_IN_BLOCK)
-				// {
-				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-				// 	{
-				// 		builtins_echo(elements->fd[1], elements->arguments);
-				// }
-
-	// if(elements->indentifier == BUILT_IN_BLOCK)
-	// 	exit(EXIT_SUCCESS);

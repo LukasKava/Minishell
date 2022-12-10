@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 18:38:18 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 20:15:39 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ int 	ft_pwd(int fd);
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
 
 /*----	../src/new_fork.c	------------------*/
-void	execute(t_chunk **salt, t_info *info, char	**envp);
+void	execute(t_chunk **salt, t_data *data, char	**envp);
 
 /*----	../parsing/errors.c	------------------*/
 void	simple_err_message(t_info *info, char *message, int exit_status);
