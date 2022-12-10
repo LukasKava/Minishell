@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/08 12:16:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/10 18:38:18 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/
-int ft_pwd(int fd);
+int 	ft_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
@@ -232,6 +232,23 @@ int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
 void	run(t_chunk *salt, t_info *info, char **envp);
+
+/*----	../src/initalise_variables.c	-------------*/
+t_vars	*initialize_vars(t_chunk **salt);
+int		count_command_number(t_chunk **salt);
+
+/*----	../src/pipes.c	-------------*/
+int		pipe_this_node(t_chunk **salt);
+int		pipe_last_node(t_chunk **salt);
+void	set_pipe_io(t_chunk **salt, t_vars *vars, int i);
+
+/*----	../src/redirections.c	-------------*/
+void	redirect_io(t_chunk **salt, t_vars *vars);
+int		in_redirection_this_node(t_chunk **salt);
+int		out_redirection_this_node(t_chunk **salt);
+void	redirect_out(t_chunk **salt, t_vars *vars);
+int		in_redirection_next_node(t_chunk **salt);
+void	redirect_in(t_chunk **salt, t_vars *vars);
 
 //INDENTIFIER EXPLANATION:
 /**

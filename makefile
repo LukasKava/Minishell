@@ -42,7 +42,6 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions_two.c\
 		./src/parsing/final_check.c\
 		./src/parsing/errors.c\
-		./src/execute/run.c\
 		./src/signals.c\
 		./src/builtins/builtins_utils.c\
 		./src/builtins/cd.c\
@@ -53,7 +52,12 @@ MAIN =	./src/parsing/main.c \
 		./src/builtins/pwd.c\
 		./src/builtins/unset.c\
 		./src/execute/here_doc.c\
-		./src/execute/new_fork.c
+		./src/execute/new_fork.c\
+		./src/execute/run.c\
+		./src/execute/initialize_variables.c\
+		./src/execute/pipes.c\
+		./src/execute/redirections.c
+
 
 
 OBJS = ${SOURCES:.c=.o}

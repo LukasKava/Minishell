@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 15:38:01 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/10 19:10:14 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,117 +16,71 @@ Needs a simple command execute, to execute one command.
 #include	"../../includes/minishell.h"
 
 void	get_exit_status(t_vars *vars,  int status);
-int		count_command_number(t_chunk **salt);
-t_vars	*initialize_vars(t_chunk **salt);
-int		pipe_this_node(t_chunk **salt);
-int		in_redirection_this_node(t_chunk **salt);
-int		pipe_last_node(t_chunk **salt);
+void	empty_data_input(t_chunk **salt, int i);
+void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
+void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
+void	first_cmd_input(t_chunk **salt, int i);
 
-
-t_vars	*initialize_vars(t_chunk **salt)
-{
-	t_vars	*vars;
-	
-	vars = malloc(sizeof(*vars));
-	vars->num_cmd = count_command_number(salt);
-	vars->number_of_infiles = 0;
-	vars->number_of_outfiles = 0;
-	return(vars);
-}
-
-int	count_command_number(t_chunk **salt)
-{
-	t_chunk	*elements;
-	int		num_cmds;
-	
-	elements = *salt;
-	num_cmds = 0;
-	while(elements)
-	{
-		if(elements->indentifier == CMD_BLOCK)
-			num_cmds++;
-		elements = elements->next;
-	}
-	return(num_cmds);
-}
-
-int	pipe_this_node(t_chunk **salt)
-{
-	t_chunk	*elements;
-	
-	elements = *salt;
-	if(elements->next != NULL && elements->out_f == NULL && elements->next->in_f == NULL)
-		return(1);
-	else
-		return(0);
-}
-
-int	pipe_last_node(t_chunk **salt)
-{
-	t_chunk	*elements;
-	
-	elements = *salt;
-	if(elements->prev != NULL && elements->prev->out_f == NULL && elements->in_f == NULL)
-		return(1);
-	else
-		return(0);
-}
-
-int in_redirection_this_node(t_chunk **salt)
+/*Function for the edge case when there is no pipe input.*/
+void empty_data_input(t_chunk	**salt, int i)
 {
 	t_chunk *element;
 
 	element = *salt;
-	if(element->in_f != NULL)
+	if(i != 0 && (!(in_redirection_this_node(&element)))\
+	&& (!(pipe_last_node(&element))))
 	{
-		return(1);
-	}
-	else
-	{
-		return(0);
+		element->fd[0] = open("./src/execute/tmp_in.txt",\
+		O_CREAT | O_RDWR |O_TRUNC , 0644);
+		dup2(element->fd[0], STDIN_FILENO);
 	}
 }
 
-int in_redirection_next_node(t_chunk **salt)
+void empty_data_output(t_chunk	**salt, t_vars *vars, int i)
 {
 	t_chunk *element;
 
 	element = *salt;
-	if(element->next != NULL && element->next->in_f != NULL)
+	if (i != vars->num_cmd - 1 && 
+	(!(out_redirection_this_node(&element))) &&
+	(!(pipe_this_node(&element))))
 	{
-		return(1);
-	}
-	else
-	{
-		return(0);
+		element->fd[1] = open("./src/execute/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
+		dup2(element->fd[1], STDOUT_FILENO);
 	}
 }
 
-// void open_infiles(t_chunk **salt, t_vars *vars)
-// {
-// 	t_chunk	*elements;
-
-// 	elements = *salt; 
-// 	while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
-// 	{
-// 		fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-// 		vars->number_of_infiles++;
-// 	}
-// 	vars->number_of_infiles = 0;
-// }
-
-int out_redirection_this_node(t_chunk **salt)
+void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i)
 {
-	t_chunk *element;
+	t_chunk	*element;
 
 	element = *salt;
-	if (element->out_f != NULL)
+	if (i == vars->num_cmd - 1 && (!(out_redirection_this_node(&element))))
 	{
-		return(1);
+		dup2(element->fd[1], STDOUT_FILENO);
 	}
-	else
+}
+
+void	first_cmd_input(t_chunk **salt, int i)
+{
+	t_chunk	*element;
+	
+	element = *salt;
+	if (i == 0 && (!(in_redirection_this_node(&element))))
 	{
-		return(0);
+		dup2(element->fd[0], STDIN_FILENO);
+	}
+}
+
+void	get_exit_status(t_vars *vars,  int status)
+{
+	int	i;
+
+	i = 0;
+	while(i < vars->num_cmd)
+	{
+		g_exit_status = WEXITSTATUS(status);
+		i++;
 	}
 }
 
@@ -140,15 +94,7 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	int		status;
 	int		save_std_out;
 	int		save_std_in;
-	// int		**fd;
-	
-	// fd = calloc(9999, sizeof(int*));
-	// j = 0;
-	// while (j < 9999)
-	// {
-	// 	fd[j] = malloc(2 * sizeof(int));
-	// 	j++;
-	// }
+
 	elements = *salt;
 	vars = initialize_vars(salt);
 	i = 0;
@@ -160,12 +106,8 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		elements->fd[0] = save_std_in;
 	
 		if (pipe_this_node(&elements))
-		{
 			if(pipe(elements->fd) == -1)
-			{
 				write(2, "Error while creating pipe\n", 27);
-			}
-		}
 		if ((elements->indentifier == CMD_BLOCK && elements->command_path != NULL) || elements->indentifier == BUILT_IN_BLOCK)
 		{
 			pids = fork();
@@ -177,94 +119,27 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 			}
 			if (pids == 0)
 			{
-				// if(elements->indentifier == BUILT_IN_BLOCK)
-				// {
-				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-				// 	{
-				// 		builtins_echo(elements->fd[1], elements->arguments);
-				// 	}
-				// 	close(elements->fd[1]);
-				// 	close(elements->fd[0]);
-				// 	exit(EXIT_SUCCESS);
-				// }
-				if (i != 0 && (!(in_redirection_this_node(&elements))) && (!(pipe_last_node(&elements))))
-				{
-					elements->fd[0] = open("./src/execute/tmp_in.txt", O_CREAT | O_RDWR |O_TRUNC , 0644);
-					dup2(elements->fd[0], STDIN_FILENO);
-				}
-				if (i != vars->num_cmd - 1 && (!(out_redirection_this_node(&elements))) && (!(pipe_this_node(&elements))))
-				{
-					elements->fd[1] = open("./src/execute/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
-					dup2(elements->fd[1], STDOUT_FILENO);
-				}
-				if (i == vars->num_cmd - 1 && (!(out_redirection_this_node(&elements))))
-				{
-					dup2(elements->fd[1], STDOUT_FILENO);
-				}
-				if (i == 0 && (!(in_redirection_this_node(&elements))))
-				{
-					dup2(elements->fd[0], STDIN_FILENO);
-				}
-				if (i != vars->num_cmd - 1 && pipe_this_node(&elements))
-				{
-					dup2(elements->fd[1], STDOUT_FILENO);
-				}
-				if (i != 0 && pipe_last_node(&elements))
-				{
-					dup2(elements->prev->fd[0], STDIN_FILENO);
-					close(elements->prev->fd[1]);
-					close(elements->prev->fd[0]);
-				}
-				if (in_redirection_this_node(&elements) && out_redirection_this_node(&elements))
-				{
-					while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
-					{
-						elements->fd[0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-						vars->number_of_infiles++;
-					}
-					vars->number_of_infiles = 0;
-					while (elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-					{
-						elements->fd[1] = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-						vars->number_of_outfiles++;
-					}
-					vars->number_of_outfiles = 0;
-					dup2(elements->fd[1], STDOUT_FILENO);
-					dup2(elements->fd[0], STDIN_FILENO);
-				}
-				else if(out_redirection_this_node(&elements))
-				{
-					while (elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-					{
-						elements->fd[1] = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-						vars->number_of_outfiles++;
-					}
-					vars->number_of_outfiles = 0;
-					dup2(elements->fd[1], STDOUT_FILENO);
-				}
-				else if(in_redirection_this_node(&elements))
-				{
-					while (elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
-					{
-						elements->fd[0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-						vars->number_of_infiles++;
-					}
-					vars->number_of_infiles = 0;
-					dup2(elements->fd[0], STDIN_FILENO);
-				}
+				empty_data_input(&elements, i);
+				empty_data_output(&elements, vars, i);
+				last_cmd_output(&elements, vars, i);
+				first_cmd_input(&elements, i);
+				set_pipe_io(&elements, vars, i);
+				redirect_io(&elements, vars);
+				redirect_out(&elements, vars);
+				redirect_in(&elements, vars);
 				close(elements->fd[1]);
 				close(elements->fd[0]);
 				run(elements, info, envp);
 			}
 		}
+		dup2(save_std_in, STDIN_FILENO);
+		dup2(save_std_out, STDOUT_FILENO);
 		if (i != 0)
 		{
 			close(elements->prev->fd[0]);
 			close(elements->prev->fd[1]);
 		}
-		dup2(save_std_in, STDIN_FILENO);
 		close(save_std_in);
-		dup2(save_std_out, STDOUT_FILENO);
 		close(save_std_out);
 		waitpid(-1, &status, 0);
 		get_exit_status(vars, status);
@@ -277,116 +152,13 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	// 	// the return status is 126.
 	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
 	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
-void	get_exit_status(t_vars *vars,  int status)
-{
-	int	i;
-
-	i = 0;
-	while(i < vars->num_cmd)
-	{
-		g_exit_status = WEXITSTATUS(status);
-		i++;
-	}
-}
-
-// execute_enchanced(t_chunk **salt, t_info *info, char	**envp)
-// {
-// 	int fd[10][2],i,pc;
-// 	char *argv[100];
-
-// 	for(i=0;i<nr;i++){
-// 		tokenize_buffer(argv,&pc,buf[i]," ");
-// 		if(i!=nr-1){
-// 			if(pipe(fd[i])<0){
-// 				perror("pipe creating was not successfull\n");
-// 				return;
-// 			}
-// 		}
-// 		if(fork()==0){//child1
-// 			if(i!=nr-1){
-// 				dup2(fd[i][1],1);
-// 				close(fd[i][0]);
-// 				close(fd[i][1]);
-// 			}
-
-// 			if(i!=0){
-// 				dup2(elements->prev->fd[0],0);
-// 				close(elements->prev->fd[1]);
-// 				close(elements->prev->fd[0]);
-// 			}
-// 			execvp(argv[0],argv);
-// 			perror("invalid input ");
-// 			exit(1);//in case exec is not successfull, exit
-// 		}
-// 		//parent
-// 		if(i!=0){//second process
-// 			close(elements->prev->fd[0]);
-// 			close(elements->prev->fd[1]);
-// 		}
-// 		waitpid(NULL);
-// 	}
-
-// }
-					
-// if (i == 0)
-		// {
-			
-		// 	while(infile_in_this_node(&elements, &vars))
-		// 	{
-		// 		fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-		// 		vars->number_of_infiles++;
-		// 	}
-		// 	vars->number_of_infiles = 0;
-		// 	while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].type == DELIMITOR)
-		// 	{
-		// 		fd[i][0] = dup(here_doc(elements->in_f[vars->number_of_infiles].name));
-		// 		vars->number_of_infiles++;
-		// 	}
-		// 	vars->number_of_infiles = 0;
-		// }
-		// else
-		// {
-		// 	while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].name != NULL && elements->in_f[vars->number_of_infiles].type == INPUT_F)
-		// 	{
-		// 		fd[i][0] = open(elements->in_f[vars->number_of_infiles].name, O_RDONLY);
-		// 		vars->number_of_infiles++;
-		// 	}
-		// 	vars->number_of_infiles = 0;
-		// 	while(elements->in_f != NULL && elements->in_f[vars->number_of_infiles].type == DELIMITOR)
-		// 	{
-		// 		fd[i][0] = dup(here_doc(elements->in_f[vars->number_of_infiles].name));
-		// 		vars->number_of_infiles++;
-		// 	}
-		// 	vars->number_of_infiles = 0;
-		// }
-		// if (i == vars->num_cmd - 1)
-		// {
-		// 	while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-		// 	{
-		// 		elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		// 		vars->number_of_outfiles++;
-		// 	}
-		// 	vars->number_of_outfiles = 0;
-		// 	while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
-		// 	{
-		// 		elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		// 		vars->number_of_outfiles++;
-		// 	}
-		// 	vars->number_of_outfiles = 0;
-		// }
-		// else
-		// {
-		// 	/*place for all output except for last one*/
-		// 	while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-		// 	{
-		// 		elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		// 		vars->number_of_outfiles++;
-		// 	}
-		// 	vars->number_of_infiles = 0;
-		// 	while(elements->out_f != NULL && elements->out_f[vars->number_of_outfiles].name != NULL && elements->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
-		// 	{
-		// 		elements->fd_out = open(elements->out_f[vars->number_of_outfiles].name, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		// 		vars->number_of_outfiles++;
-		// 	}
-		// 	vars->number_of_outfiles = 0;
-		// }
+	// if(elements->indentifier == BUILT_IN_BLOCK)
+				// {
+				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
+				// 	{
+				// 		builtins_echo(elements->fd[1], elements->arguments);
+				// 	}
+				// 	close(elements->fd[1]);
+				// 	close(elements->fd[0]);
+				// 	exit(EXIT_SUCCESS);
+				// }
