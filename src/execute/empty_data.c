@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:32:53 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 11:33:13 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 12:07:11 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ void empty_data_input(t_chunk	**salt, int i)
 	if(i != 0 && (!(in_redirection_this_node(&element))) && 
 	(!(pipe_last_node(&element))))
 	{
-		element->fd[0] = open("./src/includes/tmp_in.txt",\
+		element->fd[0] = open("./includes/tmp_in.txt",\
 		O_CREAT | O_RDWR |O_TRUNC , 0644);
 		dup2(element->fd[0], STDIN_FILENO);
+		// close(element->fd[0]);
 	}
 }
 
@@ -36,7 +37,8 @@ void empty_data_output(t_chunk	**salt, t_vars *vars, int i)
 	(!(out_redirection_this_node(&element))) &&
 	(!(pipe_this_node(&element))))
 	{
-		element->fd[1] = open("./src/includes/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
+		element->fd[1] = open("./includes/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
 		dup2(element->fd[1], STDOUT_FILENO);
+		// close(element->fd[1]);
 	}
 }

@@ -6,42 +6,20 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 11:34:57 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 12:20:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 Needs a simple command execute, to execute one command.
+Needs status 126 when command is not found by access.
+Closing file descriptors hen there is one command.
+
 */
 #include	"../../includes/minishell.h"
 
 void	get_exit_status(t_vars *vars,  int status);
-void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
-void	first_cmd_input(t_chunk **salt, int i);
-
-void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i)
-{
-	t_chunk	*element;
-
-	element = *salt;
-	if (i == vars->num_cmd - 1 &&
-	(!(out_redirection_this_node(&element))))
-	{
-		dup2(element->fd[1], STDOUT_FILENO);
-	}
-}
-
-void	first_cmd_input(t_chunk **salt, int i)
-{
-	t_chunk	*element;
-	
-	element = *salt;
-	if (i == 0 &&
-	(!(in_redirection_this_node(&element))))
-	{
-		dup2(element->fd[0], STDIN_FILENO);
-	}
-}
+void	manage_fd(t_chunk **salt, t_vars *vars, int i);
 
 void	get_exit_status(t_vars *vars,  int status)
 {
@@ -53,6 +31,21 @@ void	get_exit_status(t_vars *vars,  int status)
 		g_exit_status = WEXITSTATUS(status);
 		i++;
 	}
+}
+
+void manage_fd(t_chunk **salt, t_vars *vars, int i)
+{
+	t_chunk *element;
+
+	element = *salt;
+	empty_data_input(&element, i);
+	empty_data_output(&element, vars, i);
+	last_cmd_output(&element, vars, i);
+	first_cmd_input(&element, i);
+	set_pipe_io(&element, vars, i);
+	redirect_io(&element, vars);
+	redirect_out(&element, vars);
+	redirect_in(&element, vars);
 }
 
 void	execute(t_chunk **salt, t_data *data, char	**envp)
@@ -83,17 +76,10 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		elements->command_path != NULL) ||
 		elements->indentifier == BUILT_IN_BLOCK)
 		{
-				empty_data_input(&elements, i);
-				empty_data_output(&elements, vars, i);
-				last_cmd_output(&elements, vars, i);
-				first_cmd_input(&elements, i);
-				set_pipe_io(&elements, vars, i);
-				redirect_io(&elements, vars);
-				redirect_out(&elements, vars);
-				redirect_in(&elements, vars);
-				echo_handle(&elements);
-				cd_handle(&elements, data->env);
-				pwd_handle(&elements);
+			manage_fd(&elements, vars, i);
+			echo_handle(&elements);
+			cd_handle(&elements, data->env);
+			pwd_handle(&elements);
 			pids = fork();
 			if (pids == -1)
 			{
@@ -105,7 +91,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			{
 				if(elements->indentifier == BUILT_IN_BLOCK)
 					exit(EXIT_SUCCESS);
-				run(elements, &data->info, envp);
+				run(elements, &data->info, envp, vars);
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 20:14:58 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 12:09:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
+		hive.info.readline = readline("Minishell> ");
 		if (!hive.info.readline)
 		{
 			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);		

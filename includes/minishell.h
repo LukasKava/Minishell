@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 11:33:41 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 12:19:04 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void	simple_err_message(t_info *info, char *message, int exit_status);
 int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
-void	run(t_chunk *salt, t_info *info, char **envp);
+void	run(t_chunk *salt, t_info *info, char **envp, t_vars *vars);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);
@@ -259,6 +259,10 @@ void	pwd_handle(t_chunk	**salt);
 /*----	../src/empty_data.c	-------------*/
 void	empty_data_input(t_chunk **salt, int i);
 void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
+
+/*----	../src/pipeline_io.c	-------------*/
+void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
+void	first_cmd_input(t_chunk **salt, int i);
 
 //INDENTIFIER EXPLANATION:
 /**

@@ -58,7 +58,8 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/pipes.c\
 		./src/execute/redirections.c\
 		./src/execute/builtin_handles.c\
-		./src/execute/empty_data.c
+		./src/execute/empty_data.c\
+		./src/execute/pipeline_io.c
 
 
 
