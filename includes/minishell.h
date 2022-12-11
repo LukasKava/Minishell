@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 20:15:39 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 11:33:41 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/
 int 	ft_pwd(int fd);
+int		builtins_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
@@ -249,6 +250,15 @@ int		out_redirection_this_node(t_chunk **salt);
 void	redirect_out(t_chunk **salt, t_vars *vars);
 int		in_redirection_next_node(t_chunk **salt);
 void	redirect_in(t_chunk **salt, t_vars *vars);
+
+/*----	../src/builtin_handles.c	-------------*/
+void	echo_handle(t_chunk	**salt);
+void	cd_handle(t_chunk	**salt, t_env	*env);
+void	pwd_handle(t_chunk	**salt);
+
+/*----	../src/empty_data.c	-------------*/
+void	empty_data_input(t_chunk **salt, int i);
+void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
 
 //INDENTIFIER EXPLANATION:
 /**
