@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 13:57:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:44:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,7 @@ void	first_cmd_input(t_chunk **salt, int i);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
+#define ELSE_BLOCK 22
 
 #define	OUTPUT 1
 #define INPUT 0
