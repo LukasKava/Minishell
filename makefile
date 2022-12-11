@@ -68,7 +68,10 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/run.c\
 		./src/execute/initialize_variables.c\
 		./src/execute/pipes.c\
-		./src/execute/redirections.c
+		./src/execute/redirections.c\
+		./src/execute/builtin_handles.c\
+		./src/execute/empty_data.c\
+		./src/execute/pipeline_io.c
 
 
 OBJS = ${SOURCES:.c=.o}

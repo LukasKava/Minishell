@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 19:41:17 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 14:00:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		// EXECUTION CAN BEGIN
 		// second_child(&chunk_array, &info, envp);
-		execute(&hive->c_arr, &hive->info, envp);
+		execute(&hive->c_arr, hive, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr, &hive->info);
 	}
@@ -144,7 +144,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("Mini_hell\U0001F34C\U0001F412> ");
+		hive.info.readline = readline("Minishell> ");
 		if (!hive.info.readline)
 		{
 			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);		

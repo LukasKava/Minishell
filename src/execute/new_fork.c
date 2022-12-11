@@ -6,71 +6,20 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 19:50:00 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 13:40:49 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 Needs a simple command execute, to execute one command.
+Needs status 126 when command is not found by access.
+Closing file descriptors hen there is one command.
+
 */
 #include	"../../includes/minishell.h"
 
 void	get_exit_status(t_vars *vars,  int status);
-void	empty_data_input(t_chunk **salt, int i);
-void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
-void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
-void	first_cmd_input(t_chunk **salt, int i);
-
-/*Function for the edge case when there is no pipe input.*/
-void empty_data_input(t_chunk	**salt, int i)
-{
-	t_chunk *element;
-
-	element = *salt;
-	if(i != 0 && (!(in_redirection_this_node(&element)))\
-	&& (!(pipe_last_node(&element))))
-	{
-		element->fd[0] = open("./src/execute/tmp_in.txt",\
-		O_CREAT | O_RDWR |O_TRUNC , 0644);
-		dup2(element->fd[0], STDIN_FILENO);
-	}
-}
-
-void empty_data_output(t_chunk	**salt, t_vars *vars, int i)
-{
-	t_chunk *element;
-
-	element = *salt;
-	if (i != vars->num_cmd - 1 && 
-	(!(out_redirection_this_node(&element))) &&
-	(!(pipe_this_node(&element))))
-	{
-		element->fd[1] = open("./src/execute/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
-		dup2(element->fd[1], STDOUT_FILENO);
-	}
-}
-
-void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i)
-{
-	t_chunk	*element;
-
-	element = *salt;
-	if (i == vars->num_cmd - 1 && (!(out_redirection_this_node(&element))))
-	{
-		dup2(element->fd[1], STDOUT_FILENO);
-	}
-}
-
-void	first_cmd_input(t_chunk **salt, int i)
-{
-	t_chunk	*element;
-	
-	element = *salt;
-	if (i == 0 && (!(in_redirection_this_node(&element))))
-	{
-		dup2(element->fd[0], STDIN_FILENO);
-	}
-}
+void	manage_fd(t_chunk **salt, t_vars *vars, int i);
 
 void	get_exit_status(t_vars *vars,  int status)
 {
@@ -84,7 +33,22 @@ void	get_exit_status(t_vars *vars,  int status)
 	}
 }
 
-void	execute(t_chunk **salt, t_info *info, char	**envp)
+void manage_fd(t_chunk **salt, t_vars *vars, int i)
+{
+	t_chunk *element;
+
+	element = *salt;
+	empty_data_input(&element, i);
+	empty_data_output(&element, vars, i);
+	last_cmd_output(&element, vars, i);
+	first_cmd_input(&element, i);
+	set_pipe_io(&element, vars, i);
+	redirect_io(&element, vars);
+	redirect_out(&element, vars);
+	redirect_in(&element, vars);
+}
+
+void	execute(t_chunk **salt, t_data *data, char	**envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
@@ -108,44 +72,30 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 		if (pipe_this_node(&elements))
 			if(pipe(elements->fd) == -1)
 				write(2, "Error while creating pipe\n", 27);
-		if ((elements->indentifier == CMD_BLOCK && elements->command_path != NULL) || elements->indentifier == BUILT_IN_BLOCK)
+		if ((elements->indentifier == CMD_BLOCK &&
+		elements->command_path != NULL) ||
+		elements->indentifier == BUILT_IN_BLOCK)
 		{
+			manage_fd(&elements, vars, i);
+			echo_handle(&elements);
+			cd_handle(&elements, data->env);
+			pwd_handle(&elements);
+			env_handle(&elements, data->env);
+			export_handle(&data->exp_l, &data->env, &elements, elements->fd[1]);
+			// int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
+			unset_handle(&data->exp_l, &data->env, &elements);
 			pids = fork();
 			if (pids == -1)
 			{
-				freeing_chunks(salt, info);
+				freeing_chunks(salt, &data->info);
 				free(vars);
 				write(2, "Error while creating process\n", 30);
 			}
 			if (pids == 0)
 			{
-				empty_data_input(&elements, i);
-				//there is something to fix here
-				// elements->fd[1] = save_std_out;
-				empty_data_output(&elements, vars, i);
-				last_cmd_output(&elements, vars, i);
-				first_cmd_input(&elements, i);
-				set_pipe_io(&elements, vars, i);
-				redirect_io(&elements, vars);
-				redirect_out(&elements, vars);
-				redirect_in(&elements, vars);
 				if(elements->indentifier == BUILT_IN_BLOCK)
-				{
-					fprintf(stderr, "built in scope 1\n");
-					if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-					{
-						fprintf(stderr, "built in scope 2\n");
-						builtins_echo(elements->fd[1], elements->arguments);
-					}
-				}
-				close(elements->fd[1]);
-				close(elements->fd[0]);
-				if(elements->indentifier == BUILT_IN_BLOCK)
-				{
-					fprintf(stderr, "built in scope 3\n");
 					exit(EXIT_SUCCESS);
-				}
-				run(elements, info, envp);
+				run(elements, &data->info, envp, vars);
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);
@@ -168,12 +118,3 @@ void	execute(t_chunk **salt, t_info *info, char	**envp)
 	// 	// the return status is 126.
 	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
 	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);
-	// if(elements->indentifier == BUILT_IN_BLOCK)
-				// {
-				// 	if (strncmp(elements->arguments[0],"echo", strlen("echo")) == 0)
-				// 	{
-				// 		builtins_echo(elements->fd[1], elements->arguments);
-				// }
-
-	// if(elements->indentifier == BUILT_IN_BLOCK)
-	// 	exit(EXIT_SUCCESS);

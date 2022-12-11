@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/05 15:49:16 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 12:57:52 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	here_doc(char	*delimit)
 	while (TRUE)
 	{
 		buff = readline("> ");
-		fprintf(stderr, "output: %s\n", buff);
-		fprintf(stderr, "delimitor: %s strlen: %ld strncmp: %d\n", delimit, ft_strlen(delimit), ft_strncmp(buff, delimit, ft_strlen(delimit)));
 		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0)
 			break;
 		write(pfd[OUTPUT], buff, strlen(buff));
