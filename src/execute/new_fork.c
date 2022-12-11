@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 13:40:49 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 14:18:17 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,18 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		if (pipe_this_node(&elements))
 			if(pipe(elements->fd) == -1)
 				write(2, "Error while creating pipe\n", 27);
+		manage_fd(&elements, vars, i);
 		if ((elements->indentifier == CMD_BLOCK &&
 		elements->command_path != NULL) ||
 		elements->indentifier == BUILT_IN_BLOCK)
 		{
-			manage_fd(&elements, vars, i);
 			echo_handle(&elements);
 			cd_handle(&elements, data->env);
 			pwd_handle(&elements);
 			env_handle(&elements, data->env);
 			export_handle(&data->exp_l, &data->env, &elements, elements->fd[1]);
-			// int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
 			unset_handle(&data->exp_l, &data->env, &elements);
+			exit_handle(data, &elements);
 			pids = fork();
 			if (pids == -1)
 			{
