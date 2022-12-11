@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 17:28:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 10:52:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:16:19 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ void replace_the_value(t_env **ex_l, t_env **e_l, char *str)
 	{
 		if (ft_strncmp((*ex_l)->var_name, name, ft_strlen(name)) == 0)
 		{
-			printf("CHANGING\n");
 			free((*ex_l)->var_name);
 			(*ex_l)->var_name = ft_strdup(name);
 			free((*ex_l)->var);
@@ -189,16 +188,15 @@ void replace_the_value(t_env **ex_l, t_env **e_l, char *str)
 		e_name = save_name((*e_l)->var);
 		if (ft_strncmp(e_name, name, ft_strlen(name)) == 0)
 		{
-			printf("CHANGING_1\n");
 			free((*e_l)->var);
 			(*e_l)->var = ft_strdup(str);
+			free(e_name);
 			break;
 		}
 		free(e_name);
 		(*e_l) = (*e_l)->next;
 	}
 	(*e_l) = temp_e;
-	free(e_name);
 	free(name);
 }
 
@@ -222,14 +220,14 @@ int builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd)
 			printf("case: %s valid: %d\n", line[a], i);
 			if (i == -1)
 				return (1);
-			if (i == 1 && name_exists(*exp_list, line[a]) == 1)
+			if (name_exists(*exp_list, line[a]) == 1)
 				replace_the_value(exp_list, e_l, line[a]);
 			else if (i == 1)
 			{
 				inject_to_exp_l(exp_list, line[a]);
 				inject_to_e_l(e_l, line[a]);
 			}
-			if (i == 0)
+			if (i == 0 && name_exists(*exp_list, line[a]) != 1)
 				inject_to_exp_l(exp_list, line[a]);
 			a++;
 		}

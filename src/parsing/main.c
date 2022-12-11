@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 14:00:58 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 16:34:44 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,8 @@ int main(int argc, char **argv, char **envp)
 		errors_before(&hive.info);
 		parsing_and_execution(&hive, envp);
 	}
+	free(hive.info.readline);
+	rl_clear_history();
 	freeing_e_list(&(&hive)->env);
 	freeing_e_list(&(&hive)->exp_l);
 	return (0);

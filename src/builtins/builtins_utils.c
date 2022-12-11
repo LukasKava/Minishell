@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 12:57:10 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 16:19:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void	create_e_list(t_env **e_list, char **env)
 	while (env[i + 1] != NULL)
 	{
 		(*e_list)->var = ft_strdup(env[i]);
-		(*e_list)->var_name = save_name((*e_list)->var);
+		(*e_list)->var_name = save_name(env[i]);
 		(*e_list) = attach_end(*e_list);
 		(*e_list) = (*e_list)->next;
 		i++;
 	}
 	(*e_list)->var = ft_strdup(env[i]);
-	(*e_list)->var_name = save_name((*e_list)->var);
+	(*e_list)->var_name = save_name(env[i]);
 	(*e_list) = head;
 }
 
@@ -83,10 +83,10 @@ void freeing_e_list(t_env **e_list)
 	free_token = (*e_list);
 	while ((*e_list) != NULL)
 	{
-		free_token = (*e_list);
-		//printf("env->var: %s\n", (*e_list)->var);
 		free((*e_list)->var);
 		free((*e_list)->var_name);
+		free_token = (*e_list);
+		//printf("env->var: %s\n", (*e_list)->var);
 		(*e_list) = (*e_list)->next;
 		free(free_token);
 		//printf("env freed succesfully!\n");

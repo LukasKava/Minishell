@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 14:11:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:51:56 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,6 +333,7 @@ void	first_cmd_input(t_chunk **salt, int i);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
+#define ELSE_BLOCK 22
 
 #define	OUTPUT 1
 #define INPUT 0

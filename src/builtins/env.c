@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:09:07 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/23 14:29:38 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 14:54:46 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int builtins_env(char **arguments, t_env *e_list)
 		write(2, "\033[0;31menv does not accept any arguments or flags!\033[0m\n", 56);
 		return (1);
 	}
-	while (e_list->next != NULL && e_list != NULL)
+	while (e_list != NULL && e_list != NULL)
 	{
 		printf("%s\n", e_list->var);
 		e_list = e_list->next;

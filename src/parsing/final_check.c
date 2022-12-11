@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 13:32:36 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/05 15:18:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:45:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	check_for_executables(t_chunk **chunk)
 	temp = (*chunk);
 	while((*chunk) != NULL)
 	{
+		if ((*chunk)->command_path == NULL && (*chunk)->arguments == NULL && (*chunk)->indentifier == -1)
+			(*chunk)->indentifier = ELSE_BLOCK;
 		if ((*chunk)->indentifier == CMD_BLOCK && (*chunk)->command_path == NULL)
 		{
 			if (access((*chunk)->arguments[0], F_OK) == 0 &&\
