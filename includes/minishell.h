@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 14:02:53 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 14:11:27 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ void	pwd_handle(t_chunk	**salt);
 void	env_handle(t_chunk **salt, t_env *e_list);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
 void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt);
-void	exit_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt);
+void	exit_handle(t_data *hive, t_chunk **salt);
 
 /*----	../src/empty_data.c	-------------*/
 void	empty_data_input(t_chunk **salt, int i);

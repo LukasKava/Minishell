@@ -72,3 +72,14 @@ Indentifiers:
 
 Error handling
 There is a leak when wrong command.
+Maybe I should have seperate redirections when there is Input or Output. And seperate when there is a pipe.
+
+cases pipe
+single command
+singe comman redirect output to file
+singe command redirect input to file
+pipe input
+pipe output
+pipe input and output
+first node write to pipe(canot read from pipe) pipe next command
+first node write to file(cannot read from pipe) pipe next command
