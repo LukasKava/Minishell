@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 13:41:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 14:02:40 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,21 @@ void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
 		if (strncmp(element->arguments[0],"unset", strlen("unset")) == 0)
 		{
 			builtins_unset(exp_l, env_l, element->arguments);
+		}
+	}
+}
+
+// int builtins_exit(t_env **exp_l, t_env **env_l, char **line)
+void	exit_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
+{
+	t_chunk	*element;
+	
+	element = *salt;
+	if(element->indentifier == BUILT_IN_BLOCK)
+	{
+		if (strncmp(element->arguments[0],"exit", strlen("exit")) == 0)
+		{
+			builtins_exit(exp_l, env_l, element->arguments);
 		}
 	}
 }
