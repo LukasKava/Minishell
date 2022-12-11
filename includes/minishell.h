@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
 /*   Updated: 2022/12/11 14:02:53 by pbiederm         ###   ########.fr       */
@@ -146,8 +146,8 @@ int 	skip_quotes(char *str, char quote, int i);
 void	initialize_info(t_info *info);
 t_token *initialize_token(t_token *token, t_info *info);
 t_chunk *initialize_chunk(t_chunk *chunk, t_info *info);
-t_token *attach_token_end(t_token *token);
-t_chunk *attach_chunk_end(t_chunk *chunk);
+t_token *attach_token_end(t_token *token, t_info *info);
+t_chunk *attach_chunk_end(t_chunk *chunk, t_info *info);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
@@ -155,7 +155,7 @@ char	*ft_delete(char *str, char *part);
 void	recognise_builtins(t_token **token);
 
 /*----	parsing.c	-------------*/
-void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk);
+void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk, t_info *info);
 
 /*----	debugging.c	-------------*/
 void	print_the_list(char *message, t_token *token);
@@ -209,10 +209,11 @@ int		ft_pwd(int fd);
 int		builtins_echo(int fd, char **line);
 
 /*----	../builtins/exit.c	------------------*/
-int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+//int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+int		builtins_exit(t_data *hive, char **line);
 
 /*----	../builtins/export.c	------------------*/
-int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
+int		builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/

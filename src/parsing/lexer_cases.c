@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 11:52:07 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/09 14:30:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int quotes(t_info *info, int i, t_token **token)
 	a = 0;
 	if (info->readline[i - 1] == ' ')
 	{
-		(*token) = attach_token_end(*token);
+		(*token) = attach_token_end(*token, info);
 		(*token)->token = malloc(sizeof(char) + 2);
 		(*token)->token[0] = ' ';
 		(*token)->token[1] = '\0';
@@ -47,7 +47,7 @@ int quotes(t_info *info, int i, t_token **token)
 	}
 	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0) && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
 	{
-		(*token) = attach_token_end(*token);
+		(*token) = attach_token_end(*token, info);
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
 		(*token) = (*token)->next;
 	}
@@ -88,7 +88,7 @@ int rest_of_the_cases(t_info *info, int i, t_token **token)
 	if (i != 0 && ft_check_speacials(info->readline, i) == 0)
 	{
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
-		(*token) = attach_token_end(*token);
+		(*token) = attach_token_end(*token, info);
 		(*token) = (*token)->next;
 	}
 	(*token)->token = malloc(sizeof(char) * 2);
@@ -110,7 +110,7 @@ int doubles(t_info *info, int i, t_token **token)
 	if (i != 0 && ft_check_speacials(info->readline, i) == 0)
 	{
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
-		(*token) = attach_token_end(*token);
+		(*token) = attach_token_end(*token, info);
 		(*token) = (*token)->next;
 	}
 	(*token)->token = malloc(sizeof(char) * 3);
