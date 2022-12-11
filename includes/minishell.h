@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 19:57:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/11 13:35:49 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,10 +209,11 @@ int		ft_pwd(int fd);
 int		builtins_echo(int fd, char **line);
 
 /*----	../builtins/exit.c	------------------*/
-int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+//int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
+int		builtins_exit(t_data *hive, char **line);
 
 /*----	../builtins/export.c	------------------*/
-int 	builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
+int		builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/pwd.c	------------------*/
