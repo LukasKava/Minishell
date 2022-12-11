@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
+#    Updated: 2022/12/10 16:27:20 by lkavalia         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 define IMG
             ,
          ,-`;
@@ -60,7 +72,6 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/builtin_handles.c\
 		./src/execute/empty_data.c\
 		./src/execute/pipeline_io.c
-
 
 
 OBJS = ${SOURCES:.c=.o}

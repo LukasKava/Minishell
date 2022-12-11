@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:59:41 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/09 14:34:12 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 	}
 }
 
-void get_the_commands(t_token *token, t_env *env, t_chunk **chunk)
+void get_the_commands(t_token *token, t_env *env, t_chunk **chunk, t_info *info)
 {
 	t_chunk *temp;
 
@@ -210,7 +210,7 @@ void get_the_commands(t_token *token, t_env *env, t_chunk **chunk)
 				token = token->next;
 		}
 		if (token != NULL && token->index != 0 && token->name == PIPE)
-			(*chunk) = attach_chunk_end(*chunk);
+			(*chunk) = attach_chunk_end(*chunk, info);
 		if (token != NULL)
 			token = token->next;
 	}

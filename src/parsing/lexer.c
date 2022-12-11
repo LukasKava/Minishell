@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 13:58:59 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/09 14:31:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static t_token *triggered(t_info *info, t_token *token, int i)
 		if (ft_check_speacials(info->readline, i) == 1)
 			return (token);
 	}
-	token = attach_token_end(token);
+	token = attach_token_end(token, info);
 	token = token->next;
 	info->trigger = 0;
 	return (token);
