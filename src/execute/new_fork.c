@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 20:21:26 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 10:49:15 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,6 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 				write(2, "Error while creating pipe\n", 27);
 		if ((elements->indentifier == CMD_BLOCK && elements->command_path != NULL) || elements->indentifier == BUILT_IN_BLOCK)
 		{
-			pids = fork();
-			if (pids == -1)
-			{
-				freeing_chunks(salt, &data->info);
-				free(vars);
-				write(2, "Error while creating process\n", 30);
-			}
-			if (pids == 0)
-			{
 				empty_data_input(&elements, i);
 				empty_data_output(&elements, vars, i);
 				last_cmd_output(&elements, vars, i);
@@ -160,8 +151,15 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 				redirect_in(&elements, vars);
 				echo_handle(&elements);
 				cd_handle(&elements, data->env);
-				close(elements->fd[1]);
-				close(elements->fd[0]);
+			pids = fork();
+			if (pids == -1)
+			{
+				freeing_chunks(salt, &data->info);
+				free(vars);
+				write(2, "Error while creating process\n", 30);
+			}
+			if (pids == 0)
+			{
 				if(elements->indentifier == BUILT_IN_BLOCK)
 					exit(EXIT_SUCCESS);
 				run(elements, &data->info, envp);
