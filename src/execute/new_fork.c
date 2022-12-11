@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 12:20:56 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 13:40:49 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,10 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			echo_handle(&elements);
 			cd_handle(&elements, data->env);
 			pwd_handle(&elements);
+			env_handle(&elements, data->env);
+			export_handle(&data->exp_l, &data->env, &elements, elements->fd[1]);
+			// int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
+			unset_handle(&data->exp_l, &data->env, &elements);
 			pids = fork();
 			if (pids == -1)
 			{

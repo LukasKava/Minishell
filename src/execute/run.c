@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:49:51 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 12:19:09 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/11 13:19:14 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	run(t_chunk	*salt, t_info *info, char	**envp, t_vars *vars)
 		freeing_chunks(&salt, info);
 		free(vars);
 		printf("Error when attempting to execute programme\n");
-		exit(126);
+		g_exit_status = 126;
+		return ;
 	}
 }
