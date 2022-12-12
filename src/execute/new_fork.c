@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 14:18:17 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 18:17:06 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,26 @@ void manage_fd(t_chunk **salt, t_vars *vars, int i)
 	element = *salt;
 	empty_data_input(&element, i);
 	empty_data_output(&element, vars, i);
-	last_cmd_output(&element, vars, i);
-	first_cmd_input(&element, i);
-	set_pipe_io(&element, vars, i);
+	// last_cmd_output(&element, vars, i);
+	// first_cmd_input(&element, i);
+	redirect_in(&element, vars);
 	redirect_io(&element, vars);
 	redirect_out(&element, vars);
-	redirect_in(&element, vars);
+	set_pipe_io(&element, vars, i);
+}
+
+void	built_in_handler(t_chunk **salt, t_data *data)
+{
+	t_chunk		*element;
+
+	element = *salt;
+	echo_handle(&element);
+	cd_handle(&element, data->env);
+	pwd_handle(&element);
+	env_handle(&element, data->env);
+	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
+	unset_handle(&data->exp_l, &data->env, &element);
+	exit_handle(data, &element);
 }
 
 void	execute(t_chunk **salt, t_data *data, char	**envp)
@@ -66,24 +80,14 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 	{
 		save_std_out = dup(STDOUT_FILENO);
 		save_std_in = dup(STDIN_FILENO);
-		elements->fd[1] = save_std_out;
-		elements->fd[0] = save_std_in;
-	
 		if (pipe_this_node(&elements))
 			if(pipe(elements->fd) == -1)
 				write(2, "Error while creating pipe\n", 27);
 		manage_fd(&elements, vars, i);
+		built_in_handler(&elements, data);
 		if ((elements->indentifier == CMD_BLOCK &&
-		elements->command_path != NULL) ||
-		elements->indentifier == BUILT_IN_BLOCK)
+		elements->command_path != NULL))
 		{
-			echo_handle(&elements);
-			cd_handle(&elements, data->env);
-			pwd_handle(&elements);
-			env_handle(&elements, data->env);
-			export_handle(&data->exp_l, &data->env, &elements, elements->fd[1]);
-			unset_handle(&data->exp_l, &data->env, &elements);
-			exit_handle(data, &elements);
 			pids = fork();
 			if (pids == -1)
 			{
@@ -92,19 +96,18 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 				write(2, "Error while creating process\n", 30);
 			}
 			if (pids == 0)
-			{
-				if(elements->indentifier == BUILT_IN_BLOCK)
-					exit(EXIT_SUCCESS);
 				run(elements, &data->info, envp, vars);
-			}
+		}
+		else if(elements->indentifier == CMD_BLOCK &&
+		elements->command_path == NULL)
+		{
+			g_exit_status = 127;
+			write(2, elements->arguments[0], strlen(elements->arguments[0]));
+			write(2,": ", 3);
+			write(2, "Write propper commands, eat healthy.\n", 38);
 		}
 		dup2(save_std_in, STDIN_FILENO);
 		dup2(save_std_out, STDOUT_FILENO);
-		if (i != 0)
-		{
-			close(elements->prev->fd[0]);
-			close(elements->prev->fd[1]);
-		}
 		close(save_std_in);
 		close(save_std_out);
 		waitpid(-1, &status, 0);
@@ -115,6 +118,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 }
 	// 	// If a command is not found, the child process created to execute it 
 	// 	// returns a status of 127. If a command is found but is not executable, 
-	// 	// the return status is 126.
+	// 	// the return status is 126. 
+
 	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
 	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);

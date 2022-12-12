@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 14:11:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 13:40:09 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,8 @@ void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
 /*----	../src/pipeline_io.c	-------------*/
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
+
+void	built_in_handler(t_chunk **salt, t_data *data);
 
 //INDENTIFIER EXPLANATION:
 /**

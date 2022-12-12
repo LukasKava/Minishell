@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 14:12:18 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 17:02:18 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	echo_handle(t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0],"echo", strlen("echo")) == 0)
 		{
-			builtins_echo(element->fd[1], element->arguments);
+			builtins_echo(STDOUT_FILENO, element->arguments);
 		}
 	}	
 }
@@ -49,7 +49,7 @@ void	pwd_handle(t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0],"pwd", strlen("pwd")) == 0)
 		{
-			builtins_pwd(element->fd[1]);
+			builtins_pwd(STDOUT_FILENO);
 		}
 	}
 }

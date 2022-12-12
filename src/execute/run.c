@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 11:49:51 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 14:00:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/12 17:41:48 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	run(t_chunk	*salt, t_info *info, char	**envp, t_vars *vars)
 		freeing_chunks(&salt, info);
 		free(vars);
 		printf("Error when attempting to execute programme\n");
-		g_exit_status = 126;
-		return ;
+		g_exit_status = 127;
 	}
 }
