@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 19:35:31 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 21:05:53 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 Needs a simple command execute, to execute one command.
 Needs status 126 when command is not found by access.
 Closing file descriptors hen there is one command.
-
+Wifeexited afte waitpid.
+Install norminett and make it in accordance with the norm.
+Check cases and check for memory leaks.
+Add error handling.
 */
 #include	"../../includes/minishell.h"
 
@@ -91,8 +94,6 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			pids = fork();
 			if (pids == -1)
 			{
-				// freeing_chunks(salt, &data->info);
-				// free(vars);
 				write(2, "Error while creating process\n", 30);
 			}
 			if (pids == 0)
@@ -117,9 +118,3 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 	}
 	free(vars);
 }
-	// 	// If a command is not found, the child process created to execute it 
-	// 	// returns a status of 127. If a command is found but is not executable, 
-	// 	// the return status is 126. 
-
-	// 	fprintf(stderr,"exit status: %d\n", g_exit_status);
-	// 	fprintf(stderr, "Parrent waited for process pids[%d]\n", i);

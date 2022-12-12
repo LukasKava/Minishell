@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 19:25:18 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 21:02:12 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ int out_redirection_this_node(t_chunk **salt)
 	}
 }
 
-
-// while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
-// {
-// 	elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-// 	number_of_infiles++;
-// }
-// number_of_infiles = 0;
 void	redirect_in(t_chunk **salt, t_vars *vars)
 {
 	t_chunk	*element;
@@ -85,11 +78,21 @@ void	redirect_out(t_chunk **salt, t_vars *vars)
 			{
 				output_fd = open(element->out_f[vars->number_of_outfiles].name, \
 				O_WRONLY | O_CREAT | O_TRUNC, 0664);
+				if(output_fd == -1)
+				{
+					write(2,"Could not create output file.\n", 31);
+					g_exit_status = 1;
+				}
 			}
 			else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 			{
 				output_fd = open(element->out_f[vars->number_of_outfiles].name, \
 				O_WRONLY | O_CREAT | O_APPEND, 0664);
+				if(output_fd == -1)
+				{
+					write(2,"Could not create output append file.\n", 38);
+					g_exit_status = 1;
+				}
 			}
 			vars->number_of_outfiles++;
 		}
@@ -112,9 +115,13 @@ void	redirect_io(t_chunk **salt, t_vars *vars)
 		{
 			if(element->in_f[vars->number_of_infiles].type == INPUT_F)
 			{
-				fprintf(stderr,"checking for infile\n");
 				input_fd = open(element->in_f[vars->number_of_infiles].name, O_RDONLY);
-				
+				if(input_fd == -1)
+				{
+					input_fd = open("./includes/err_read.txt", O_RDONLY|O_CREAT, 0644);
+					write(2,"Could not create output append file.\n", 38);
+					g_exit_status = 1;
+				}
 			}
 			else if(element->in_f[vars->number_of_infiles].type == DELIMITOR)
 			{

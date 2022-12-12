@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:51:48 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 13:29:24 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 21:00:27 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	set_pipe_io(t_chunk **salt, t_vars *vars, int i)
 	}
 	if (i != 0 && pipe_last_node(&element))
 	{
-		// fprintf(stderr, "pipe recieved data");
 		dup2(element->prev->fd[0], STDIN_FILENO);
 		close(element->prev->fd[1]);
 		close(element->prev->fd[0]);

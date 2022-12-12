@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:32:53 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 18:51:07 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 20:57:32 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ void empty_data_output(t_chunk	**salt, t_vars *vars, int i)
 	element = *salt;
 	if (i != vars->num_cmd - 1 && 
 	(!(out_redirection_this_node(&element))) &&
-	(!(pipe_this_node(&element))))
+	(!(pipe_this_node(&element))) &&
+	element->indentifier != ELSE_BLOCK)
 	{
-		empty_output_fd = open("./includes/tmp_out.txt", O_CREAT | O_RDWR | O_TRUNC , 0644);
+		empty_output_fd = open("./includes/tmp_out.txt",\
+		O_CREAT | O_RDWR | O_TRUNC , 0644);
 		if(empty_output_fd == -1)
 		{
 			write(2,"Error while opening temporary output file\n", 43);
