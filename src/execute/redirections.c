@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 18:59:50 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:20:47 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	redirect_out(t_chunk **salt, t_vars *vars)
 			{
 				output_fd = open(element->out_f[vars->number_of_outfiles].name, \
 				O_WRONLY | O_CREAT | O_TRUNC, 0664);
-				output_fd ==
 			}
 			else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 			{

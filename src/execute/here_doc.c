@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 17:35:37 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:19:38 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	here_doc(char	*delimit)
 			printf("CTRL D was activated!\n");
 			return (1);
 		}
-		if (ft_strncmp(buff, trimmed_delimit, ft_strlen(trimmed_delimit)) == 0)
+		if (ft_strncmp(buff, trimmed_delimit, ft_strlen(trimmed_delimit)) == 0 && (ft_strlen(trimmed_delimit) == ft_strlen(buff)))
 			break;
 		write(pfd[OUTPUT], buff, strlen(buff));
 		write(pfd[OUTPUT], "\n", 1);
