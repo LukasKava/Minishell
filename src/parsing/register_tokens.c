@@ -304,7 +304,6 @@ static void check_command_excists(t_token **token, t_env *env)
 	}
 	else
 		path = env->var;
-	printf("path: %s\n", path);
 	temp = (*token);
 	i = 0;
 	while ((*token) != NULL)
@@ -325,10 +324,7 @@ static void check_command_excists(t_token **token, t_env *env)
 				i++;
 			}
 			if (splitted_path[i] == NULL)
-			{
-				printf("command: %s does not excist!\n", (*token)->token);
-				(*token)->ignore = true;
-			}
+				return ;
 			i = 0;
 			while (splitted_path[i] != NULL)
 			{
@@ -376,10 +372,10 @@ void register_tokens(t_info *info, t_token **token, t_env *env)
 	temp_token = (*token);
 	expand_expansions(token, env);
 	assign_indexes(token, info);
-	//print_the_list("inside", (*token));
 	connecting_quotes(token);
+	print_the_list("before syntax error", (*token));
 	if (info->error == false)
-		check_tokens(info, token); // WORKS NEEDS REVIEW
+		check_tokens(info, token);
 	if (info->error == false)
 	{
 		recognise_commands(token);

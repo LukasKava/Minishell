@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/09 14:34:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/12 18:33:03 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*find_command_path(char *s, t_env *env)
 		env = env->next;
 	if (env ==  NULL)
 	{
-		printf("ERRROR  ind parsing.c PATH is not excistent!\n");
+		printf("ERRROR  in parsing.c PATH is not excistent!\n");
 		g_exit_status = 127;
 		return (NULL);
 	}
@@ -59,7 +59,6 @@ static char	*find_command_path(char *s, t_env *env)
 	}
 	if (splitted_path[i] == NULL)
 	{
-		printf("ERROR (find_command_path): could not find the command!\n");
 		g_exit_status = 127;
 		return (NULL);
 	}
@@ -172,13 +171,13 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 		if (registered_input != 1 && (token->name == R_INPUT || token->name == R_AP_INPUT) && (token))
 		{
 			registered_input = 1;
-			printf("inside register redirections!\n");
+//			printf("inside register redirections!\n");
 			count_inputs(token, chunk, token->name);
 		}
 		else if (registered_output != 1 && (token->name == R_OUTPUT || token->name == R_AP_OUTPUT))
 		{
 			registered_output = 1;
-			printf("inside register redirections 2!\n");
+//			printf("inside register redirections 2!\n");
 			count_inputs(token, chunk, token->name);
 		}
 		token = token->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 14:18:17 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 15:47:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			pids = fork();
 			if (pids == -1)
 			{
-				freeing_chunks(salt, &data->info);
+				freeing_chunks(salt);
 				free(vars);
 				write(2, "Error while creating process\n", 30);
 			}
@@ -95,7 +95,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			{
 				if(elements->indentifier == BUILT_IN_BLOCK)
 					exit(EXIT_SUCCESS);
-				run(elements, &data->info, envp, vars);
+				run(elements, envp, vars);
 			}
 		}
 		dup2(save_std_in, STDIN_FILENO);

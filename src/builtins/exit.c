@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 17:25:24 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/12 15:41:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int builtins_exit(t_data *hive, char **line)
 	}
 	// Free everything.
 	freeing_tokens(hive->token);
-	freeing_chunks(&hive->c_arr, &hive->info);
+	freeing_chunks(&hive->c_arr);
 	freeing_e_list(&hive->env);
 	freeing_e_list(&hive->exp_l);
 	printf("env exp: %s %s\n", hive->env->var_name, hive->env->var);

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 17:51:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/12 15:46:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int 	space(t_info *info, int i, t_token **token);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
-void	freeing_chunks(t_chunk **chunk, t_info *info);
+void	freeing_chunks(t_chunk **chunk);
 
 int		parsing(t_info *info);
 int 	quotes_in_pipe(t_info *info, char quote, int position); 
@@ -233,7 +233,7 @@ void	simple_err_message(t_info *info, char *message, int exit_status);
 int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
-void	run(t_chunk *salt, t_info *info, char **envp, t_vars *vars);
+void	run(t_chunk *salt, char **envp, t_vars *vars);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);
