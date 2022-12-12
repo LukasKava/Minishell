@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 19:36:05 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:48:30 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,6 +335,7 @@ void	built_in_handler(t_chunk **salt, t_data *data);
 
 #define CMD_BLOCK 20
 #define BUILT_IN_BLOCK 21
+#define ELSE_BLOCK 22
 
 #define	OUTPUT 1
 #define INPUT 0
