@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 18:17:06 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:35:31 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			pids = fork();
 			if (pids == -1)
 			{
-				freeing_chunks(salt, &data->info);
-				free(vars);
+				// freeing_chunks(salt, &data->info);
+				// free(vars);
 				write(2, "Error while creating process\n", 30);
 			}
 			if (pids == 0)
-				run(elements, &data->info, envp, vars);
+				run(elements, envp);
 		}
 		else if(elements->indentifier == CMD_BLOCK &&
 		elements->command_path == NULL)
@@ -115,6 +115,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		i++;
 		elements = elements->next;
 	}
+	free(vars);
 }
 	// 	// If a command is not found, the child process created to execute it 
 	// 	// returns a status of 127. If a command is found but is not executable, 

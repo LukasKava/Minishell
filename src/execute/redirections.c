@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 19:20:47 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:25:18 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,19 +124,27 @@ void	redirect_io(t_chunk **salt, t_vars *vars)
 		}
 		vars->number_of_infiles = 0;
 		while (element->out_f != NULL &&
-		element->out_f[vars->number_of_outfiles].name != NULL &&
-		((element->out_f[vars->number_of_outfiles].type == OUTPUT_F)||
-		(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)))
+		element->out_f[vars->number_of_outfiles].name != NULL)
 		{	
 			if(element->out_f[vars->number_of_outfiles].type == OUTPUT_F)
 			{
 				output_fd = open(element->out_f[vars->number_of_outfiles].name, \
 				O_WRONLY | O_CREAT | O_TRUNC, 0664);
+				if (output_fd == -1)
+				{
+					g_exit_status = 1;
+					write(2, "Invalid output file.\n", 22);
+				}
 			}
 			else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 			{
 				output_fd = open(element->out_f[vars->number_of_outfiles].name, \
 				O_WRONLY | O_CREAT | O_APPEND, 0664);
+				if (output_fd == -1)
+				{
+					g_exit_status = 1;
+					write(2, "Invalid output append file.\n", 22);
+				}
 			}
 			vars->number_of_outfiles++;
 		}

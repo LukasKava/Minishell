@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 13:40:09 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:36:05 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ void	simple_err_message(t_info *info, char *message, int exit_status);
 int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
-void	run(t_chunk *salt, t_info *info, char **envp, t_vars *vars);
+void	run(t_chunk *salt,char **envp);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);

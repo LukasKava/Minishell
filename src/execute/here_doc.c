@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 19:19:38 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 19:32:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ int	here_doc(char	*delimit)
 {
 	int		pfd[2];
 	char*	buff;
-	char*	trimmed_delimit;
-	char	*set;
 	
-	set = malloc(2);
-	set[0] = '"' + 'a';
-	set[1] = '\0';
-	trimmed_delimit = ft_strtrim(delimit, set);
-	pipe(pfd);
+	if (pipe(pfd) == -1)
+	{
+		g_exit_status = 1;
+		write(2, "Problems with setting up the here doc pipe\n", 44);
+	}
 	buff = calloc(9999, sizeof(char));
 	while (TRUE)
 	{
@@ -33,14 +31,14 @@ int	here_doc(char	*delimit)
 			printf("CTRL D was activated!\n");
 			return (1);
 		}
-		if (ft_strncmp(buff, trimmed_delimit, ft_strlen(trimmed_delimit)) == 0 && (ft_strlen(trimmed_delimit) == ft_strlen(buff)))
+		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 &&
+		(ft_strlen(delimit) == ft_strlen(buff)))
 			break;
 		write(pfd[OUTPUT], buff, strlen(buff));
 		write(pfd[OUTPUT], "\n", 1);
 	}
 	close(pfd[OUTPUT]);
 	free(buff);
-	free(set);
-	free(trimmed_delimit);
+	free(delimit);
 	return(pfd[INPUT]);
 }
