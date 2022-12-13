@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 11:16:52 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:08:47 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	empty_data_input(&element, vars);
 	empty_data_output(&element, vars);
 	redirect_in(&element, vars);
-	// redirect_io(&element, vars);
 	redirect_out(&element, vars);
 	set_pipe_io(&element, vars);
 }
