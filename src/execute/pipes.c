@@ -6,22 +6,22 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:51:48 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 21:00:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:10:49 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../../includes/minishell.h"
 
-void	set_pipe_io(t_chunk **salt, t_vars *vars, int i)
+void	set_pipe_io(t_chunk **salt, t_vars *vars)
 {
 	t_chunk	*element;
 	
 	element = *salt;
-	if (i != vars->num_cmd - 1 && pipe_this_node(&element))
+	if (vars->pipe_group!= vars->num_cmd - 1 && pipe_this_node(&element))
 	{
 		dup2(element->fd[1], STDOUT_FILENO);
 	}
-	if (i != 0 && pipe_last_node(&element))
+	if (vars->pipe_group!= 0 && pipe_last_node(&element))
 	{
 		dup2(element->prev->fd[0], STDIN_FILENO);
 		close(element->prev->fd[1]);

@@ -6,20 +6,20 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:32:53 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 20:57:32 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:07:53 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../../includes/minishell.h"
 
 /*Function for the edge case when there is no pipe input.*/
-void empty_data_input(t_chunk	**salt, int i)
+void empty_data_input(t_chunk	**salt, t_vars *vars)
 {
 	t_chunk *element;
 	int		empty_input_fd;
 
 	element = *salt;
-	if(i != 0 &&
+	if(vars->pipe_group!= 0 &&
 	(!(in_redirection_this_node(&element))) && 
 	(!(pipe_last_node(&element))))
 	{
@@ -35,13 +35,13 @@ void empty_data_input(t_chunk	**salt, int i)
 	}
 }
 
-void empty_data_output(t_chunk	**salt, t_vars *vars, int i)
+void empty_data_output(t_chunk	**salt, t_vars *vars)
 {
 	t_chunk *element;
 	int	empty_output_fd;
 
 	element = *salt;
-	if (i != vars->num_cmd - 1 && 
+	if (vars->pipe_group!= vars->num_cmd - 1 && 
 	(!(out_redirection_this_node(&element))) &&
 	(!(pipe_this_node(&element))) &&
 	element->indentifier != ELSE_BLOCK)
