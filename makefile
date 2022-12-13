@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
+#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/13 11:12:22 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/13 13:18:34 by lkavalia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ endef
 export IMG
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
 
 NAME = minishell
 

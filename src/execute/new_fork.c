@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 12:47:00 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 13:38:32 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			}
 			if (vars->pid == 0)
 				run(elements, envp);
+			else
+				signal(SIGINT, SIG_IGN);
 		}
 		else if(elements->indentifier == CMD_BLOCK &&
 		elements->command_path == NULL)
@@ -106,6 +108,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		close(vars->save_stdin);
 		close(vars->save_stdout);
 		waitpid(-1, &g_exit_status, 0);
+		signal(SIGINT, handle_sigint);
 		get_exit_status(vars);
 		vars->pipe_group++;
 		elements = elements->next;
