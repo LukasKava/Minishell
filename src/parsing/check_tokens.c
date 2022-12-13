@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 17:45:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:25:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	error_message(t_info *info, int exit_s)
 {
-	printf("Syntax error\n");
+	printf("\033[0;31mSyntax error\033[0m\n");
 	g_exit_status = exit_s;
 	info->error = true;
 	return (true);

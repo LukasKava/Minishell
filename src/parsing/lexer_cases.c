@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/09 14:30:22 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:15:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int quotes(t_info *info, int i, t_token **token)
 		(*token)->token[1] = '\0';
 		(*token) = (*token)->next;
 	}
-	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0) && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
+	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0 || info->readline[i - 1] == '<' || info->readline[i - 1] == '>') && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
 	{
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);

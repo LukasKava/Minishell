@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/04 21:58:47 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:35:07 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,24 @@ void print_the_chunk_list(char *message, t_chunk *chunk)
 	int	i;
 
 	i = 0;
-	printf("________%s_________________\n", message);
+	printf("\033[30;1m________%s_________________\033[0m\n", message);
 	while (chunk != NULL) // Printing out the  tokens for checking the correct info
 	{
-		printf("full listC: indentifier: %d: %s\n", chunk->indentifier, chunk->command_path);
-		printf("ARGUMENTS:\n");
+		printf("\033[30;1mfull listC: indentifier: %d: %s\033[0m\n", chunk->indentifier, chunk->command_path);
+		printf("\033[30;1mARGUMENTS:\033[0m\n");
 		while (chunk->arguments != NULL && chunk->arguments[i] != NULL)
 		{
-			printf("%s ", chunk->arguments[i]);
+			printf("\033[30;1m%s \033[0m", chunk->arguments[i]);
 			i++;
 		}
 		printf("\n");
 		i = 0;
 		if (chunk->in_f != NULL)
 		{
-			printf("INFILES:\n");
+			printf("\033[30;1mINFILES:\033[0m\n");
 			while (chunk->in_f[i].name != NULL)
 			{
-				printf("[%s]: %d ", chunk->in_f[i].name, chunk->in_f[i].type);
+				printf("\033[30;1m[%s]: %d \033[0m", chunk->in_f[i].name, chunk->in_f[i].type);
 				i++;
 			}
 			printf("\n");
@@ -62,10 +62,10 @@ void print_the_chunk_list(char *message, t_chunk *chunk)
 		i = 0;
 		if (chunk->out_f != NULL)
 		{
-			printf("OUTFILES:\n");
+			printf("\033[30;1mOUTFILES:\033[0m\n");
 			while (chunk->out_f[i].name != NULL)
 			{
-				printf("[%s]: %d ", chunk->out_f[i].name, chunk->out_f[i].type);
+				printf("\033[30;1m[%s]: %d \033[0m", chunk->out_f[i].name, chunk->out_f[i].type);
 				i++;
 			}
 		}
