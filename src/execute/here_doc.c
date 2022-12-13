@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 20:40:37 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 13:16:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	here_doc(char	*delimit)
 		buff = readline("> ");
 		if (!buff)
 		{
-			printf("CTRL D was activated!\n");
+			write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
 			return (1);
 		}
 		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 &&
