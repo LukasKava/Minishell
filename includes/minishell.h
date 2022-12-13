@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 19:48:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:10:59 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,12 @@ typedef struct s_vars
 	int		number_of_infiles;
 	int		number_of_outfiles;
 	int		num_cmd;
+	int		input_fd;
+	int		output_fd;
+	int		pid;
+	int		pipe_group;
+	int		save_stdout;
+	int		save_stdin;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -242,7 +248,7 @@ int		count_command_number(t_chunk **salt);
 /*----	../src/pipes.c	-------------*/
 int		pipe_this_node(t_chunk **salt);
 int		pipe_last_node(t_chunk **salt);
-void	set_pipe_io(t_chunk **salt, t_vars *vars, int i);
+void	set_pipe_io(t_chunk **salt, t_vars *vars);
 
 /*----	../src/redirections.c	-------------*/
 void	redirect_io(t_chunk **salt, t_vars *vars);
@@ -262,14 +268,15 @@ void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt);
 void	exit_handle(t_data *hive, t_chunk **salt);
 
 /*----	../src/empty_data.c	-------------*/
-void	empty_data_input(t_chunk **salt, int i);
-void	empty_data_output(t_chunk **salt, t_vars *vars, int i);
+void	empty_data_input(t_chunk	**salt, t_vars *vars);
+void	empty_data_output(t_chunk **salt, t_vars *vars);
 
 /*----	../src/pipeline_io.c	-------------*/
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
 void	built_in_handler(t_chunk **salt, t_data *data);
+void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 
 //INDENTIFIER EXPLANATION:
 /**

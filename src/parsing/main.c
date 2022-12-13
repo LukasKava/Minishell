@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 19:48:41 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:04:20 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("HannahMontanaOS> ");
+		hive.info.readline = readline("BiebianOS> ");
 		if (!hive.info.readline)
 		{
 			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);		
