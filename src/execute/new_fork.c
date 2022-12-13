@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 12:08:47 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:47:00 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		vars->save_stdin = dup(STDIN_FILENO);
 		if (pipe_this_node(&elements))
 			if(pipe(elements->fd) == -1)
+			{
+				g_exit_status = 1;
 				write(2, "Error while creating pipe\n", 27);
+			}
 		manage_fd(&elements, vars);
 		built_in_handler(&elements, data);
 		if ((elements->indentifier == CMD_BLOCK &&
@@ -84,6 +87,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			vars->pid = fork();
 			if (vars->pid == -1)
 			{
+				g_exit_status = 1;
 				write(2, "Error while creating process\n", 30);
 			}
 			if (vars->pid == 0)
