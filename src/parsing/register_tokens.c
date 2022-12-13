@@ -317,10 +317,7 @@ static void check_command_excists(t_token **token, t_env *env)
 				splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 				splitted_path[i] = ft_strjoin(splitted_path[i], (*token)->token);
 				if (access(splitted_path[i], F_OK) == 0 && access(splitted_path[i], X_OK) == 0)
-				{
-					printf("command: %s does excist: %s\n", (*token)->token, splitted_path[i]);
 					break ;
-				}
 				i++;
 			}
 			if (splitted_path[i] == NULL)
@@ -354,7 +351,6 @@ static void	ignore(t_token **token)
 		{
 			while ((*token) != NULL && ((*token)->name < PIPE || (*token)->name > R_AP_OUTPUT))
 			{
-				printf("token->token: %s\n", (*token)->token);
 				(*token)->ignore = true;
 				(*token) = (*token)->next;
 			}
@@ -373,7 +369,7 @@ void register_tokens(t_info *info, t_token **token, t_env *env)
 	expand_expansions(token, env);
 	assign_indexes(token, info);
 	connecting_quotes(token);
-	print_the_list("before syntax error", (*token));
+	//print_the_list("before syntax error", (*token));
 	if (info->error == false)
 		check_tokens(info, token);
 	if (info->error == false)

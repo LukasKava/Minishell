@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 19:29:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:13:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,11 @@ void lexer(t_info *info, t_token **token)
 	while (info->readline[i] != '\0')
 	{
 		if (info->readline[i] == 34 || info->readline[i] == 39)
-		{
-			printf("Quotes!\n");
 			i = quotes(info, i, token);
-		}
 		else if (info->readline[i] == ' ')
 			i = space(info, i, token);
 		else if (possible_doubles(info, i) == true)
-		{
-			printf("inside the doubles\n");
 			i = doubles(info, i, token);
-		}
 		else if (possible_metacharacters(info, i) == true)
 			i = rest_of_the_cases(info, i, token);
 		if (info->trigger == 1)

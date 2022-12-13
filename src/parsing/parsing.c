@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 18:33:03 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:13:12 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,15 +119,22 @@ static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 	(*red)[amount].name = NULL;
 	while (token != NULL && token->name != PIPE && amount >= 0)
 	{
-		if ((token->name == id || token->name == id + 1)  && (token->next != NULL && (token->next->name == id + 9 || token->next->name == id + 10)))
+		if ((token->name == id || token->name == id + 1)  && (token->next != NULL))
 		{
+			
 			token = token->next;
-			(*red)[i].name = token->token;
-			(*red)[i].type = token->name;
-			i++;
-			amount--; 
+			while (token != NULL && token->name == SPace)
+				token = token->next;
+			if (token != NULL && (token->name == id + 9 || token->name == id + 10))
+			{
+				(*red)[i].name = token->token;
+				(*red)[i].type = token->name;
+				i++;
+				amount--;
+			}
 		}
-		token = token->next;
+		if (token != NULL && token->name != PIPE)
+			token = token->next;
 	}
 	i = 0;
 }
@@ -167,17 +174,14 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 	registered_output = 0;
 	while (token != NULL && token->name != PIPE)
 	{
-		printf("checking: [%s]\n", token->token);
 		if (registered_input != 1 && (token->name == R_INPUT || token->name == R_AP_INPUT) && (token))
 		{
 			registered_input = 1;
-//			printf("inside register redirections!\n");
 			count_inputs(token, chunk, token->name);
 		}
 		else if (registered_output != 1 && (token->name == R_OUTPUT || token->name == R_AP_OUTPUT))
 		{
 			registered_output = 1;
-//			printf("inside register redirections 2!\n");
 			count_inputs(token, chunk, token->name);
 		}
 		token = token->next;

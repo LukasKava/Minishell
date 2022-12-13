@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 19:31:33 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:15:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,14 @@ int quotes(t_info *info, int i, t_token **token)
 	a = 0;
 	if (info->readline[i - 1] == ' ')
 	{
-		printf("in one!\n");
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = malloc(sizeof(char) + 2);
 		(*token)->token[0] = ' ';
 		(*token)->token[1] = '\0';
 		(*token) = (*token)->next;
 	}
-	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0) && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
+	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0 || info->readline[i - 1] == '<' || info->readline[i - 1] == '>') && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
 	{
-		printf("in 2\n");
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
 		(*token) = (*token)->next;
@@ -111,7 +109,6 @@ int doubles(t_info *info, int i, t_token **token)
 	sign = info->readline[i];
 	if (i != 0 && ft_check_speacials(info->readline, i) == 0)
 	{
-		printf("inside the i = 0\n");
 		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
 		(*token) = attach_token_end(*token, info);
 		(*token) = (*token)->next;
@@ -120,7 +117,6 @@ int doubles(t_info *info, int i, t_token **token)
 	(*token)->token[0] = sign;
 	(*token)->token[1] = info->readline[i + 1];
 	(*token)->token[2] = '\0';
-	printf("[%s]\n", (*token)->token);
 	if (info->readline[i + 2] == ' ')
 		i = skip_white_sp(info->readline, i + 2) - 1;
 	else
