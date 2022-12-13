@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 11:10:59 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 15:46:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int 	space(t_info *info, int i, t_token **token);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
-void	freeing_chunks(t_chunk **chunk, t_info *info);
+void	freeing_chunks(t_chunk **chunk);
 
 int		parsing(t_info *info);
 int 	quotes_in_pipe(t_info *info, char quote, int position); 

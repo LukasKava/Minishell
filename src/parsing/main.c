@@ -112,18 +112,15 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		hive->token = initialize_token(hive->token, &hive->info);
 		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
 		lexer(&hive->info, &hive->token);
-	//	print_the_list("after lexing", hive->token);
 		register_tokens(&hive->info, &hive->token, hive->env);
-		print_the_list("register tokens check", hive->token);
+		//print_the_list("register tokens check", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
 		if (hive->info.error == false)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
-		// EXECUTION CAN BEGIN
-		// second_child(&chunk_array, &info, envp);
 		execute(&hive->c_arr, hive, envp);
 		freeing_tokens(hive->token);
-		freeing_chunks(&hive->c_arr, &hive->info);
+		freeing_chunks(&hive->c_arr);
 	}
 	if (ft_strlen(hive->info.readline) != 0)
 		add_history(hive->info.readline);
@@ -147,7 +144,7 @@ int main(int argc, char **argv, char **envp)
 		hive.info.readline = readline("BiebianOS> ");
 		if (!hive.info.readline)
 		{
-			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);		
+			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
 			break ;
 		}
 		initialize_info(&hive.info);
