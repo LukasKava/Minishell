@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/11 15:25:17 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/13 11:12:22 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ endef
 export IMG
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 
 NAME = minishell
 
@@ -70,8 +70,7 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/pipes.c\
 		./src/execute/redirections.c\
 		./src/execute/builtin_handles.c\
-		./src/execute/empty_data.c\
-		./src/execute/pipeline_io.c
+		./src/execute/empty_data.c
 
 
 OBJS = ${SOURCES:.c=.o}

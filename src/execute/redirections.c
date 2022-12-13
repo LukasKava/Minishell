@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 13:06:45 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:09:04 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,38 +27,71 @@ int out_redirection_this_node(t_chunk **salt)
 	}
 }
 
+void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
+{
+	t_chunk	*element;
+	
+	element = *salt;
+	if(element->in_f[vars->number_of_infiles].type == INPUT_F)
+	{
+		vars->input_fd = open(element->in_f[vars->number_of_infiles].name, O_RDONLY);
+		if(vars->input_fd == -1)
+		{
+			vars->input_fd = open("./includes/err_read.txt", O_RDONLY|O_CREAT, 0644);
+			write(2,"Go outside, take a walk, rethink inputing nonexisting files.\n", 62);
+			g_exit_status = 1;
+		}
+	}
+	else if(element->in_f[vars->number_of_infiles].type == DELIMITOR)
+	{
+		vars->input_fd = here_doc(element->in_f[vars->number_of_infiles].name);
+	}
+}
 
-// while(elements->in_f != NULL && elements->in_f[number_of_infiles].type == DELIMITOR)
-// {
-// 	elements->fd_in = dup(here_doc(elements->in_f[number_of_infiles].name));
-// 	number_of_infiles++;
-// }
-// number_of_infiles = 0;
 void	redirect_in(t_chunk **salt, t_vars *vars)
 {
 	t_chunk	*element;
 
+	vars->input_fd = -11;
 	element = *salt;
-
 	if(in_redirection_this_node(&element))
 	{
 		while (element->in_f != NULL &&
-		element->in_f[vars->number_of_infiles].name != NULL &&
-		((element->in_f[vars->number_of_infiles].type == INPUT_F) ||
-		(element->in_f[vars->number_of_infiles].type == DELIMITOR)))
+		element->in_f[vars->number_of_infiles].name != NULL)
 		{
-			if(element->in_f[vars->number_of_infiles].type == INPUT_F)
-			{
-				element->fd[0] = open(element->in_f[vars->number_of_infiles].name, O_RDONLY);
-			}
-			else if(element->in_f[vars->number_of_infiles].type == DELIMITOR)
-			{
-				element->fd[0] = here_doc(element->in_f[vars->number_of_infiles].name);
-			}
+			redirect_in_conditions(&element, vars);
 			vars->number_of_infiles++;
 		}
 		vars->number_of_infiles = 0;
-		dup2(element->fd[0], STDIN_FILENO);
+		dup2(vars->input_fd, STDIN_FILENO);
+		close(vars->input_fd);
+	}
+}
+
+void	redirect_out_condition(t_chunk **salt, t_vars *vars)
+{
+	t_chunk *element;
+
+	element = *salt;
+	if(element->out_f[vars->number_of_outfiles].type == OUTPUT_F)
+	{
+		vars->output_fd = open(element->out_f[vars->number_of_outfiles].name, \
+		O_WRONLY | O_CREAT | O_TRUNC, 0664);
+		if(vars->output_fd == -1)
+		{
+			write(2,"Could not create output file.\n", 31);
+			g_exit_status = 1;
+		}
+	}
+	else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
+	{
+		vars->output_fd = open(element->out_f[vars->number_of_outfiles].name, \
+		O_WRONLY | O_CREAT | O_APPEND, 0664);
+		if(vars->output_fd == -1)
+		{
+			write(2,"Could not create output append file.\n", 38);
+			g_exit_status = 1;
+		}
 	}
 }
 
@@ -70,60 +103,14 @@ void	redirect_out(t_chunk **salt, t_vars *vars)
 	if(out_redirection_this_node(&element))
 	{
 		while (element->out_f != NULL &&
-		element->out_f[vars->number_of_outfiles].name != NULL &&
-		((element->out_f[vars->number_of_outfiles].type == OUTPUT_F)||
-		(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)))
+		element->out_f[vars->number_of_outfiles].name != NULL)
 		{	
-			if(element->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-			{
-				element->fd[1] = open(element->out_f[vars->number_of_outfiles].name, \
-				O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			}
-			else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
-			{
-				element->fd[1] = open(element->out_f[vars->number_of_outfiles].name, \
-				O_WRONLY | O_CREAT | O_APPEND, 0664);
-			}
+			redirect_out_condition(&element, vars);
 			vars->number_of_outfiles++;
 		}
 		vars->number_of_outfiles = 0;
-		dup2(element->fd[1], STDOUT_FILENO);
-	}
-}
-
-void	redirect_io(t_chunk **salt, t_vars *vars)
-{
-	t_chunk	*element;
-	
-	element = *salt;
-	if (in_redirection_this_node(&element) && out_redirection_this_node(&element))
-	{
-		while (element->in_f != NULL && element->in_f[vars->number_of_infiles].name != NULL && element->in_f[vars->number_of_infiles].type == INPUT_F)
-		{
-			element->fd[0] = open(element->in_f[vars->number_of_infiles].name, O_RDONLY);
-			vars->number_of_infiles++;
-		}
-		vars->number_of_infiles = 0;
-		while (element->out_f != NULL &&
-		element->out_f[vars->number_of_outfiles].name != NULL &&
-		((element->out_f[vars->number_of_outfiles].type == OUTPUT_F)||
-		(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)))
-		{	
-			if(element->out_f[vars->number_of_outfiles].type == OUTPUT_F)
-			{
-				element->fd[1] = open(element->out_f[vars->number_of_outfiles].name, \
-				O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			}
-			else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
-			{
-				element->fd[1] = open(element->out_f[vars->number_of_outfiles].name, \
-				O_WRONLY | O_CREAT | O_APPEND, 0664);
-			}
-			vars->number_of_outfiles++;
-		}
-		vars->number_of_outfiles = 0;
-		dup2(element->fd[1], STDOUT_FILENO);
-		dup2(element->fd[0], STDIN_FILENO);
+		dup2(vars->output_fd, STDOUT_FILENO);
+		close(vars->output_fd);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/11 12:57:52 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/12 20:40:37 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,26 @@ int	here_doc(char	*delimit)
 {
 	int		pfd[2];
 	char*	buff;
-
-	pipe(pfd);
+	
+	if (pipe(pfd) == -1)
+	{
+		g_exit_status = 1;
+		write(2, "Problems with setting up the here doc pipe\n", 44);
+	}
 	while (TRUE)
 	{
 		buff = readline("> ");
-		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0)
+		if (!buff)
+		{
+			printf("CTRL D was activated!\n");
+			return (1);
+		}
+		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 &&
+		(ft_strlen(delimit) == ft_strlen(buff)))
 			break;
 		write(pfd[OUTPUT], buff, strlen(buff));
 		write(pfd[OUTPUT], "\n", 1);
 	}
 	close(pfd[OUTPUT]);
-	free(buff);
 	return(pfd[INPUT]);
 }

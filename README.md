@@ -83,3 +83,12 @@ pipe output
 pipe input and output
 first node write to pipe(canot read from pipe) pipe next command
 first node write to file(cannot read from pipe) pipe next command
+
+strerr
+
+127
+126
+2
+non existant file
+here doc with quotes
+what is strerror

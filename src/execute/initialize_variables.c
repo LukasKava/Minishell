@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:12:43 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/10 19:49:48 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:03:03 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ t_vars	*initialize_vars(t_chunk **salt)
 	vars->num_cmd = count_command_number(salt);
 	vars->number_of_infiles = 0;
 	vars->number_of_outfiles = 0;
+	vars->pid = -1;
+	vars->input_fd = -1;
+	vars->output_fd = -1;
+	vars->pipe_group = 0;
+	vars->save_stdin = -1;
+	vars->save_stdout = -1;
 	return(vars);
 }
 
