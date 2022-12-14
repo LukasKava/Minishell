@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 15:41:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:13:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@
 // 	return (0);
 // }
 
+// static int cheking_digit()
+// {
+	
+
+// 	return (0);
+// }
+
 int builtins_exit(t_data *hive, char **line)
 {
 	int i;
@@ -65,7 +72,7 @@ int builtins_exit(t_data *hive, char **line)
 		{
 			write(2, "it is not a numeric argument!\nexit", 35);
 			g_exit_status = 2;
-			return (1);
+			exit (g_exit_status);
 		}
 	}
 	// Free everything.
@@ -76,7 +83,7 @@ int builtins_exit(t_data *hive, char **line)
 	printf("env exp: %s %s\n", hive->env->var_name, hive->env->var);
 	i = ft_atoi(line[1]) % 256;
 	g_exit_status = i;
-	printf("i: %d\n", i);
+//	printf("i: %d\n", i);
 	write(2, "exit\n", 6);
 	exit(i); // I need to give it the global exit staatus
 }

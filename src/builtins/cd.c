@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 19:58:14 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:13:01 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*all_cases(t_env **e, char **line, int spec)
 		return (get_home(e));
 	if (spec == 3)
 	{
-		printf("spec 3\n");
+//		printf("spec 3\n");
 		if (line[1][0] == '~' && line[1][1] == '/')
 			combination = ft_strtrim_beginning(line[1], "~/");
 		else 
@@ -152,11 +152,11 @@ int builtins_cd(char **line, t_env **e_list)
 	}
 	else
 	{
-		printf("fails before:\n");
+//		printf("fails before:\n");
 		if (check_s_c(line) != 0)
 		{
 			super_case = all_cases(e_list, line, check_s_c(line));
-			printf("super_case: %s\n", super_case);
+//			printf("super_case: %s\n", super_case);
 			if (chdir(super_case) != 0)
 			{
 				free(super_case);
@@ -167,6 +167,9 @@ int builtins_cd(char **line, t_env **e_list)
 		}
 		else if (chdir(line[1]) != 0)
 		{
+			ft_putstr_fd("minishell: cd: no such file or directory: ", 2);
+			ft_putstr_fd(line[1], 2);
+			ft_putstr_fd("\n", 2);
 			perror("chdir: ");
 			return (1);
 		}

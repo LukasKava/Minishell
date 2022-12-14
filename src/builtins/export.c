@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 17:28:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/11 17:16:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:14:25 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int possible_cases(char *arg)
 		}
 		i++;
 	}
-	printf("checker: %d\n", checker);
+//	printf("checker: %d\n", checker);
 	return (checker);
 }
 
@@ -150,7 +150,7 @@ int name_exists(t_env *exp_list, char *str)
 	{
 		if (ft_strncmp(exp_list->var_name, temp_name, ft_strlen(temp_name)) == 0)
 		{
-			printf("HELLO THE VARS MATCH!\n");
+	//		printf("HELLO THE VARS MATCH!\n");
 			free(temp_name);
 			return (1);
 		}
@@ -217,7 +217,7 @@ int builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd)
 		while (line[a] != NULL)
 		{
 			i = possible_cases(line[a]);
-			printf("case: %s valid: %d\n", line[a], i);
+	//		printf("case: %s valid: %d\n", line[a], i);
 			if (i == -1)
 				return (1);
 			if (name_exists(*exp_list, line[a]) == 1)
