@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/14 17:21:23 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/14 20:52:25 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ export IMG
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
-
+# CFLAGS = -Wall -Werror -Wextra
 NAME = minishell
 
 MAIN =	./src/parsing/main.c \
@@ -100,6 +100,9 @@ fclean:	clean
 	@rm -f ${NAME}
 
 re:	fclean all
+
+memory:
+	valgrind --leak-check=full --show-leak-kinds=all ./minishell
 
 re_bonus:	fclean bonus
 

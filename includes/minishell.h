@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 15:38:55 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 19:10:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,7 @@ int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
 void	run(t_chunk	*salt, char	**envp);
+// void	run(t_chunk	*salt, char	**envp, t_data *hive, t_vars *vars);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);

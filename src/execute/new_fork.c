@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 17:18:06 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 19:11:10 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			if(pipe(elements->fd) == -1)
 			{
 				g_exit_status = 1;
-				write(2, "Error while creating pipe\n", 27);
+				perror(" ");
 			}
 		manage_fd(&elements, vars);
 		built_in_handler(&elements, data, vars);
@@ -126,11 +126,11 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			if (vars->pid == -1)
 			{
 				g_exit_status = 1;
-				write(2, "Error while creating process\n", 30);
+				perror(" ");
 			}
 			if (vars->pid == 0)
 			{
-				// run(elements, envp, data);
+				// run(elements, envp, data, vars);
 				run(elements, envp);
 			}
 		}

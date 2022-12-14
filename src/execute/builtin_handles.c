@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 17:20:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:32:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	exit_handle(t_data *hive, t_chunk **salt)
 	{
 		if (strncmp(element->arguments[0],"exit", strlen("exit")) == 0)
 		{
-			builtins_exit(hive, element->arguments);
+			g_exit_status = builtins_exit(hive, element->arguments);
 		}
 	}
 }

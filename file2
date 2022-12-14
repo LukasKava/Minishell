@@ -1,0 +1,16 @@
+total 244
+-rw-rw-r-- 1 piotr piotr      0 Dez 14 18:11 file
+-rw-rw-r-- 1 piotr piotr      0 Dez 14 18:11 file2
+-rw-rw-r-- 1 piotr piotr    103 Dez 14 16:55 fooo
+-rw-rw-r-- 1 piotr piotr      0 Dez 14 16:03 hey.txt
+drwxrwxr-x 2 piotr piotr   4096 Dez 14 16:09 includes
+-rw-rw-r-- 1 piotr piotr     10 Dez 14 12:29 lala
+drwxrwxr-x 2 piotr piotr   4096 Dez 14 18:03 libft
+-rw-rw-r-- 1 piotr piotr   2842 Dez 14 18:02 makefile
+-rwxrwxr-x 1 piotr piotr 129248 Dez 14 18:03 minishell
+drwxrwxr-x 3 piotr piotr   4096 Dez 11 14:08 minishell.dSYM
+-rw-rw-r-- 1 piotr piotr      3 Dez 14 16:09 out
+-rwxrwxr-x 1 piotr piotr   3448 Dez 13 18:07 README.md
+drwxrwxr-x 5 piotr piotr   4096 Dez 13 12:54 src
+drwxr-xr-x 4 piotr piotr   4096 Dez 14 12:39 tester
+-rw-rw-r-- 1 piotr piotr  77312 Dez 14 11:56 tester.tar
