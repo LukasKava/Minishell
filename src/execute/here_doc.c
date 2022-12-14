@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 17:25:13 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:36:04 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ int	here_doc(char	*delimit)
 		write(2, "Problems with setting up the here doc pipe\n", 44);
 		perror(" ");
 	}
+	signal(SIGINT, handle_sigint);
 	while (TRUE)
 	{
 		buff = readline("> ");
 		if (!buff)
 		{
-			printf("CTRL D was activated!\n");
+      write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
 			perror(" ");
 			return (1);
 		}

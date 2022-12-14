@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 19:11:10 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:47:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,20 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 
 	elements = *salt;
 	vars = initialize_vars(salt);
-	while (elements)
+	signal(SIGINT, handle_child);
+	while (elements && bip == false)
 	{
+		signal(SIGINT, handle_child);
 		vars->save_stdout = dup(STDOUT_FILENO);
 		vars->save_stdin = dup(STDIN_FILENO);
 		if (pipe_this_node(&elements))
+		{
 			if(pipe(elements->fd) == -1)
 			{
 				g_exit_status = 1;
 				perror(" ");
 			}
+		}
 		manage_fd(&elements, vars);
 		built_in_handler(&elements, data, vars);
 		if ((elements->indentifier == CMD_BLOCK)) 
@@ -131,17 +135,34 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			if (vars->pid == 0)
 			{
 				// run(elements, envp, data, vars);
-				run(elements, envp);
+				// if (bip == true)
+				// {
+				// 	write(2, "hello\n", 7);
+				// 	exit(1);
+				// 	break;
+		  	// }
+			  //	write(1, "run\n", 5);
+        run(elements, envp);
 			}
+		}
+		else if(elements->indentifier == CMD_BLOCK &&
+		elements->command_path == NULL)
+		{
+			g_exit_status = 127;
+			write(2, elements->arguments[0], strlen(elements->arguments[0]));
+			write(2,": ", 3);
+			write(2, "Write propper commands, eat healthy.\n", 38);
 		}
 		dup2(vars->save_stdin, STDIN_FILENO);
 		dup2(vars->save_stdout, STDOUT_FILENO);
 		close(vars->save_stdin);
 		close(vars->save_stdout);
 		waitpid(-1, &g_exit_status, 0);
+		signal(SIGINT, handle_sigint);
 		get_exit_status(vars);
 		vars->pipe_group++;
 		elements = elements->next;
 	}
+	bip = false;
 	free(vars);
 }

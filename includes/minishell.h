@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
 /*   Updated: 2022/12/14 19:10:56 by pbiederm         ###   ########.fr       */
@@ -32,11 +32,13 @@
 # include <stdint.h>
 
 extern int	g_exit_status;
+extern bool bip;
 
 typedef struct s_env
 {
 	char	*var;
 	char	*var_name;
+	char	*trim_var;
 	struct	s_env *next;
 }	t_env;
 
@@ -193,10 +195,10 @@ void	check_for_executables(t_chunk **chunk);
 
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);
-void	handle_sigint_child(int num);
+void	handle_child(int sig);
 
 /*----	../builtins/builtins_utils.c	------------------*/
-void	create_e_list(t_env **e_list, char **env);
+void create_e_list(t_env **e_list, char **env);
 void	freeing_e_list(t_env **e_list);
 int		valid_name(char *name);
 t_env	*attach_end(t_env *token);
