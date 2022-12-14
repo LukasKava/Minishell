@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 11:04:20 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:17:50 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../../includes/minishell.h"
 
 int g_exit_status;
+bool bip = false;
 
 // static void check_non_generic(t_info *info)
 // {
@@ -87,6 +88,7 @@ static void	initialize_hive(t_data *h, char **envp)
 	h->token = NULL;
 	create_e_list(&h->env, envp);
 	create_e_list(&h->exp_l, envp);
+	bip = false;
 }
 
 void	checker_before(t_data *hive)
@@ -113,7 +115,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
 		lexer(&hive->info, &hive->token);
 		register_tokens(&hive->info, &hive->token, hive->env);
-		//print_the_list("register tokens check", hive->token);
+	//	print_the_list("register tokens check", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
 		if (hive->info.error == false)
@@ -141,10 +143,11 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+	//	signal(SIGINT, handle_sigint);
 		hive.info.readline = readline("BiebianOS> ");
 		if (!hive.info.readline)
 		{
-			write(1, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
+			write(1, "\033[0;31mCtrl-D was activated a\033[0m\n", 35);
 			break ;
 		}
 		initialize_info(&hive.info);

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 13:38:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 11:47:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,20 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 
 	elements = *salt;
 	vars = initialize_vars(salt);
-	while (elements)
+	signal(SIGINT, handle_child);
+	while (elements && bip == false)
 	{
+		signal(SIGINT, handle_child);
 		vars->save_stdout = dup(STDOUT_FILENO);
 		vars->save_stdin = dup(STDIN_FILENO);
 		if (pipe_this_node(&elements))
+		{
 			if(pipe(elements->fd) == -1)
 			{
 				g_exit_status = 1;
 				write(2, "Error while creating pipe\n", 27);
 			}
+		}
 		manage_fd(&elements, vars);
 		built_in_handler(&elements, data);
 		if ((elements->indentifier == CMD_BLOCK &&
@@ -91,9 +95,16 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 				write(2, "Error while creating process\n", 30);
 			}
 			if (vars->pid == 0)
+			{
+				// if (bip == true)
+				// {
+				// 	write(2, "hello\n", 7);
+				// 	exit(1);
+				// 	break;
+				// }
+			//	write(1, "run\n", 5);
 				run(elements, envp);
-			else
-				signal(SIGINT, SIG_IGN);
+			}
 		}
 		else if(elements->indentifier == CMD_BLOCK &&
 		elements->command_path == NULL)
@@ -113,5 +124,6 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		vars->pipe_group++;
 		elements = elements->next;
 	}
+	bip = false;
 	free(vars);
 }
