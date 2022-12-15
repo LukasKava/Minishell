@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 11:47:28 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/15 01:42:10 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 
 	elements = *salt;
 	vars = initialize_vars(salt);
-	signal(SIGINT, handle_child);
+	// signal(SIGINT, handle_child);
 	while (elements && bip == false)
 	{
 		signal(SIGINT, handle_child);

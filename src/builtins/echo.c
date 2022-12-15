@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 19:09:40 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/23 19:10:48 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 23:20:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int builtins_echo(int fd, char **line)
 		while (line[i] != NULL)
 		{
 			ft_putstr_fd(line[i], fd);
-			write(fd, " ", 1);
+			if (line[i + 1] != NULL)
+				write(fd, " ", 1);
 			i++;
 		}
 	}
@@ -48,7 +49,8 @@ int builtins_echo(int fd, char **line)
 		while (line[i] != NULL)
 		{
 			ft_putstr_fd(line[i], fd);
-			write(fd, " ", 1);
+			if (line[i + 1] != NULL)
+				write(fd, " ", 1);
 			i++;
 		}
 		write(fd, "\n", 1);
