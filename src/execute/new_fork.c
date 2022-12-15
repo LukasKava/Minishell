@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
 /*   Updated: 2022/12/14 11:47:28 by lkavalia         ###   ########.fr       */
@@ -18,6 +18,26 @@ Wifeexited afte waitpid.
 Install norminett and make it in accordance with the norm.
 Check cases and check for memory leaks.
 Add error handling.
+Might have to fork with built ins for pipes.
+Actually you shouldn't fork on export, unset, cd and exit, 
+as they pretty much need to change the state of the main process.
+Builtins without pipes must be executed in the parent process.
+Every operation that you call to exit should free all of the resources correctly, 
+of course excluding the leaks from readline()
+It actually sets the exit status
+[08:31]
+exit with number
+Either to the number provided or to "2" if you input random characters instead
+ https://github.com/VladDrag/Minishell_Documentation
+ Hello everyone, does anyone knows how to initialize the status variable used for waitpid() correct?
+So that  valgrind is not complaining about it and the status works properly with WEXITSTATUS(status);
+If I just initialize status = 0;
+Then the waitpid(pid, &status, 0);
+Always returns 0 as exit status for the child.
+Adding exits.
+Checking for memory leaks.
+< infilea ls -l | wc -l > out
+exit statuses from the built ins
 */
 #include	"../../includes/minishell.h"
 
@@ -48,18 +68,37 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	built_in_handler(t_chunk **salt, t_data *data)
+void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 {
 	t_chunk		*element;
 
 	element = *salt;
-	echo_handle(&element);
-	cd_handle(&element, data->env);
-	pwd_handle(&element);
-	env_handle(&element, data->env);
-	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-	unset_handle(&data->exp_l, &data->env, &element);
-	exit_handle(data, &element);
+	if (pipe_this_node(&element) && element->indentifier == BUILT_IN_BLOCK)
+	{
+		vars->pid = fork();
+		if (vars->pid == -1)
+		{
+			g_exit_status = 1;
+			write(2, "Error while creating process\n", 30);
+		}
+		if (vars->pid == 0)
+		{
+			echo_handle(&element);
+			pwd_handle(&element);
+			env_handle(&element, data->env);
+			exit (EXIT_SUCCESS);
+		}
+	}
+	else
+	{
+		echo_handle(&element);
+		pwd_handle(&element);
+		env_handle(&element, data->env);
+		cd_handle(&element, data->env);
+		export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
+		unset_handle(&data->exp_l, &data->env, &element);
+		exit_handle(data, &element);
+	}
 }
 
 void	execute(t_chunk **salt, t_data *data, char	**envp)
@@ -80,30 +119,30 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			if(pipe(elements->fd) == -1)
 			{
 				g_exit_status = 1;
-				write(2, "Error while creating pipe\n", 27);
+				perror(" ");
 			}
 		}
 		manage_fd(&elements, vars);
-		built_in_handler(&elements, data);
-		if ((elements->indentifier == CMD_BLOCK &&
-		elements->command_path != NULL))
+		built_in_handler(&elements, data, vars);
+		if ((elements->indentifier == CMD_BLOCK)) 
 		{
 			vars->pid = fork();
 			if (vars->pid == -1)
 			{
 				g_exit_status = 1;
-				write(2, "Error while creating process\n", 30);
+				perror(" ");
 			}
 			if (vars->pid == 0)
 			{
+				// run(elements, envp, data, vars);
 				// if (bip == true)
 				// {
 				// 	write(2, "hello\n", 7);
 				// 	exit(1);
 				// 	break;
-				// }
-			//	write(1, "run\n", 5);
-				run(elements, envp);
+		  	// }
+			  //	write(1, "run\n", 5);
+        run(elements, envp);
 			}
 		}
 		else if(elements->indentifier == CMD_BLOCK &&

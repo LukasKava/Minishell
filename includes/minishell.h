@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 08:50:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 19:10:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,8 @@ void	simple_err_message(t_info *info, char *message, int exit_status);
 int		here_doc(char	*delimit);
 
 /*----	../src/run.c	-------------*/
-void	run(t_chunk *salt,char **envp);
+void	run(t_chunk	*salt, char	**envp);
+// void	run(t_chunk	*salt, char	**envp, t_data *hive, t_vars *vars);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);
@@ -277,7 +278,7 @@ void	empty_data_output(t_chunk **salt, t_vars *vars);
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
-void	built_in_handler(t_chunk **salt, t_data *data);
+void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars);
 void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 
 //INDENTIFIER EXPLANATION:

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 12:09:04 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:13:34 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 		if(vars->input_fd == -1)
 		{
 			vars->input_fd = open("./includes/err_read.txt", O_RDONLY|O_CREAT, 0644);
-			write(2,"Go outside, take a walk, rethink inputing nonexisting files.\n", 62);
+			
+			perror("Error ");
 			g_exit_status = 1;
+			return ;
 		}
 	}
 	else if(element->in_f[vars->number_of_infiles].type == DELIMITOR)
@@ -79,7 +81,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		O_WRONLY | O_CREAT | O_TRUNC, 0664);
 		if(vars->output_fd == -1)
 		{
-			write(2,"Could not create output file.\n", 31);
+			perror("Error: ");
 			g_exit_status = 1;
 		}
 	}
@@ -89,7 +91,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		O_WRONLY | O_CREAT | O_APPEND, 0664);
 		if(vars->output_fd == -1)
 		{
-			write(2,"Could not create output append file.\n", 38);
+			perror("Error: ");
 			g_exit_status = 1;
 		}
 	}
