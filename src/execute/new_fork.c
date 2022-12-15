@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 11:47:28 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/15 01:42:10 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,11 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
+	int		status = 0;
 
 	elements = *salt;
 	vars = initialize_vars(salt);
-	signal(SIGINT, handle_child);
+	// signal(SIGINT, handle_child);
 	while (elements && bip == false)
 	{
 		signal(SIGINT, handle_child);
@@ -96,12 +97,12 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			}
 			if (vars->pid == 0)
 			{
-				// if (bip == true)
-				// {
-				// 	write(2, "hello\n", 7);
-				// 	exit(1);
-				// 	break;
-				// }
+				if (bip == true)
+				{
+					write(2, "hello\n", 7);
+					exit(1);
+					break;
+				}
 			//	write(1, "run\n", 5);
 				run(elements, envp);
 			}
@@ -118,7 +119,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		dup2(vars->save_stdout, STDOUT_FILENO);
 		close(vars->save_stdin);
 		close(vars->save_stdout);
-		waitpid(-1, &g_exit_status, 0);
+		waitpid(-1, &status, 0);
 		signal(SIGINT, handle_sigint);
 		get_exit_status(vars);
 		vars->pipe_group++;

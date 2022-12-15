@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 12:35:07 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/14 23:15:11 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void print_the_chunk_list(char *message, t_chunk *chunk)
 		printf("\033[30;1mARGUMENTS:\033[0m\n");
 		while (chunk->arguments != NULL && chunk->arguments[i] != NULL)
 		{
-			printf("\033[30;1m%s \033[0m", chunk->arguments[i]);
+			printf("\033[30;1m[%s] \033[0m", chunk->arguments[i]);
 			i++;
 		}
 		printf("\n");
