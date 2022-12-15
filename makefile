@@ -6,7 +6,7 @@
 #    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/13 13:18:34 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/14 20:52:25 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,9 @@ endef
 export IMG
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
+
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+# CFLAGS = -Wall -Werror -Wextra
 
 NAME = minishell
 
@@ -100,6 +102,9 @@ fclean:	clean
 	@rm -f ${NAME}
 
 re:	fclean all
+
+memory:
+	valgrind --leak-check=full --show-leak-kinds=all ./minishell
 
 re_bonus:	fclean bonus
 

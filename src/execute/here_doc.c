@@ -21,6 +21,7 @@ int	here_doc(char	*delimit)
 	{
 		g_exit_status = 1;
 		write(2, "Problems with setting up the here doc pipe\n", 44);
+		perror(" ");
 	}
 	signal(SIGINT, handle_sigint);
 	while (TRUE)
@@ -28,7 +29,8 @@ int	here_doc(char	*delimit)
 		buff = readline("> ");
 		if (!buff)
 		{
-			write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
+      write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
+			perror(" ");
 			return (1);
 		}
 		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 &&

@@ -92,3 +92,19 @@ strerr
 non existant file
 here doc with quotes
 what is strerror
+
+TODO
+
+- Try ctrl-C after running a blocking command like cat or grep without arguments
+- Test only spaces or tabs.
+- Try environment variables, whitespaces, pipes, redirection in the single quotes
+- Unset the $PATH and check if it is not working anymore
+- Set the $PATH to a multiple directory value (directory1:directory2) and check that directories are checked in order
+from left to right
+exit twice after entering minishell three or more times apparently there are leaks
+also it prints two prompts
+ls ""
+'$PATH'
+'               ' this example crashes.
+ls '|' cat
+unset $PATH

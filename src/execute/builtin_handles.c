@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/12 17:02:18 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:32:35 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	env_handle(t_chunk **salt, t_env *e_list)
 	}	
 	
 }
-// int builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd)
+
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd)
 {
 	t_chunk *element;
@@ -83,7 +83,6 @@ void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd)
 	}
 }
 
-// int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
 void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
 {
 	t_chunk	*element;
@@ -98,7 +97,6 @@ void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
 	}
 }
 
-// int builtins_exit(t_data *hive, char **line)
 void	exit_handle(t_data *hive, t_chunk **salt)
 {
 	t_chunk	*element;
@@ -108,7 +106,7 @@ void	exit_handle(t_data *hive, t_chunk **salt)
 	{
 		if (strncmp(element->arguments[0],"exit", strlen("exit")) == 0)
 		{
-			builtins_exit(hive, element->arguments);
+			g_exit_status = builtins_exit(hive, element->arguments);
 		}
 	}
 }
