@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 11:13:01 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 16:02:32 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ int builtins_cd(char **line, t_env **e_list)
 			return (1);
 		}
 		// free(super_case);
-		printf("fails after:\n");
 		reset_old_pwd(e_list);
 		reset_pwd(e_list);
 	}

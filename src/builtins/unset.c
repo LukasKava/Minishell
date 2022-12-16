@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:27:10 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 11:15:46 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 14:17:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,20 @@ static void delete_env_node(t_env **e_l, char *str)
 {
 	t_env *temp_e;
 	t_env *temp_node;
-	char *name;
+	
 	temp_e = (*e_l);
 	temp_node = NULL;
-	name = save_name((*e_l)->var);
 	if (*e_l != NULL && ft_strncmp((*e_l)->var_name, str, ft_strlen(str)) == 0)
 	{
 		(*e_l) = (*e_l)->next;
 		free(temp_e->trim_var);
 		free(temp_e->var_name);
 		free(temp_e->var);
-		free(name);
 		free(temp_e);
 		return;
 	}
 	while ((*e_l) != NULL)
 	{
-		if ((*e_l)->next != NULL)
-			name = save_name((*e_l)->next->var);
 		if ((*e_l)->next != NULL && ft_strncmp((*e_l)->next->var_name, str, ft_strlen(str)) == 0)
 		{
 			temp_node = (*e_l)->next;
@@ -84,12 +80,8 @@ static void delete_env_node(t_env **e_l, char *str)
 			free(temp_node->var_name);
 			free(temp_node->var);
 			free(temp_node);
-			free(name);
 			break;
 		}
-		if (name != NULL)
-			free(name);
-		name = NULL;
 		(*e_l) = (*e_l)->next;
 	}
 	(*e_l) = temp_e;

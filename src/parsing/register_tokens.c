@@ -321,7 +321,16 @@ static void check_command_excists(t_token **token, t_env *env)
 				i++;
 			}
 			if (splitted_path[i] == NULL)
+			{
+				i = 0;
+				while (splitted_path[i] != NULL)
+				{
+					free(splitted_path[i]);
+					i++;
+				}
+				free(splitted_path);
 				return ;
+			}
 			i = 0;
 			while (splitted_path[i] != NULL)
 			{
