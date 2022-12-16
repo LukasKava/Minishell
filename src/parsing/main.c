@@ -6,15 +6,17 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 14:30:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:43:40 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
 
-int g_exit_status;
-bool bip = false;
+//int g_exit_status;
+//bool bip = false;
+
+t_collect g_errors;
 
 // static void check_non_generic(t_info *info)
 // {
@@ -62,7 +64,7 @@ void errors_before(t_info *info)
 		{
 			info->error = true;
 			printf("Quotes are not closed!\n");
-			g_exit_status = 2;
+			g_errors.g_exit_status = 2;
 			return ;
 		}
 	}
@@ -72,7 +74,7 @@ void errors_before(t_info *info)
 		{
 			info->error = true;
 			printf("Syntax error | \n");
-			g_exit_status = 2;
+			g_errors.g_exit_status = 2;
 			return ;
 		}
 	}
@@ -88,7 +90,8 @@ static void	initialize_hive(t_data *h, char **envp)
 	h->token = NULL;
 	create_e_list(&h->env, envp);
 	create_e_list(&h->exp_l, envp);
-	bip = false;
+	g_errors.g_exit_status = 0;
+	g_errors.bip = false;
 }
 
 void	checker_before(t_data *hive)
@@ -101,7 +104,7 @@ void	checker_before(t_data *hive)
 	if (hive->info.readline[i] == '\0' || (hive->info.readline[i] >= '\a' && hive->info.readline[i] <= '\r'))
 	{
 			hive->info.error = true;
-			g_exit_status = 0;
+			g_errors.g_exit_status = 0;
 	}
 }
 
@@ -143,7 +146,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-	//	signal(SIGINT, handle_sigint);
+		//signal(SIGINT, handle_sigint);
 		hive.info.readline = readline("BiebianOS> ");
 		if (!hive.info.readline)
 		{

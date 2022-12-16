@@ -180,7 +180,7 @@ static void assign_indexes(t_token **token, t_info *info)
 		if ((*token)->ignore == true)
 		{
 			info->error = true;
-			g_exit_status = 2;
+			g_errors.g_exit_status = 2;
 			break;
 		}
 		(*token)->index = i;
@@ -299,7 +299,7 @@ static void check_command_excists(t_token **token, t_env *env)
 	if (env == NULL)
 	{
 		printf("ERRROR in find path path is not excistent!\n");
-		g_exit_status = 127;
+		g_errors.g_exit_status = 127;
 		return ;
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 17:13:34 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:08:42 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 			vars->input_fd = open("./includes/err_read.txt", O_RDONLY|O_CREAT, 0644);
 			
 			perror("Error ");
-			g_exit_status = 1;
+			g_errors.g_exit_status = 1;
 			return ;
 		}
 	}
@@ -82,7 +82,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		if(vars->output_fd == -1)
 		{
 			perror("Error: ");
-			g_exit_status = 1;
+			g_errors.g_exit_status = 1;
 		}
 	}
 	else if(element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
@@ -92,7 +92,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		if(vars->output_fd == -1)
 		{
 			perror("Error: ");
-			g_exit_status = 1;
+			g_errors.g_exit_status = 1;
 		}
 	}
 }
