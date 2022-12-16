@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 10:59:27 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:17:37 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ void	get_exit_status(t_vars *vars)
 	int	i;
 
 	i = 0;
-	while(i < vars->num_cmd)
+	while (i < vars->num_cmd)
 	{
 		g_exit_status = WEXITSTATUS(g_exit_status);
 		i++;
 	}
 }
 
-void manage_fd(t_chunk **salt, t_vars *vars)
+void	manage_fd(t_chunk **salt, t_vars *vars)
 {
-	t_chunk *element;
+	t_chunk	*element;
 
 	element = *salt;
 	empty_data_input(&element, vars);
@@ -67,6 +67,11 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	redirect_out(&element, vars);
 	set_pipe_io(&element, vars);
 }
+
+// void	no_fork_builtins(t_chunk **salt, t_data *data)
+// {
+	
+// }
 
 void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 {
