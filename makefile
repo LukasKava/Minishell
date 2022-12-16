@@ -6,7 +6,7 @@
 #    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/14 20:52:25 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/16 12:00:21 by lkavalia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,8 @@ export IMG
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
-# CFLAGS = -Wall -Werror -Wextra
+#CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+ CFLAGS = -Wall -Werror -Wextra
 
 NAME = minishell
 

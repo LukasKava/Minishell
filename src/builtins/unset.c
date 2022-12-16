@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:27:10 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 11:15:41 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 11:15:46 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,14 @@ static void delete_env_node(t_env **e_l, char *str)
 // 	return (0);	
 // }
 
-int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
+static void	remake_env(char **env, t_env *env_l)
+{
+	//clean up
+	(void)env;
+	(void)env_l;
+}
+
+int builtins_unset(t_env **exp_l, t_env **env_l, char **env, char **line)
 {
 	int i;
 	i = 0;
@@ -129,6 +136,7 @@ int builtins_unset(t_env **exp_l, t_env **env_l, char **line)
 	//		printf("fails after exp_node");
 			delete_env_node(env_l, line[i]);
 	//		printf("env.... %s\n", (*env_l)->var);
+			remake_env(env, (*env_l));
 		}
 		else
 			return (1);
