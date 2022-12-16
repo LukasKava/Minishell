@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 19:10:56 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/15 17:38:11 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int 	ft_pwd(int fd);
 int		builtins_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
-int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
+int		builtins_unset(t_env **exp_l, t_env **env_l, char **env, char **line);
 
 /*----	../src/new_fork.c	------------------*/
 void	execute(t_chunk **salt, t_data *data, char	**envp);
@@ -267,7 +267,7 @@ void	cd_handle(t_chunk	**salt, t_env	*env);
 void	pwd_handle(t_chunk	**salt);
 void	env_handle(t_chunk **salt, t_env *e_list);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
-void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt);
+void	unset_handle(t_env **exp_l, t_env **env_l, char **env, t_chunk	**salt);
 void	exit_handle(t_data *hive, t_chunk **salt);
 
 /*----	../src/empty_data.c	-------------*/
@@ -278,7 +278,7 @@ void	empty_data_output(t_chunk **salt, t_vars *vars);
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
-void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars);
+void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars);
 void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 
 //INDENTIFIER EXPLANATION:

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/15 01:42:10 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 10:59:27 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
+void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 {
 	t_chunk		*element;
 
@@ -96,7 +96,7 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 		env_handle(&element, data->env);
 		cd_handle(&element, data->env);
 		export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-		unset_handle(&data->exp_l, &data->env, &element);
+		unset_handle(&data->exp_l, &data->env, env, &element);
 		exit_handle(data, &element);
 	}
 }
@@ -123,7 +123,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			}
 		}
 		manage_fd(&elements, vars);
-		built_in_handler(&elements, data, vars);
+		built_in_handler(&elements, data, envp, vars);
 		if ((elements->indentifier == CMD_BLOCK)) 
 		{
 			vars->pid = fork();

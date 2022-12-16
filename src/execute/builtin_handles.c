@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handles.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 18:32:35 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 12:21:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd)
 	}
 }
 
-void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
+void	unset_handle(t_env **exp_l, t_env **env_l, char **env, t_chunk	**salt)
 {
 	t_chunk	*element;
 	
@@ -92,7 +92,7 @@ void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0],"unset", strlen("unset")) == 0)
 		{
-			builtins_unset(exp_l, env_l, element->arguments);
+			builtins_unset(exp_l, env_l, env, element->arguments);
 		}
 	}
 }
