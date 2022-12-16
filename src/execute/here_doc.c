@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/14 11:36:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:02:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	here_doc(char	*delimit)
 	
 	if (pipe(pfd) == -1)
 	{
-		g_exit_status = 1;
+		g_errors.g_exit_status = 1;
 		write(2, "Problems with setting up the here doc pipe\n", 44);
 		perror(" ");
 	}

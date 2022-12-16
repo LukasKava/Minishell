@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/15 17:38:11 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:39:30 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,16 @@
 # include <errno.h>
 # include <stdint.h>
 
-extern int	g_exit_status;
-extern bool bip;
+//extern int	g_exit_status;
+//extern bool bip;
+
+typedef struct	g_collection
+{
+	int g_exit_status;
+	bool bip;
+}	t_collect;
+
+extern t_collect g_errors;
 
 typedef struct s_env
 {

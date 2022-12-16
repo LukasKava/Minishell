@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 12:21:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:09:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	exit_handle(t_data *hive, t_chunk **salt)
 	{
 		if (strncmp(element->arguments[0],"exit", strlen("exit")) == 0)
 		{
-			g_exit_status = builtins_exit(hive, element->arguments);
+			g_errors.g_exit_status = builtins_exit(hive, element->arguments);
 		}
 	}
 }

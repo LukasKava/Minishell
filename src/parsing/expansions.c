@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:32:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 14:45:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:47:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	exit_status(t_token **token)
 		if ((*token)->token[1] != '\0' && (*token)->token[1] == '?')
 		{
 			free((*token)->token);
-			(*token)->token = ft_itoa(g_exit_status);
+			(*token)->token = ft_itoa(g_errors.g_exit_status);
 		}
 	}
 }
