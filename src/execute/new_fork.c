@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 18:17:37 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:41:07 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	get_exit_status(t_vars *vars)
 	i = 0;
 	while (i < vars->num_cmd)
 	{
-		g_exit_status = WEXITSTATUS(g_exit_status);
+		g_errors.g_exit_status = WEXITSTATUS(g_errors.g_exit_status);
 		i++;
 	}
 }
@@ -83,7 +83,7 @@ void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 		vars->pid = fork();
 		if (vars->pid == -1)
 		{
-			g_exit_status = 1;
+			g_errors.g_exit_status = 1;
 			write(2, "Error while creating process\n", 30);
 		}
 		if (vars->pid == 0)
@@ -114,7 +114,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 	elements = *salt;
 	vars = initialize_vars(salt);
 	// signal(SIGINT, handle_child);
-	while (elements && bip == false)
+	while (elements && g_errors.bip == false)
 	{
 		signal(SIGINT, handle_child);
 		vars->save_stdout = dup(STDOUT_FILENO);
@@ -123,7 +123,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		{
 			if(pipe(elements->fd) == -1)
 			{
-				g_exit_status = 1;
+				g_errors.g_exit_status = 1;
 				perror(" ");
 			}
 		}
@@ -134,26 +134,18 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			vars->pid = fork();
 			if (vars->pid == -1)
 			{
-				g_exit_status = 1;
+				g_errors.g_exit_status = 1;
 				perror(" ");
 			}
 			if (vars->pid == 0)
 			{
-				// run(elements, envp, data, vars);
-				// if (bip == true)
-				// {
-				// 	write(2, "hello\n", 7);
-				// 	exit(1);
-				// 	break;
-		  	// }
-			  //	write(1, "run\n", 5);
-        run(elements, envp);
+      			run(elements, envp);
 			}
 		}
 		else if(elements->indentifier == CMD_BLOCK &&
 		elements->command_path == NULL)
 		{
-			g_exit_status = 127;
+			g_errors.g_exit_status = 127;
 			write(2, elements->arguments[0], strlen(elements->arguments[0]));
 			write(2,": ", 3);
 			write(2, "Write propper commands, eat healthy.\n", 38);
@@ -162,12 +154,12 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		dup2(vars->save_stdout, STDOUT_FILENO);
 		close(vars->save_stdin);
 		close(vars->save_stdout);
-		waitpid(-1, &g_exit_status, 0);
+		waitpid(-1, &g_errors.g_exit_status, 0);
 		signal(SIGINT, handle_sigint);
 		get_exit_status(vars);
 		vars->pipe_group++;
 		elements = elements->next;
 	}
-	bip = false;
+	g_errors.bip = false;
 	free(vars);
 }

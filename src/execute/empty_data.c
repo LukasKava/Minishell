@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:32:53 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 17:56:04 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:39:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	empty_data_input(t_chunk	**salt, t_vars *vars)
 		dup2(empty_input_fd, STDIN_FILENO);
 		if (empty_input_fd == -1)
 		{
-			write (2, "Error while opening temporary input file\n", 42);
-			g_exit_status = 1;
+			write(2, "Error while opening temporary input file\n", 42);
+			g_errors.g_exit_status = 1;
 		}
 		close(empty_input_fd);
 	}
@@ -50,8 +50,8 @@ void	empty_data_output(t_chunk	**salt, t_vars *vars)
 		O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (empty_output_fd == -1)
 		{
-			write (2, "Error while opening temporary output file\n", 43);
-			g_exit_status = 1;
+			write(2,"Error while opening temporary output file\n", 43);
+			g_errors.g_exit_status = 1;
 		}
 		dup2(empty_output_fd, STDOUT_FILENO);
 		close(empty_output_fd);

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:24:58 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 15:50:23 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:12:01 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,9 @@ void	handle_sigint(int sig)
 
 void	handle_child(int sig)
 {
-	if (sig == SIGINT && bip == false)
+	if (sig == SIGINT && g_errors.bip == false)
 	{
-		//printf("insidesdhf");
-	//	rl_replace_line("", 0);
-	//	printf("\n");
 		write(1, "\n", 1);
-		bip = true;
-	//	write(1, "djkkfks\n", 9);
-		//exit(1);
-		//exit(1);
+		g_errors.bip = true;
 	}
 }
-
-// void handle_child(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		// printf("insidesdhf");
-// 		//	rl_replace_line("", 0);
-// 		write(1, "\n", 1);
-// 		write(1, "here\n", 9);
-// 		// exit(1);
-// 		// exit(1);
-// 	}
-// }

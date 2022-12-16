@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 15:41:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:59:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ int builtins_exit(t_data *hive, char **line)
 	if (checking_digit(line[1]) == -1)
 	{
 		write(2, "It is not a numeric argument!\nexit\n", 36);
-		g_exit_status = 2;
-		exit(g_exit_status);
+		g_errors.g_exit_status = 2;
+		exit(g_errors.g_exit_status);
 	}
 	i = ft_atoi(line[1]) % 256;
-	g_exit_status = i;
+	g_errors.g_exit_status = i;
 	freeing_tokens(hive->token);
 	freeing_chunks(&hive->c_arr);
 	freeing_e_list(&hive->env);

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 18:03:17 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:43:21 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ int	here_doc(char	*delimit)
 	char	*buff;
 
 	if (pipe(pfd) == -1)
-		pipe_error();
+	{
+		g_exit_status = 1;
+		write(2, "Problems with setting up the here doc pipe\n", 44);
+		perror(" ");
+	}
 	signal(SIGINT, handle_sigint);
 	while (TRUE)
 	{

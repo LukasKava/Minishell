@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 17:34:08 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 17:50:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:43:00 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	unset_handle(t_env **exp_l, t_env **env_l, char **env, t_chunk	**salt)
 	element = *salt;
 	if (element->indentifier == BUILT_IN_BLOCK)
 	{
-		if (strncmp(element->arguments[0], "unset", strlen("unset")) == 0)
+		if (strncmp(element->arguments[0],"unset", strlen("unset")) == 0)
 		{
 			builtins_unset(exp_l, env_l, env, element->arguments);
 		}
@@ -33,9 +33,9 @@ void	exit_handle(t_data *hive, t_chunk **salt)
 	element = *salt;
 	if (element->indentifier == BUILT_IN_BLOCK)
 	{
-		if (strncmp(element->arguments[0],"exit", strlen("exit")) == 0)
+		if (strncmp(element->arguments[0], "exit", strlen("exit")) == 0)
 		{
-			g_exit_status = builtins_exit(hive, element->arguments);
+			g_errors.g_exit_status = builtins_exit(hive, element->arguments);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/10 16:32:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:45:04 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_token	*initialize_token(t_token *token, t_info *info)
 	if (!token)
 	{
 		printf("ERROR(initialize_token): malloc has failed!\n");
-		g_exit_status = 5;
+		g_errors.g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}
@@ -53,7 +53,7 @@ t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info)
 	if (!chunk)
 	{
 		printf("ERROR(initialize_chunk): malloc has failed!\n");
-		g_exit_status = 5;
+		g_errors.g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}
@@ -83,7 +83,7 @@ t_token	*attach_token_end(t_token *token, t_info *info)
 	if (!temp)
 	{
 		printf("allocation failed!\n");
-		g_exit_status = 5;
+		g_errors.g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}
@@ -107,7 +107,7 @@ t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info)
 	if (!newnode)
 	{
 		printf("allocation failed!\n");
-		g_exit_status = 5;
+		g_errors.g_exit_status = 5;
 		info->error = true;
 		return (NULL);
 	}

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 11:12:23 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:52:06 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_env	*attach_end(t_env *token)
 	if (!temp)
 	{
 		printf("allocation failed!\n");
+		g_errors.g_exit_status = 3;
 		return (NULL);
 	}
 	temp->var = NULL;
@@ -68,7 +69,7 @@ void	create_e_list(t_env **e_list, char **env)
 	if (!head)
 	{
 		printf("allocation has failed!\n");
-		g_exit_status = 3;
+		g_errors.g_exit_status = 3;
 		return;
 	}
 	while (env[i + 1] != NULL)

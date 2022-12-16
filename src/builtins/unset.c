@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:27:10 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 14:17:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 18:35:41 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

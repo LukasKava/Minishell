@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 14:04:40 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 17:48:31 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*find_command_path(char *s, t_env *env)
 	if (env ==  NULL)
 	{
 		printf("ERRROR  in parsing.c PATH is not excistent!\n");
-		g_exit_status = 127;
+		g_errors.g_exit_status = 127;
 		return (NULL);
 	}
 	else
@@ -60,11 +60,10 @@ static char	*find_command_path(char *s, t_env *env)
 	if (splitted_path[i] == NULL)
 	{
 		free(splitted_path);
-		g_exit_status = 127;
+		g_errors.g_exit_status = 127;
 		return (NULL);
 	}
 	i++;
-	//i = 0;
 	while (splitted_path[i] != NULL)
 	{
 		free(splitted_path[i]);
