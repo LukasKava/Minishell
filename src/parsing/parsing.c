@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 12:13:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 14:04:40 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static char	*find_command_path(char *s, t_env *env)
 	{
 		splitted_path[i] = ft_strjoin(splitted_path[i], "/");
 		splitted_path[i] = ft_strjoin(splitted_path[i], s);
-		if (access(splitted_path[i], F_OK) == 0 && \
-							access(splitted_path[i], X_OK) == 0)
+		if (access(splitted_path[i], F_OK) == 0 &&
+			access(splitted_path[i], X_OK) == 0)
 		{
 			path = splitted_path[i];
 			break ;
@@ -59,10 +59,12 @@ static char	*find_command_path(char *s, t_env *env)
 	}
 	if (splitted_path[i] == NULL)
 	{
+		free(splitted_path);
 		g_exit_status = 127;
 		return (NULL);
 	}
 	i++;
+	//i = 0;
 	while (splitted_path[i] != NULL)
 	{
 		free(splitted_path[i]);

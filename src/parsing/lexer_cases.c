@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 12:15:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 14:55:41 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int quotes(t_info *info, int i, t_token **token)
 
 	quote = info->readline[i];
 	a = 0;
-	if (info->readline[i - 1] == ' ')
+	if (i != 0 && info->readline[i - 1] == ' ')
 	{
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = malloc(sizeof(char) + 2);

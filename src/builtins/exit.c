@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 12:42:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 15:41:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ int builtins_exit(t_data *hive, char **line)
 		exit(0);
 	if (line[2] != NULL)
 	{
-		write(2, "too many arguments!\n", 21);
+		write(2, "Too many arguments!\n", 21);
 		return (1);
 	}
 	if (checking_digit(line[1]) == -1)
 	{
-		write(2, "it is not a numeric argument!\nexit", 35);
+		write(2, "It is not a numeric argument!\nexit\n", 36);
 		g_exit_status = 2;
 		exit(g_exit_status);
 	}
