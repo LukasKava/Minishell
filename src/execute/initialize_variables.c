@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:12:43 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/13 11:03:03 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/16 19:03:42 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_vars	*initialize_vars(t_chunk **salt)
 {
 	t_vars	*vars;
-	
+
 	vars = malloc(sizeof(*vars));
 	vars->num_cmd = count_command_number(salt);
 	vars->number_of_infiles = 0;
@@ -26,22 +26,22 @@ t_vars	*initialize_vars(t_chunk **salt)
 	vars->pipe_group = 0;
 	vars->save_stdin = -1;
 	vars->save_stdout = -1;
-	return(vars);
+	return (vars);
 }
 
 int	count_command_number(t_chunk **salt)
 {
 	t_chunk	*elements;
 	int		num_cmds;
-	
+
 	elements = *salt;
 	num_cmds = 0;
-	while(elements)
+	while (elements)
 	{
-		if(elements->indentifier == CMD_BLOCK ||
+		if (elements->indentifier == CMD_BLOCK || \
 		elements->indentifier == BUILT_IN_BLOCK)
 			num_cmds++;
 		elements = elements->next;
 	}
-	return(num_cmds);
+	return (num_cmds);
 }

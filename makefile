@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/16 14:09:29 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/16 19:17:44 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,8 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/pipes.c\
 		./src/execute/redirections.c\
 		./src/execute/builtin_handles.c\
-		./src/execute/empty_data.c
+		./src/execute/empty_data.c\
+		./src/execute/builtin_handles_II.c
 
 
 OBJS = ${SOURCES:.c=.o}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 18:05:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/16 20:42:43 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,23 @@ exit statuses from the built ins
 
 void	get_exit_status(t_vars *vars);
 void	manage_fd(t_chunk **salt, t_vars *vars);
+void	no_fork_handle(t_chunk	**salt, t_data	*data, char **env);
 
 void	get_exit_status(t_vars *vars)
 {
 	int	i;
 
 	i = 0;
-	while(i < vars->num_cmd)
+	while (i < vars->num_cmd)
 	{
 		g_errors.g_exit_status = WEXITSTATUS(g_errors.g_exit_status);
 		i++;
 	}
 }
 
-void manage_fd(t_chunk **salt, t_vars *vars)
+void	manage_fd(t_chunk **salt, t_vars *vars)
 {
-	t_chunk *element;
+	t_chunk	*element;
 
 	element = *salt;
 	empty_data_input(&element, vars);
@@ -66,6 +67,20 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	redirect_in(&element, vars);
 	redirect_out(&element, vars);
 	set_pipe_io(&element, vars);
+}
+
+void	no_fork_handle(t_chunk	**salt, t_data	*data, char **env)
+{
+	t_chunk	*element;
+
+	element = *salt;
+	echo_handle(&element);
+	pwd_handle(&element);
+	env_handle(&element, data->env);
+	cd_handle(&element, data->env);
+	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
+	unset_handle(&data->exp_l, &data->env, env, &element);
+	exit_handle(data, &element);
 }
 
 void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
@@ -90,15 +105,43 @@ void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 		}
 	}
 	else
-	{
-		echo_handle(&element);
-		pwd_handle(&element);
-		env_handle(&element, data->env);
-		cd_handle(&element, data->env);
-		export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-		unset_handle(&data->exp_l, &data->env, env, &element);
-		exit_handle(data, &element);
-	}
+		no_fork_handle(&element, data, env);
+}
+
+void	parent_process(t_chunk *elements, t_vars *vars)
+{
+	dup2(vars->save_stdin, STDIN_FILENO);
+	dup2(vars->save_stdout, STDOUT_FILENO);
+	close(vars->save_stdin);
+	close(vars->save_stdout);
+	waitpid(-1, &g_errors.g_exit_status, 0);
+	signal(SIGINT, handle_sigint);
+	get_exit_status(vars);
+	vars->pipe_group++;
+	elements = elements->next;
+}
+
+void	pipe_error_execute(void)
+{
+	g_errors.g_exit_status = 1;
+	perror(" ");
+}
+
+void	fork_error(void)
+{
+	g_errors.g_exit_status = 1;
+	perror(" ");
+}
+
+void	command_error(t_chunk **salt)
+{
+	t_chunk	*element;
+
+	element = *salt;
+	g_errors.g_exit_status = 127;
+	write(2, element->arguments[0], strlen(element->arguments[0]));
+	write(2, ": ", 3);
+	write(2, "Write propper commands, eat healthy.\n", 38);
 }
 
 void	execute(t_chunk **salt, t_data *data, char	**envp)
@@ -108,43 +151,27 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 
 	elements = *salt;
 	vars = initialize_vars(salt);
-	// signal(SIGINT, handle_child);
 	while (elements && g_errors.bip == false)
 	{
 		signal(SIGINT, handle_child);
 		vars->save_stdout = dup(STDOUT_FILENO);
 		vars->save_stdin = dup(STDIN_FILENO);
 		if (pipe_this_node(&elements))
-		{
-			if(pipe(elements->fd) == -1)
-			{
-				g_errors.g_exit_status = 1;
-				perror(" ");
-			}
-		}
+			if (pipe(elements->fd) == -1)
+				pipe_error_execute();
 		manage_fd(&elements, vars);
 		built_in_handler(&elements, data, envp, vars);
-		if ((elements->indentifier == CMD_BLOCK)) 
+		if ((elements->indentifier == CMD_BLOCK))
 		{
 			vars->pid = fork();
 			if (vars->pid == -1)
-			{
-				g_errors.g_exit_status = 1;
-				perror(" ");
-			}
+				fork_error();
 			if (vars->pid == 0)
-			{
-      			run(elements, envp);
-			}
+				run(elements, envp);
 		}
-		else if(elements->indentifier == CMD_BLOCK &&
+		else if (elements->indentifier == CMD_BLOCK && \
 		elements->command_path == NULL)
-		{
-			g_errors.g_exit_status = 127;
-			write(2, elements->arguments[0], strlen(elements->arguments[0]));
-			write(2,": ", 3);
-			write(2, "Write propper commands, eat healthy.\n", 38);
-		}
+			command_error(&elements);
 		dup2(vars->save_stdin, STDIN_FILENO);
 		dup2(vars->save_stdout, STDOUT_FILENO);
 		close(vars->save_stdin);
