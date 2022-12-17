@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 17:48:31 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:21:34 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,46 +30,21 @@ static char	*find_command_path(char *s, t_env *env)
 	char	**splitted_path;
 
 	i = 0;
-	path = NULL;
 	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
 		env = env->next;
-	if (env ==  NULL)
-	{
-		printf("ERRROR  in parsing.c PATH is not excistent!\n");
-		g_errors.g_exit_status = 127;
+	path = path_checker(env);
+	if (path == NULL)
 		return (NULL);
-	}
-	else
-		path = env->var;
 	splitted_path = ft_split(path, ':');
 	splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
-	i = 0;
-	while (splitted_path[i] != NULL)
-	{
-		splitted_path[i] = ft_strjoin(splitted_path[i], "/");
-		splitted_path[i] = ft_strjoin(splitted_path[i], s);
-		if (access(splitted_path[i], F_OK) == 0 &&
-			access(splitted_path[i], X_OK) == 0)
-		{
-			path = splitted_path[i];
-			break ;
-		}
-		free(splitted_path[i]);
-		i++;
-	}
+	i = find_correct_path(splitted_path, s);
+	path = splitted_path[i];
 	if (splitted_path[i] == NULL)
 	{
 		free(splitted_path);
-		g_errors.g_exit_status = 127;
 		return (NULL);
 	}
-	i++;
-	while (splitted_path[i] != NULL)
-	{
-		free(splitted_path[i]);
-		i++;
-	}
-	free(splitted_path);
+	free_splitted_path(splitted_path, i);
 	return (path);
 }
 

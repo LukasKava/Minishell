@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 14:55:41 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:14:02 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,18 @@
  *	RETURN:
  *	--------> (i) its a position to continue from.
  */
-int space(t_info *info, int i, t_token **token)
+int	space(t_info *info, int i, t_token **token)
 {
-	(*token)->token = ft_substr(info->readline, info->start, i - info->start);
+	(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 	i = skip_white_sp(info->readline, i) - 1;
 	(*token)->next = NULL;
-	info->start = i + 1;
+	info->f = i + 1;
 	info->trigger = 1;
 	return (i);
 }
 
-int quotes(t_info *info, int i, t_token **token)
+static int	checking_before_cases(t_token **token, t_info *info, int i, char q)
 {
-	char quote;
-	int a;
-
-	quote = info->readline[i];
-	a = 0;
 	if (i != 0 && info->readline[i - 1] == ' ')
 	{
 		(*token) = attach_token_end(*token, info);
@@ -45,26 +40,43 @@ int quotes(t_info *info, int i, t_token **token)
 		(*token)->token[1] = '\0';
 		(*token) = (*token)->next;
 	}
-	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || ft_isalnum(info->readline[i - 1]) == 0 || info->readline[i - 1] == '<' || info->readline[i - 1] == '>') && (info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
+	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || \
+						ft_isalnum(info->readline[i - 1]) == 0 || \
+						info->readline[i - 1] == '<' || \
+						info->readline[i - 1] == '>') && \
+						(info->readline[i - 1] != 34 && \
+						info->readline[i - 1] != 39))
 	{
 		(*token) = attach_token_end(*token, info);
-		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
+		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 		(*token) = (*token)->next;
 	}
-	info->start = skip_white_sp(info->readline, i + 1);
-	i = skip_quotes(info->readline, quote, i + 1);
-	(*token)->token = ft_substr(info->readline, info->start, i - (info->start));
+	info->f = skip_white_sp(info->readline, i + 1);
+	i = skip_quotes(info->readline, q, i + 1);
+	return (i);
+}
+
+int	quotes(t_info *info, int i, t_token **token)
+{
+	char	quote;
+	int		a;
+
+	quote = info->readline[i];
+	a = 0;
+	i = checking_before_cases(token, info, i, quote);
+	(*token)->token = ft_substr(info->readline, info->f, i - (info->f));
 	(*token)->next = NULL;
 	check_quote_type(token, quote);
-	info->start = i + 1;
+	info->f = i + 1;
 	info->trigger = 1;
 	if (info->readline[i + 1] == ' ')
 	{
 		a = skip_white_sp(info->readline, i + 1);
-		if ((info->readline[a] == '"' || info->readline[a] == 39) || info->readline[a] == '\0')
+		if ((info->readline[a] == '"' || info->readline[a] == 39) || \
+											info->readline[a] == '\0')
 		{
 			i = a - 1;
-			info->start = a;
+			info->f = a;
 		}
 	}
 	return (i);
@@ -80,14 +92,14 @@ int quotes(t_info *info, int i, t_token **token)
  *	-------->	('(')	left bracket.
  *	-------->	(')')	right bracket.
  */
-int rest_of_the_cases(t_info *info, int i, t_token **token)
+int	rest_of_the_cases(t_info *info, int i, t_token **token)
 {
-	char sign;
+	char	sign;
 
 	sign = info->readline[i];
 	if (i != 0 && ft_check_speacials(info->readline, i) == 0)
 	{
-		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
+		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 		(*token) = attach_token_end(*token, info);
 		(*token) = (*token)->next;
 	}
@@ -96,20 +108,19 @@ int rest_of_the_cases(t_info *info, int i, t_token **token)
 	(*token)->token[1] = '\0';
 	if (info->readline[i + 1] == ' ')
 		i = skip_white_sp(info->readline, i + 1) - 1;
-	info->start = i + 1;
+	info->f = i + 1;
 	info->trigger = 1;
-
 	return (i);
 }
 
-int doubles(t_info *info, int i, t_token **token)
+int	doubles(t_info *info, int i, t_token **token)
 {
-	char sign;
+	char	sign;
 
 	sign = info->readline[i];
 	if (i != 0 && ft_check_speacials(info->readline, i) == 0)
 	{
-		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
+		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 		(*token) = attach_token_end(*token, info);
 		(*token) = (*token)->next;
 	}
@@ -121,7 +132,7 @@ int doubles(t_info *info, int i, t_token **token)
 		i = skip_white_sp(info->readline, i + 2) - 1;
 	else
 		i++;
-	info->start = i + 1;
+	info->f = i + 1;
 	info->trigger = 1;
 	return (i);
 }

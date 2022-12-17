@@ -297,11 +297,7 @@ static void check_command_excists(t_token **token, t_env *env)
 	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
 		env = env->next;
 	if (env == NULL)
-	{
-		printf("ERRROR in find path path is not excistent!\n");
-		g_errors.g_exit_status = 127;
 		return ;
-	}
 	else
 		path = env->var;
 	temp = (*token);

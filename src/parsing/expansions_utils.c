@@ -6,13 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:26:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/06 14:32:20 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 22:39:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*ft_strtrim_beginning(char *s1, char *s2)
+char	*ft_strtrim_f(char *s1, char *s2)
 {
 	int		b;
 	int		len;
@@ -55,11 +55,20 @@ char	*save_the_front(char *token)
 	return (front);
 }
 
+static	int	skip_counter(char *str, int i)
+{
+	while (str[i] != '\0' && ((str[i] >= 'a' && str[i] <= 'z') || \
+						(str[i] >= 'A' && str[i] <= 'Z') || \
+						(str[i] >= '0' && str[i] <= '9') || str[i] == '_'))
+		i++;
+	return (i);
+}
+
 char	*save_tail(char *str)
 {
-	char *tail;
-	int i;
-	int len;
+	char	*tail;
+	int		i;
+	int		len;
 
 	tail = NULL;
 	i = 0;
@@ -67,8 +76,7 @@ char	*save_tail(char *str)
 	while (str[i] != '\0' && str[i] != '$')
 		i++;
 	i++;
-	while (str[i] != '\0' && ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9') || str[i] == '_'))
-		i++;
+	i = skip_counter(str, i);
 	while (str[i] != '\0')
 	{
 		len++;
@@ -83,9 +91,9 @@ char	*save_tail(char *str)
 	return (tail);
 }
 
-int confirm_expansion(t_token *token)
+int	confirm_expansion(t_token *token)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (token->token[i] != '\0')
@@ -95,9 +103,9 @@ int confirm_expansion(t_token *token)
 			i++;
 			if (token->token[i] == '\0')
 				return (1);
-			if ((token->token[i] >= 'a' && token->token[i] <= 'z') ||
-				(token->token[i] >= 'A' && token->token[i] <= 'Z') ||
-				(token->token[i] >= '0' && token->token[i] <= '9') ||
+			if ((token->token[i] >= 'a' && token->token[i] <= 'z') || \
+				(token->token[i] >= 'A' && token->token[i] <= 'Z') || \
+				(token->token[i] >= '0' && token->token[i] <= '9') || \
 				token->token[i] == '_')
 				return (0);
 		}

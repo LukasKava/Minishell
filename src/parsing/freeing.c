@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/12 15:33:50 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:42:15 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,14 @@ void	freeing_tokens(t_token *token)
 	t_token	*temp;
 
 	temp = token;
-	//printf("\n");
 	while (token != NULL)
 	{
 		temp = token;
-		//printf("[%s] ---> ", temp->token);
 		free(token->token);
 		token = token->next;
 		free(temp);
-		//printf("token freed succesfully!\n");
 	}
-	//printf("HEY!\n");
 	free(token);
-	//printf("HEY1!\n");
 }
 
 void	freeing_chunks(t_chunk **chunk)
@@ -40,7 +35,6 @@ void	freeing_chunks(t_chunk **chunk)
 	while ((*chunk) != NULL)
 	{
 		free_token = (*chunk);
-		//printf("command path: %s\n", (*chunk)->command_path);
 		free((*chunk)->command_path);
 		free((*chunk)->arguments);
 		if ((*chunk)->in_f != NULL)
@@ -49,8 +43,34 @@ void	freeing_chunks(t_chunk **chunk)
 			free((*chunk)->out_f);
 		(*chunk) = (*chunk)->next;
 		free(free_token);
-		//printf("chunk freed succesfully!\n");
 	}
 	free(*chunk);
-	//printf("dksj: %d\n", info->d_quotes);
+}
+
+void	freeing_e_list(t_env **e_list)
+{
+	t_env	*free_token;
+
+	free_token = (*e_list);
+	while ((*e_list) != NULL)
+	{
+		free((*e_list)->var);
+		free((*e_list)->var_name);
+		free((*e_list)->trim_var);
+		free_token = (*e_list);
+		(*e_list) = (*e_list)->next;
+		free(free_token);
+	}
+	free(*e_list);
+}
+
+void	free_splitted_path(char **splitted_path, int i)
+{
+	i++;
+	while (splitted_path[i] != NULL)
+	{
+		free(splitted_path[i]);
+		i++;
+	}
+	free(splitted_path);
 }

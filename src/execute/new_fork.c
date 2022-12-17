@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 18:05:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:31:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
+void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 {
 	t_chunk		*element;
 
@@ -94,9 +94,9 @@ void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 		echo_handle(&element);
 		pwd_handle(&element);
 		env_handle(&element, data->env);
-		cd_handle(&element, data->env);
+		cd_handle(&element, data->env, data->exp_l);
 		export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-		unset_handle(&data->exp_l, &data->env, env, &element);
+		unset_handle(&data->exp_l, &data->env, &element);
 		exit_handle(data, &element);
 	}
 }
@@ -123,7 +123,7 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 			}
 		}
 		manage_fd(&elements, vars);
-		built_in_handler(&elements, data, envp, vars);
+		built_in_handler(&elements, data, vars);
 		if ((elements->indentifier == CMD_BLOCK)) 
 		{
 			vars->pid = fork();
@@ -151,7 +151,8 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		close(vars->save_stdout);
 		waitpid(-1, &g_errors.g_exit_status, 0);
 		signal(SIGINT, handle_sigint);
-		get_exit_status(vars);
+		if (elements->indentifier == CMD_BLOCK)
+			get_exit_status(vars);
 		vars->pipe_group++;
 		elements = elements->next;
 	}

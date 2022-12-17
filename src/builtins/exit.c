@@ -6,15 +6,15 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 17:59:35 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 00:12:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int checking_digit(char *nbr)
+static int	checking_digit(char *nbr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (nbr[i] == '-' || (nbr[i] >= '0' && nbr[i] <= '9') || nbr[i] == '+')
@@ -30,20 +30,22 @@ static int checking_digit(char *nbr)
 	return (-1);
 }
 
-int builtins_exit(t_data *hive, char **line)
+int	builtins_exit(t_data *hive, char **line)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	if (line[1] == NULL)
 		exit(0);
 	if (line[2] != NULL)
 	{
-		write(2, "Too many arguments!\n", 21);
-		return (1);
+		write(2, "\033[0;31mexit: take your arguments back!\n\033[0m", 44);
+		g_errors.g_exit_status = 11;
+		return (11);
 	}
 	if (checking_digit(line[1]) == -1)
 	{
-		write(2, "It is not a numeric argument!\nexit\n", 36);
+		write(2, "\033[0;31mI only like numbers!\n\033[0mexit\n", 38);
 		g_errors.g_exit_status = 2;
 		exit(g_errors.g_exit_status);
 	}
