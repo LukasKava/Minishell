@@ -1,23 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run.c                                              :+:      :+:    :+:   */
+/*   redirections_II.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 11:49:51 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/17 21:29:51 by pbiederm         ###   ########.fr       */
+/*   Created: 2022/12/18 00:17:36 by pbiederm          #+#    #+#             */
+/*   Updated: 2022/12/18 00:19:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include	"../../includes/minishell.h"
 
-void	run(t_chunk	*salt, char	**envp)
+int	in_redirection_this_node(t_chunk **salt)
 {
-	if (execve(salt->command_path, salt->arguments, envp) < 0)
+	t_chunk	*element;
+
+	element = *salt;
+	if (element->in_f != NULL)
 	{
-		write(2, salt->arguments[0], ft_strlen(salt->arguments[0]));
-		perror(" ");
-		exit(126);
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
+
+int	in_redirection_next_node(t_chunk **salt)
+{
+	t_chunk	*element;
+
+	element = *salt;
+	if (element->next != NULL && element->next->in_f != NULL)
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
 	}
 }
