@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 13:00:25 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:41:39 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	builtins_cd(char **line, t_env **e_list, t_env **exp_list)
 	}
 	else if (line[2] != NULL)
 	{
-		write(2, "\033[0;31mTo many arguments!\n\033[0m", 32);
+		write(2, "\033[0;31mTo many arguments!\n\033[0m", 31);
 		g_errors.g_exit_status = 10;
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 00:19:34 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:45:15 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,7 +317,7 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 void	pipe_error_execute(void);
 void	get_exit_status(t_vars *vars, int status);
 void	manage_fd(t_chunk **salt, t_vars *vars);
-void	no_fork_handle(t_chunk **salt, t_data *data, char **env);
+void	no_fork_handle(t_chunk **salt, t_data *data);
 
 /*----	../src/execution.c	-------------*/
 void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars);

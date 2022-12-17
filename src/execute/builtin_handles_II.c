@@ -6,13 +6,13 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 18:57:52 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 19:01:00 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:47:00 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../../includes/minishell.h"
 
-void	unset_handle(t_env **exp_l, t_env **env_l, char **env, t_chunk	**salt)
+void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk	**salt)
 {
 	t_chunk	*element;
 
@@ -21,7 +21,7 @@ void	unset_handle(t_env **exp_l, t_env **env_l, char **env, t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0], "unset", strlen("unset")) == 0)
 		{
-			builtins_unset(exp_l, env_l, env, element->arguments);
+			builtins_unset(exp_l, env_l, element->arguments);
 		}
 	}
 }

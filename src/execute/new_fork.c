@@ -6,27 +6,11 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/17 23:31:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:45:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	Still need to work on.
-*/
 #include "../../includes/minishell.h"
-
-// void	get_exit_status(t_vars *vars, int status)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < vars->num_cmd)
-// 	{
-// 		if (WIFEXITED(status))
-// 			g_errors.g_exit_status = WEXITSTATUS(status);
-// 		i++;
-// 	}
-// }
 
 void	manage_fd(t_chunk **salt, t_vars *vars)
 {
@@ -40,7 +24,7 @@ void	manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	no_fork_handle(t_chunk **salt, t_data *data, char **env)
+void	no_fork_handle(t_chunk **salt, t_data *data)
 {
 	t_chunk	*element;
 
@@ -48,9 +32,9 @@ void	no_fork_handle(t_chunk **salt, t_data *data, char **env)
 	echo_handle(&element);
 	pwd_handle(&element);
 	env_handle(&element, data->env);
-	cd_handle(&element, data->env);
+	cd_handle(&element, data->env, data->exp_l);
 	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-	unset_handle(&data->exp_l, &data->env, env, &element);
+	unset_handle(&data->exp_l, &data->env, &element);
 	exit_handle(data, &element);
 }
 
@@ -77,7 +61,7 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 		}
 	}
 	else
-		no_fork_handle(&element, data, env);
+		no_fork_handle(&element, data);
 }
 
 void	execute(t_chunk **salt, t_data *data, char **envp)

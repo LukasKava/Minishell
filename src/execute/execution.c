@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 11:13:34 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/17 21:15:30 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:47:34 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars)
 		if (pipe(element->fd) == -1)
 			pipe_error_execute();
 	manage_fd(&element, vars);
-	built_in_handler(&element, data, envp, vars);
+	built_in_handler(&element, data, vars);
 	if ((element->indentifier == CMD_BLOCK && \
 		element->command_path != NULL))
 	{
