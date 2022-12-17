@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 23:36:49 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 19:16:19 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		//print_the_list("register tokens check", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
-		//if (hive->info.error == false)
-		//	print_the_chunk_list("CHUNK LIST", hive->c_arr);
+		if (hive->info.error == false)
+			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		execute(&hive->c_arr, hive, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr);
