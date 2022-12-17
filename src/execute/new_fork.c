@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/17 21:28:44 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:31:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	no_fork_handle(t_chunk **salt, t_data *data, char **env)
 	exit_handle(data, &element);
 }
 
-void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
+void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 {
 	t_chunk	*element;
 

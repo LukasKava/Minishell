@@ -6,24 +6,25 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/13 12:13:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:15:06 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int ft_check_speacials(char *str, int i)
+int	ft_check_speacials(char *str, int i)
 {
 	if (str[i - 1] == '<' || str[i - 1] == '>')
 		return (1);
-	if (str[i - 1] == '|' || str[i - 1] == ' ' || str[i - 1] == 34 || str[i - 1] == 39)
+	if (str[i - 1] == '|' || str[i - 1] == ' ' || \
+		str[i - 1] == 34 || str[i - 1] == 39)
 		return (1);
 	if (str[i - 1] == '&' || str[i - 1] == ';' || str[i - 1] == '(')
 		return (1);
 	return (0);
 }
 
-static t_token *triggered(t_info *info, t_token *token, int i)
+static t_token	*triggered(t_info *info, t_token *token, int i)
 {
 	if (info->readline[i + 1] == '\0')
 	{
@@ -45,7 +46,7 @@ static t_token *triggered(t_info *info, t_token *token, int i)
  * x	True if any of the cases excist.
  * x	False if any of them do not excist.
  */
-static bool possible_doubles(t_info *info, int i)
+static bool	possible_doubles(t_info *info, int i)
 {
 	if (info->readline[i] == '>' && info->readline[i + 1] == '|')
 		return (true);
@@ -71,25 +72,26 @@ static bool possible_doubles(t_info *info, int i)
  * 	x	True if any of ("<" ">" "(" ")" "|" "&" ";") excist.
  * 	x	False if they do not excist.
  */
-static bool possible_metacharacters(t_info *info, int i)
+static bool	possible_metacharacters(t_info *info, int i)
 {
 	if (info->readline[i] == '<' || info->readline[i] == '>')
 		return (true);
 	if (info->readline[i] == '(' || info->readline[i] == ')')
 		return (true);
-	if (info->readline[i] == '|' || info->readline[i] == '&' || info->readline[i] == ';')
+	if (info->readline[i] == '|' || info->readline[i] == '&' || \
+									info->readline[i] == ';')
 		return (true);
 	return (false);
 }
 
-void lexer(t_info *info, t_token **token)
+void	lexer(t_info *info, t_token **token)
 {
-	int i;
-	t_token *temp_token;
+	int		i;
+	t_token	*temp_token;
 
 	temp_token = (*token);
 	i = skip_white_sp(info->readline, 0);
-	info->start = i;
+	info->f = i;
 	info->trigger = 0;
 	while (info->readline[i] != '\0')
 	{
@@ -106,6 +108,6 @@ void lexer(t_info *info, t_token **token)
 		i++;
 	}
 	if (ft_check_speacials(info->readline, i) == 0)
-		(*token)->token = ft_substr(info->readline, info->start, i - info->start);
+		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 	(*token) = temp_token;
 }

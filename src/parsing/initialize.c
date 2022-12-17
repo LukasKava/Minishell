@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 17:45:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 22:59:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	initialize_info(t_info *info)
 	info->redirect_output_append = 0;
 	info->dollar_question_sign = 0;
 	info->dollar_sign = 0;
-	info->start = 0;
+	info->f = 0;
 	info->trigger = 0;
 	info->error = false;
 }
@@ -105,12 +105,7 @@ t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info)
 	newnode = malloc(sizeof(t_chunk));
 	temp = chunk;
 	if (!newnode)
-	{
-		printf("allocation failed!\n");
-		g_errors.g_exit_status = 5;
-		info->error = true;
-		return (NULL);
-	}
+		return (error_initialise(info));
 	while (temp->next != NULL)
 		temp = temp->next;
 	newnode->command_path = NULL;

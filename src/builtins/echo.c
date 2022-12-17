@@ -6,13 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 19:09:40 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/14 23:20:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 00:15:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int echo_str_cmp(char **line)
+static int	echo_str_cmp(char **line)
 {
 	if (line[1] != NULL)
 	{
@@ -28,32 +28,32 @@ static int echo_str_cmp(char **line)
 	return (1);
 }
 
-int builtins_echo(int fd, char **line)
+static void	while_loop(char **line, int i, int fd)
 {
-	int i;
+	while (line[i] != NULL)
+	{
+		ft_putstr_fd(line[i], fd);
+		if (line[i + 1] != NULL)
+			write(fd, " ", 1);
+		i++;
+	}
+}
+
+int	builtins_echo(int fd, char **line)
+{
+	int	i;
 
 	i = 1;
 	if (echo_str_cmp(line) == 0)
 	{
 		i++;
-		while (line[i] != NULL)
-		{
-			ft_putstr_fd(line[i], fd);
-			if (line[i + 1] != NULL)
-				write(fd, " ", 1);
-			i++;
-		}
+		while_loop(line, i, fd);
 	}
 	else
 	{
-		while (line[i] != NULL)
-		{
-			ft_putstr_fd(line[i], fd);
-			if (line[i + 1] != NULL)
-				write(fd, " ", 1);
-			i++;
-		}
+		while_loop(line, i, fd);
 		write(fd, "\n", 1);
 	}
+	g_errors.g_exit_status = 0;
 	return (0);
 }

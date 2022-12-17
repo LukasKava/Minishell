@@ -27,7 +27,7 @@ void	echo_handle(t_chunk	**salt)
 	}	
 }
 
-void	cd_handle(t_chunk	**salt, t_env	*env)
+void	cd_handle(t_chunk	**salt, t_env	*env, t_env *exp_l)
 {
 	t_chunk	*element;
 
@@ -36,7 +36,7 @@ void	cd_handle(t_chunk	**salt, t_env	*env)
 	{
 		if (strncmp(element->arguments[0], "cd", strlen("cd")) == 0)
 		{
-			builtins_cd(element->arguments, &env);
+			builtins_cd(element->arguments, &env, &exp_l);
 		}
 	}
 }
