@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:12:43 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 19:03:42 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/17 19:58:47 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_vars	*initialize_vars(t_chunk **salt)
 	vars->pipe_group = 0;
 	vars->save_stdin = -1;
 	vars->save_stdout = -1;
+	vars->capture_exit_flag = -1;
 	return (vars);
 }
 

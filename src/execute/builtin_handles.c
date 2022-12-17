@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 19:01:11 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/17 19:29:36 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	echo_handle(t_chunk	**salt)
 		{
 			builtins_echo(STDOUT_FILENO, element->arguments);
 		}
+		g_errors.g_exit_status = 0;
 	}	
 }
 
@@ -61,7 +62,7 @@ void	env_handle(t_chunk **salt, t_env *e_list)
 	element = *salt;
 	if (element->indentifier == BUILT_IN_BLOCK)
 	{
-		if (strncmp(element->arguments[0],"env", strlen("env")) == 0)
+		if (strncmp(element->arguments[0], "env", strlen("env")) == 0)
 		{
 			builtins_env(element->arguments, e_list);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 17:39:30 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/17 21:22:01 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_vars
 	int		pipe_group;
 	int		save_stdout;
 	int		save_stdin;
+	int		capture_exit_flag;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -286,8 +287,24 @@ void	empty_data_output(t_chunk **salt, t_vars *vars);
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
-void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars);
+/*----	../src/new_fork.c	-------------*/
+void	built_in_handler(t_chunk **salt, \
+t_data *data, char **env, t_vars *vars);
 void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
+void	pipe_error_execute(void);
+void	get_exit_status(t_vars *vars, int status);
+void	manage_fd(t_chunk **salt, t_vars *vars);
+void	no_fork_handle(t_chunk **salt, t_data *data, char **env);
+
+/*----	../src/execution.c	-------------*/
+void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars);
+void	fork_error(void);
+void	command_error(t_chunk **salt, t_vars *vars);
+void	restore_standard_io(t_vars *vars);
+void	child_process(t_chunk **salt, t_vars *vars, char **envp);
+
+/*----	../src/errors.c	-------------*/
+void	pipe_error_execute(void);
 
 //INDENTIFIER EXPLANATION:
 /**
@@ -323,44 +340,44 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 //  delimitor == 13
 
 // NOT USED
-#define FORCED_R -7
-#define AMPERSAND -6
-#define DOUBLE_AMPERSAND -5
-#define SEMICOLON -4
-#define DOUBLE_SEMICOLON -3
-#define L_BRACKET -2
-#define R_BRACKET -1
+# define FORCED_R -7
+# define AMPERSAND -6
+# define DOUBLE_AMPERSAND -5
+# define SEMICOLON -4
+# define DOUBLE_SEMICOLON -3
+# define L_BRACKET -2
+# define R_BRACKET -1
 
 // USED
-#define ELSE -9
-#define SPace 0
-#define PIPE 1
-#define R_INPUT 2
-#define R_AP_INPUT 3
-#define R_OUTPUT 4
-#define R_AP_OUTPUT 5
-#define ESCAPE 6
-#define COMMAND 7
-#define BUILT_IN 8
-#define ARGUMENT 9
-#define FLAG 10
-#define INPUT_F 11
-#define DELIMITOR 12
-#define OUTPUT_F 13
-#define	R_AP_OUTPUT_F 14
+# define ELSE -9
+# define SPace 0
+# define PIPE 1
+# define R_INPUT 2
+# define R_AP_INPUT 3
+# define R_OUTPUT 4
+# define R_AP_OUTPUT 5
+# define ESCAPE 6
+# define COMMAND 7
+# define BUILT_IN 8
+# define ARGUMENT 9
+# define FLAG 10
+# define INPUT_F 11
+# define DELIMITOR 12
+# define OUTPUT_F 13
+# define R_AP_OUTPUT_F 14
 
 // USEFULL FOR THE EXECUTION
 
-#define CMD_BLOCK 20
-#define BUILT_IN_BLOCK 21
-#define ELSE_BLOCK 22
+# define CMD_BLOCK 20
+# define BUILT_IN_BLOCK 21
+# define ELSE_BLOCK 22
 
-#define	OUTPUT 1
-#define INPUT 0
-#define	WRITE 1
-#define READ 0
-#define TRUE 1
-#define FALSE 0
+# define OUTPUT 1
+# define INPUT 0
+# define WRITE 1
+# define READ 0
+# define TRUE 1
+# define FALSE 0
 // INPUT_F the same
 // OUTPUT_F the same
 // DELIMITOR the same

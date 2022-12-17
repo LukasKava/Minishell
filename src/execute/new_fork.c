@@ -6,56 +6,27 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 20:42:43 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/17 21:28:44 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-Needs a simple command execute, to execute one command.
-Needs status 126 when command is not found by access.
-Closing file descriptors hen there is one command.
-Wifeexited afte waitpid.
-Install norminett and make it in accordance with the norm.
-Check cases and check for memory leaks.
-Add error handling.
-Might have to fork with built ins for pipes.
-Actually you shouldn't fork on export, unset, cd and exit, 
-as they pretty much need to change the state of the main process.
-Builtins without pipes must be executed in the parent process.
-Every operation that you call to exit should free all of the resources correctly, 
-of course excluding the leaks from readline()
-It actually sets the exit status
-[08:31]
-exit with number
-Either to the number provided or to "2" if you input random characters instead
- https://github.com/VladDrag/Minishell_Documentation
- Hello everyone, does anyone knows how to initialize the status variable used for waitpid() correct?
-So that  valgrind is not complaining about it and the status works properly with WEXITSTATUS(status);
-If I just initialize status = 0;
-Then the waitpid(pid, &status, 0);
-Always returns 0 as exit status for the child.
-Adding exits.
-Checking for memory leaks.
-< infilea ls -l | wc -l > out
-exit statuses from the built ins
+	Still need to work on.
 */
-#include	"../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-void	get_exit_status(t_vars *vars);
-void	manage_fd(t_chunk **salt, t_vars *vars);
-void	no_fork_handle(t_chunk	**salt, t_data	*data, char **env);
+// void	get_exit_status(t_vars *vars, int status)
+// {
+// 	int	i;
 
-void	get_exit_status(t_vars *vars)
-{
-	int	i;
-
-	i = 0;
-	while (i < vars->num_cmd)
-	{
-		g_errors.g_exit_status = WEXITSTATUS(g_errors.g_exit_status);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (i < vars->num_cmd)
+// 	{
+// 		if (WIFEXITED(status))
+// 			g_errors.g_exit_status = WEXITSTATUS(status);
+// 		i++;
+// 	}
+// }
 
 void	manage_fd(t_chunk **salt, t_vars *vars)
 {
@@ -69,7 +40,7 @@ void	manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	no_fork_handle(t_chunk	**salt, t_data	*data, char **env)
+void	no_fork_handle(t_chunk **salt, t_data *data, char **env)
 {
 	t_chunk	*element;
 
@@ -85,7 +56,7 @@ void	no_fork_handle(t_chunk	**salt, t_data	*data, char **env)
 
 void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 {
-	t_chunk		*element;
+	t_chunk	*element;
 
 	element = *salt;
 	if (pipe_this_node(&element) && element->indentifier == BUILT_IN_BLOCK)
@@ -101,53 +72,19 @@ void	built_in_handler(t_chunk **salt, t_data *data, char **env, t_vars *vars)
 			echo_handle(&element);
 			pwd_handle(&element);
 			env_handle(&element, data->env);
-			exit (EXIT_SUCCESS);
+			vars->capture_exit_flag = 1;
+			exit(EXIT_SUCCESS);
 		}
 	}
 	else
 		no_fork_handle(&element, data, env);
 }
 
-void	parent_process(t_chunk *elements, t_vars *vars)
-{
-	dup2(vars->save_stdin, STDIN_FILENO);
-	dup2(vars->save_stdout, STDOUT_FILENO);
-	close(vars->save_stdin);
-	close(vars->save_stdout);
-	waitpid(-1, &g_errors.g_exit_status, 0);
-	signal(SIGINT, handle_sigint);
-	get_exit_status(vars);
-	vars->pipe_group++;
-	elements = elements->next;
-}
-
-void	pipe_error_execute(void)
-{
-	g_errors.g_exit_status = 1;
-	perror(" ");
-}
-
-void	fork_error(void)
-{
-	g_errors.g_exit_status = 1;
-	perror(" ");
-}
-
-void	command_error(t_chunk **salt)
-{
-	t_chunk	*element;
-
-	element = *salt;
-	g_errors.g_exit_status = 127;
-	write(2, element->arguments[0], strlen(element->arguments[0]));
-	write(2, ": ", 3);
-	write(2, "Write propper commands, eat healthy.\n", 38);
-}
-
-void	execute(t_chunk **salt, t_data *data, char	**envp)
+void	execute(t_chunk **salt, t_data *data, char **envp)
 {
 	t_chunk	*elements;
 	t_vars	*vars;
+	int		status;
 
 	elements = *salt;
 	vars = initialize_vars(salt);
@@ -156,32 +93,18 @@ void	execute(t_chunk **salt, t_data *data, char	**envp)
 		signal(SIGINT, handle_child);
 		vars->save_stdout = dup(STDOUT_FILENO);
 		vars->save_stdin = dup(STDIN_FILENO);
-		if (pipe_this_node(&elements))
-			if (pipe(elements->fd) == -1)
-				pipe_error_execute();
-		manage_fd(&elements, vars);
-		built_in_handler(&elements, data, envp, vars);
-		if ((elements->indentifier == CMD_BLOCK))
-		{
-			vars->pid = fork();
-			if (vars->pid == -1)
-				fork_error();
-			if (vars->pid == 0)
-				run(elements, envp);
-		}
-		else if (elements->indentifier == CMD_BLOCK && \
-		elements->command_path == NULL)
-			command_error(&elements);
-		dup2(vars->save_stdin, STDIN_FILENO);
-		dup2(vars->save_stdout, STDOUT_FILENO);
-		close(vars->save_stdin);
-		close(vars->save_stdout);
-		waitpid(-1, &g_errors.g_exit_status, 0);
+		pipe_fork(&elements, data, envp, vars);
+		restore_standard_io(vars);
+		waitpid(vars->pid, &status, 0);
 		signal(SIGINT, handle_sigint);
-		get_exit_status(vars);
 		vars->pipe_group++;
 		elements = elements->next;
 	}
+	if (vars->capture_exit_flag > 0)
+	{
+		g_errors.g_exit_status = WEXITSTATUS(status);
+		vars->capture_exit_flag = -1;
+	}
 	g_errors.bip = false;
 	free(vars);
-}
+}	
