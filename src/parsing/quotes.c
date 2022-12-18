@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/01 09:45:00 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:02:56 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
  * FUNCTION (count_quotes) counts the quotes that are in the
  * 				input.
  */
-void count_quotes(t_info *info)
+void	count_quotes(t_info *info)
 {
-	int i;
-	int double_quotes;
-	int single_quotes;
+	int	i;
+	int	double_quotes;
+	int	single_quotes;
 
 	i = 0;
 	double_quotes = 0;
@@ -37,10 +37,10 @@ void count_quotes(t_info *info)
 	info->s_quotes = single_quotes;
 }
 
-int check_quotes(t_info *info)
+int	check_quotes(t_info *info)
 {
-	size_t i;
-	char quote;
+	size_t	i;
+	char	quote;
 
 	i = 0;
 	quote = '1';
@@ -58,32 +58,36 @@ int check_quotes(t_info *info)
 	return (0);
 }
 
-void	check_quote_type(t_token **token, char c)
-{
-	if (c == '"')
-		(*token)->double_quotes = true;
-	else
-		(*token)->single_quotes = true;
-}
-
 static int	connecting_quotes_cases(t_token *token)
 {
-	if (token->name != SPace && token->next->name != SPace)
+	if (token->name != SPC && token->next->name != SPC)
 	{
-		if (token->name != SPace && (token->next->single_quotes == true || token->next->double_quotes == true))
+		if (token->name != SPC && (token->next->single_quotes == true || \
+			token->next->double_quotes == true))
 			return (0);
-		if (((token->single_quotes == true || token->double_quotes == true) && token->next->name != SPace))
-			return (0); 
+		if ((token->single_quotes == true || token->double_quotes == true) && \
+			token->next->name != SPC)
+			return (0);
 	}
 	return (1);
+}
+
+static void	norminette_hell(t_token **token, t_token *delete)
+{
+	connecting_quotes(token);
+	free(delete->token);
+	free(delete);
+	recognise_builtins(token);
 }
 
 void	connecting_quotes(t_token **token)
 {
 	t_token	*temp;
-	t_token *delete = NULL;
-	char *temp_ptr = NULL;
+	t_token	*delete;
+	char	*temp_ptr;
 
+	delete = NULL;
+	temp_ptr = NULL;
 	temp = (*token);
 	while ((*token) != NULL)
 	{
@@ -95,10 +99,7 @@ void	connecting_quotes(t_token **token)
 				(*token)->token = temp_ptr;
 				delete = (*token)->next;
 				(*token)->next = (*token)->next->next;
-				connecting_quotes(token);
-				free(delete->token);
-				free(delete);
-				recognise_builtins(token);
+				norminette_hell(token, delete);
 			}
 		}
 		(*token) = (*token)->next;

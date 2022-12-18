@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/16 17:46:47 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:03:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	check_tokens(t_info *info, t_token **token)
 		else if (((*token)->name >= PIPE \
 				&& (*token)->name <= R_AP_OUTPUT) \
 				&& (((*token)->next->name >= FORCED_R \
-				&& (*token)->next->name < SPace) \
+				&& (*token)->next->name < SPC) \
 				|| ((*token)->next->name == PIPE)))
 			error = error_message(info, 2);
 		(*token) = (*token)->next;

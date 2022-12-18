@@ -6,47 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 00:21:34 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:02:01 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/**
- * FUNCTION: (find_command_path) finds and validates the needed
- * 				command path it achieves it by going into environment
- * 				variables finding the one that starts with "PATH=". 
- * 				Processes it using  ft_split, ft_delete, ft_strjoin
- * 				and then checks if command excists and if it can
- * 				be executed using access.
- *	RETURN_VALUE:
- *	x 	correct path
- *	x 	NULL if the command was not found.
- */
-static char	*find_command_path(char *s, t_env *env)
-{
-	int		i;
-	char	*path;
-	char	**splitted_path;
-
-	i = 0;
-	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
-		env = env->next;
-	path = path_checker(env);
-	if (path == NULL)
-		return (NULL);
-	splitted_path = ft_split(path, ':');
-	splitted_path[0] = ft_delete(splitted_path[0], "PATH=");
-	i = find_correct_path(splitted_path, s);
-	path = splitted_path[i];
-	if (splitted_path[i] == NULL)
-	{
-		free(splitted_path);
-		return (NULL);
-	}
-	free_splitted_path(splitted_path, i);
-	return (path);
-}
 
 /**
  * FUNCTION: (find_arguments) takes care of finding and registering command and
@@ -55,7 +19,7 @@ static char	*find_command_path(char *s, t_env *env)
  * 	2. Giving a chunck->arguments that space.
  * 	3. filling up the available spots with command and arguments.
  */
-static t_token	*find_arguments(t_token *token, t_chunk **chunk)
+t_token	*find_arguments(t_token *token, t_chunk **chunk)
 {
 	int		i;
 	int		length;
@@ -75,18 +39,13 @@ static t_token	*find_arguments(t_token *token, t_chunk **chunk)
 	token = temp;
 	while (token != NULL && token->name != PIPE)
 	{
-		if (token->name >= COMMAND && token->name <= FLAG)
-		{
-			(*chunk)->arguments[i] = token->token;
-			i++;
-		}
+		i = filling_arguments(token, chunk, i);
 		token = token->next;
 	}
 	return (token);
 }
 
-
-static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
+static void	save_the_files(int amount, int id, t_token *token, t_redir **red)
 {
 	int	i;
 
@@ -95,13 +54,14 @@ static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 	(*red)[amount].name = NULL;
 	while (token != NULL && token->name != PIPE && amount >= 0)
 	{
-		if ((token->name == id || token->name == id + 1)  && (token->next != NULL))
+		if ((token->name == id || token->name == id + 1) && \
+								(token->next != NULL))
 		{
-			
 			token = token->next;
-			while (token != NULL && token->name == SPace)
+			while (token != NULL && token->name == SPC)
 				token = token->next;
-			if (token != NULL && (token->name == id + 9 || token->name == id + 10))
+			if (token != NULL && (token->name == id + 9 || \
+									token->name == id + 10))
 			{
 				(*red)[i].name = token->token;
 				(*red)[i].type = token->name;
@@ -112,10 +72,9 @@ static	void save_the_files(int amount, int id, t_token *token, t_redir **red)
 		if (token != NULL && token->name != PIPE)
 			token = token->next;
 	}
-	i = 0;
 }
 
-static	void count_inputs(t_token *token, t_chunk **chunk, int id)
+static void	count_inputs(t_token *token, t_chunk **chunk, int id)
 {
 	t_token	*temp;
 	int		count;
@@ -150,12 +109,14 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 	registered_output = 0;
 	while (token != NULL && token->name != PIPE)
 	{
-		if (registered_input != 1 && (token->name == R_INPUT || token->name == R_AP_INPUT) && (token))
+		if (registered_input != 1 && (token->name == R_INPUT || \
+										token->name == R_AP_INPUT) && (token))
 		{
 			registered_input = 1;
 			count_inputs(token, chunk, token->name);
 		}
-		else if (registered_output != 1 && (token->name == R_OUTPUT || token->name == R_AP_OUTPUT))
+		else if (registered_output != 1 && (token->name == R_OUTPUT || \
+										token->name == R_AP_OUTPUT))
 		{
 			registered_output = 1;
 			count_inputs(token, chunk, token->name);
@@ -164,35 +125,25 @@ static void	register_the_redirections(t_token *token, t_chunk **chunk)
 	}
 }
 
-void get_the_commands(t_token *token, t_env *env, t_chunk **chunk, t_info *info)
+void	get_the_commands(t_token *t, t_env *env, t_chunk **c, t_info *i)
 {
-	t_chunk *temp;
+	t_chunk	*temp;
 
-	temp = (*chunk);
-	while (token != NULL)
+	temp = (*c);
+	while (t != NULL)
 	{
-		register_the_redirections(token, chunk);
-		while (token != NULL && token->name != PIPE)
+		register_the_redirections(t, c);
+		while (t != NULL && t->name != PIPE)
 		{
-			if (token->name == COMMAND)
-			{
-				(*chunk)->indentifier = CMD_BLOCK;
-				(*chunk)->command_path = find_command_path(token->token, env);
-				token = find_arguments(token, chunk);
-			}
-			else if (token->name == BUILT_IN)
-			{
-				(*chunk)->indentifier = BUILT_IN_BLOCK;
-				token = find_arguments(token, chunk);
-			}
-			if (token != NULL && token->name != PIPE)
-				token = token->next;
+			t = choosing_block(t, c, env);
+			if (t != NULL && t->name != PIPE)
+				t = t->next;
 		}
-		if (token != NULL && token->index != 0 && token->name == PIPE)
-			(*chunk) = attach_chunk_end(*chunk, info);
-		if (token != NULL)
-			token = token->next;
+		if (t != NULL && t->index != 0 && t->name == PIPE)
+			(*c) = attach_chunk_end(*c, i);
+		if (t != NULL)
+			t = t->next;
 	}
-	(*chunk)->next = NULL;
-	(*chunk) = temp;
+	(*c)->next = NULL;
+	(*c) = temp;
 }

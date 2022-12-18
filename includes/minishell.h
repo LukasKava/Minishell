@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 00:45:15 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:09:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,49 +34,49 @@
 //extern int	g_exit_status;
 //extern bool bip;
 
-typedef struct	g_collection
+typedef struct g_collection
 {
-	int g_exit_status;
-	bool bip;
+	int		g_exit_status;
+	bool	bip;
 }	t_collect;
 
-extern t_collect g_errors;
+extern t_collect	g_errors;
 
 typedef struct s_env
 {
-	char	*var;
-	char	*var_name;
-	char	*trim_var;
-	struct	s_env *next;
+	char			*var;
+	char			*var_name;
+	char			*trim_var;
+	struct s_env	*next;
 }	t_env;
 
 typedef struct s_redirection
 {
 	char	*name;
 	int		type;
-} t_redir;
+}	t_redir;
 
 typedef struct s_chunk
 {
-	char	*command_path;
-	char	**arguments;
-	t_redir	*in_f;
-	t_redir	*out_f;
-	int		fd[2];
-	int		indentifier;
-	struct	s_chunk *prev;
-	struct	s_chunk	*next;
+	char			*command_path;
+	char			**arguments;
+	t_redir			*in_f;
+	t_redir			*out_f;
+	int				fd[2];
+	int				indentifier;
+	struct s_chunk	*prev;
+	struct s_chunk	*next;
 }	t_chunk;
 
 typedef struct s_token
 {
-	char		*token;
-	bool		single_quotes;
-	bool		double_quotes;
-	bool		ignore;
-	int			index;
-	int 		name;
-	struct 		s_token *next;
+	char			*token;
+	bool			single_quotes;
+	bool			double_quotes;
+	bool			ignore;
+	int				index;
+	int				name;
+	struct s_token	*next;
 }	t_token;
 
 typedef struct s_info
@@ -96,12 +96,12 @@ typedef struct s_info
 	int		f;
 }	t_info;
 
-typedef struct	s_struct_holder
+typedef struct s_struct_holder
 {
 	t_env	*env;
 	t_env	*exp_l;
-	t_token *token;
-	t_chunk *c_arr;
+	t_token	*token;
+	t_chunk	*c_arr;
 	t_info	info;
 }	t_data;
 
@@ -122,24 +122,23 @@ typedef struct s_vars
 /*----	lexer_cases.c	-----------------*/
 int		rest_of_the_cases(t_info *info, int i, t_token **token);
 int		quotes(t_info *info, int i, t_token **token);
-int 	doubles(t_info *info, int i, t_token **token);
+int		doubles(t_info *info, int i, t_token **token);
 
 /*----	lexer.c	-----------------*/
 int		ft_check_speacials(char *str, int i);
-void 	lexer(t_info *info, t_token **token);
+void	lexer(t_info *info, t_token **token);
 
 /*----	check_pipes.c	-----------------*/
 int		pipe_cases(t_info *info);
 int		pipe_excistence(t_info *info);
 
 /*----	quotes.c	-----------------*/
-void	check_quote_type(t_token **token, char c);
 int		check_quotes(t_info *info);
 void	count_quotes(t_info *info);
 void	connecting_quotes(t_token **token);
 
 void	check_tokens(t_info *info, t_token **token);
-int 	space(t_info *info, int i, t_token **token);
+int		space(t_info *info, int i, t_token **token);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
@@ -148,40 +147,53 @@ void	freeing_e_list(t_env **e_list);
 void	free_splitted_path(char **splitted_path, int i);
 
 int		parsing(t_info *info);
-int 	quotes_in_pipe(t_info *info, char quote, int position); 
-char 	**bananasplit(t_info *info);
-int 	which_quote(const char *s1, int index);
-int 	if_quotes_closed(t_info *info, char quote);
+int		quotes_in_pipe(t_info *info, char quote, int position);
+char	**bananasplit(t_info *info);
+int		which_quote(const char *s1, int index);
+int		if_quotes_closed(t_info *info, char quote);
 
 /*----	utils.c	------------------------*/
 int		ft_strcmp(const char *s1, const char *s2);
-int 	set_error_str(t_info *info, char *message, int error);
+int		set_error_str(t_info *info, char *message, int error);
 void	count_redirections(t_info *info);
 void	check_dollar_signs(t_info *info);
 int		skip_white_sp(char *s, int i);
-int 	skip_quotes(char *str, char quote, int i);
+int		skip_quotes(char *str, char quote, int i);
 
 /*----	initialize.c	-------------------*/
 void	initialize_info(t_info *info);
-t_token *initialize_token(t_token *token, t_info *info);
-t_chunk *initialize_chunk(t_chunk *chunk, t_info *info);
-t_token *attach_token_end(t_token *token, t_info *info);
-t_chunk *attach_chunk_end(t_chunk *chunk, t_info *info);
+t_token	*initialize_token(t_token *token, t_info *info);
+t_chunk	*initialize_chunk(t_chunk *chunk, t_info *info);
+t_token	*attach_token_end(t_token *token, t_info *info);
+t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
 char	*ft_delete(char *str, char *part);
+
+/*----	register_tokens2.c	-------------*/
+void	register_redirection_name(t_token **token, int redirection);
+void	register_next_token(t_token **token);
 void	recognise_builtins(t_token **token);
+void	recognise_commands(t_token **token);
+
+/*----	register_tokens3.c	-------------*/
+void	check_command_excists(t_token **token, t_env *env);
+void	ignore(t_token **token);
 
 /*----	parsing.c	-------------*/
-void	get_the_commands(t_token *token, t_env *env, t_chunk **chunk, t_info *info);
+void	get_the_commands(t_token *t, t_env *env, t_chunk **c, t_info *i);
+t_token	*find_arguments(t_token *token, t_chunk **chunk);
 
 /*----	parsing_utils.c	-------------*/
-int find_correct_path(char **splitted_path, char *s);
-char *path_checker(t_env *env);
+int		find_correct_path(char **splitted_path, char *s);
+char	*path_checker(t_env *env);
+int		filling_arguments(t_token *token, t_chunk **chunk, int i);
+char	*find_command_path(char *s, t_env *env);
+t_token	*choosing_block(t_token *token, t_chunk **chunk, t_env *env);
 
 /*----	debugging.c	-------------*/
-void print_the_list(char *message, t_token *token);
+void	print_the_list(char *message, t_token *token);
 void	print_the_chunk_list(char *message, t_chunk *chunk);
 void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
 
@@ -226,7 +238,7 @@ int		check_s_c(char **line);
 char	*get_env_prev(t_env **e);
 
 /*----	../builtins/env.c	------------------*/
-int builtins_env(char **arguments, t_env *e_list);
+int		builtins_env(char **arguments, t_env *e_list);
 
 /*----	../builtins/pwd.c	------------------*/
 int		ft_pwd(int fd);
@@ -243,38 +255,37 @@ int		builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/export2.c	------------------*/
-int possible_cases(char *arg);
-int name_exists(t_env *exp_list, char *str);
-void inject_to_exp_l(t_env **exp_l, char *str);
-void inject_to_e_l(t_env **env_l, char *str);
-int	check_len(t_env *exl);
+int		possible_cases(char *arg);
+int		name_exists(t_env *exp_list, char *str);
+void	inject_to_exp_l(t_env **exp_l, char *str);
+void	inject_to_e_l(t_env **env_l, char *str);
+int		check_len(t_env *exl);
 
 /*----	../builtins/export3.c	------------------*/
-void sort_indexes(t_env **exl);
+void	sort_indexes(t_env **exl);
 
 /*----	../builtins/pwd.c	------------------*/
-int ft_pwd(int fd);
+int		ft_pwd(int fd);
 int		builtins_pwd(int fd);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
-void delete_env_node(t_env **e_l, char *str);
+void	delete_env_node(t_env **e_l, char *str);
 
 /*----	../src/new_fork.c	------------------*/
-void execute(t_chunk **salt, t_data *data, char **envp);
+void	execute(t_chunk **salt, t_data *data, char **envp);
 
 /*----	../parsing/errors.c	------------------*/
 void	simple_err_message(t_info *info, char *message, int exit_status);
 t_chunk	*error_initialise(t_info *info);
-int 	readline_err(t_data hive);
+int		readline_err(t_data hive);
 void	errors_before(t_info *info);
 
 /*----	../src/here_doc.c	-------------*/
-int here_doc(char *delimit);
+int		here_doc(char *delimit);
 
 /*----	../src/run.c	-------------*/
 void	run(t_chunk	*salt, char	**envp);
-// void	run(t_chunk	*salt, char	**envp, t_data *hive, t_vars *vars);
 
 /*----	../src/initalise_variables.c	-------------*/
 t_vars	*initialize_vars(t_chunk **salt);
@@ -299,7 +310,7 @@ void	cd_handle(t_chunk	**salt, t_env	*env, t_env	*exp_l);
 void	pwd_handle(t_chunk	**salt);
 void	env_handle(t_chunk **salt, t_env *e_list);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
-void	unset_handle(t_env **exp_l, t_env **env_l,  t_chunk	**salt);
+void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk **salt);
 void	exit_handle(t_data *hive, t_chunk **salt);
 
 /*----	../src/empty_data.c	-------------*/
@@ -373,7 +384,7 @@ void	pipe_error_execute(void);
 
 // USED
 # define ELSE -9
-# define SPace 0
+# define SPC 0
 # define PIPE 1
 # define R_INPUT 2
 # define R_AP_INPUT 3

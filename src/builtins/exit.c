@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 00:12:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 01:40:09 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	builtins_exit(t_data *hive, char **line)
 	{
 		write(2, "\033[0;31mI only like numbers!\n\033[0mexit\n", 38);
 		g_errors.g_exit_status = 2;
+		free(hive->info.readline);
 		exit(g_errors.g_exit_status);
 	}
 	i = ft_atoi(line[1]) % 256;
@@ -55,6 +56,7 @@ int	builtins_exit(t_data *hive, char **line)
 	freeing_chunks(&hive->c_arr);
 	freeing_e_list(&hive->env);
 	freeing_e_list(&hive->exp_l);
+	free(hive->info.readline);
 	write(2, "exit\n", 6);
 	exit(i);
 }

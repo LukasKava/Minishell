@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 14:56:46 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 23:34:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 03:23:15 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	errors_before(t_info *info)
 			info->error = true;
 			printf("\033[0;31mQuotes are not closed!\033[0m\n");
 			g_errors.g_exit_status = 2;
-			return;
+			return ;
 		}
 	}
 	if (pipe_excistence(info) == 0)
@@ -47,7 +47,7 @@ void	errors_before(t_info *info)
 			info->error = true;
 			printf("\033[0;31mSyntax error | \033[0m\n");
 			g_errors.g_exit_status = 2;
-			return;
+			return ;
 		}
 	}
 	//	check_non_generic(info);

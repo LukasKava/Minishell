@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 23:42:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 02:35:21 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	freeing_e_list(t_env **e_list)
 
 void	free_splitted_path(char **splitted_path, int i)
 {
-	i++;
 	while (splitted_path[i] != NULL)
 	{
 		free(splitted_path[i]);
