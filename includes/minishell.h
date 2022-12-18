@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/12/18 11:35:15 by lkavalia         ###   ########.fr       */
-=======
-/*   Updated: 2022/12/18 14:47:45 by pbiederm         ###   ########.fr       */
->>>>>>> 7c76b00c75d9bd11fa52cacc0fab7dfa4256f769
+/*   Updated: 2022/12/18 20:31:52 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
