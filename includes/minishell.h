@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 17:29:58 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:46:13 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,6 +341,10 @@ void	child_process(t_chunk **salt, t_vars *vars, char **envp);
 /*----	../src/errors.c	-------------*/
 void	pipe_error_execute(void);
 void	redirection_out_error(t_vars *vars);
+
+/*----	../src/child_process_do.c	-------------*/
+void	child_process_do(t_chunk **salt, \
+t_data *data, t_vars *vars, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**

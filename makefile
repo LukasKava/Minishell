@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/18 11:03:12 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/18 19:49:20 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,8 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/builtin_handles_II.c\
 		./src/execute/execution.c\
 		./src/execute/errors.c\
-		./src/execute/redirections_II.c
+		./src/execute/redirections_II.c\
+		./src/execute/child_process_do.c
 
 OBJS = ${SOURCES:.c=.o}
 

@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 17:16:27 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:34:53 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("BiebianOS> ");
+		hive.info.readline = readline("De_OS> ");
 		if (readline_err(hive) == 1)
 			break ;
 		initialize_info(&hive.info);

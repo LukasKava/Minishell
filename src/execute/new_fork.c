@@ -6,11 +6,28 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 19:33:39 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:54:25 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// void	child_process_do(t_chunk **salt,
+// addinde *data, t_vars *vars, char **envp)
+// {
+// 	t_chunk	*element;
+
+// 	element = *salt;
+// 	vars->save_stdout = dup(STDOUT_FILENO);
+// 	vars->save_stdin = dup(STDIN_FILENO);
+// 	pipe_fork(&element, data, envp, vars);
+// 	restore_standard_io(vars);
+// }
+
+// vars->save_stdout = dup(STDOUT_FILENO);
+// vars->save_stdin = dup(STDIN_FILENO);
+// pipe_fork(&elements, data, envp, vars);
+// restore_standard_io(vars);
 
 void	manage_fd(t_chunk **salt, t_vars *vars)
 {
@@ -85,10 +102,7 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 	while (elements && g_errors.bip == false)
 	{
 		signal(SIGINT, handle_child);
-		vars->save_stdout = dup(STDOUT_FILENO);
-		vars->save_stdin = dup(STDIN_FILENO);
-		pipe_fork(&elements, data, envp, vars);
-		restore_standard_io(vars);
+		child_process_do(&elements, data, vars, envp);
 		signal(SIGINT, handle_sigint);
 		vars->pipe_group++;
 		elements = elements->next;
@@ -97,10 +111,11 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 		waitpid(vars->pid, &status, 0);
 	while (--vars->pipe_group)
 		waitpid(-1, NULL, 0);
-	if (vars->capture_exit_flag > 0 && !vars->capture_redirection_error)
+	// if (vars->capture_exit_flag > 0 && !vars->capture_redirection_error)
+	if (WIFEXITED(status))
 	{
 		g_errors.g_exit_status = WEXITSTATUS(status);
-		vars->capture_exit_flag = -1;
+		// vars->capture_exit_flag = -1;
 	}
 	g_errors.bip = false;
 	free(vars);
