@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:34 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:02:58 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:44:16 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isdigit(int input)
+int	ft_isdigit(int input)
 {
 	if (input >= '0' && input <= '9')
 		return (1);

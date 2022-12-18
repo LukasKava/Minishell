@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 14:56:46 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 03:23:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:21:32 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_chunk	*error_initialise(t_info *info)
 	return (NULL);
 }
 
+//	check_non_generic(info);
 void	errors_before(t_info *info)
 {
 	count_quotes(info);
@@ -50,7 +51,6 @@ void	errors_before(t_info *info)
 			return ;
 		}
 	}
-	//	check_non_generic(info);
 	check_dollar_signs(info);
 }
 

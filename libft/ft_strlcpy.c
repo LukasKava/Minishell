@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:23 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:10:44 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:25:22 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ The strlcpy() function copies the null-terminated
 string from src to dest.
 */
 
-size_t ft_strlcpy(char *dest, const char *src, size_t n)
+size_t	ft_strlcpy(char *dest, const char *src, size_t n)
 {
-	size_t i;
-	size_t srcl;
+	size_t	i;
+	size_t	srcl;
 
 	i = 0;
 	srcl = ft_strlen(src);

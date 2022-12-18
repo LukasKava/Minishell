@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:37 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:03:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:51:01 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isprint(int input)
+int	ft_isprint(int input)
 {
 	if (input >= 32 && input <= 126)
 		return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:10:24 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:36:47 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 strlcat() appends the null-terminated string src to the end of dest
 */
 
-size_t ft_strlcat(char *dest, const char *src, size_t dst_size)
+size_t	ft_strlcat(char *dest, const char *src, size_t dst_size)
 {
-	size_t i;
-	size_t g;
-	size_t dest_l;
-	size_t src_l;
+	size_t	i;
+	size_t	g;
+	size_t	dest_l;
+	size_t	src_l;
 
 	g = 0;
 	dest_l = ft_strlen(dest);

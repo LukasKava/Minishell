@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 11:38:09 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:41:28 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ s  using the char c.
  * It is reused this way to avoid using all of the Libft library.
  */
 
-int ft_word_count(const char *s1, char c)
+int	ft_word_count(const char *s1, char c)
 {
-	int w_count;
-	int i;
+	int	w_count;
+	int	i;
 
 	i = 0;
 	w_count = 0;
@@ -44,9 +44,9 @@ int ft_word_count(const char *s1, char c)
 	return (w_count);
 }
 
-static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
+static char	*ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 {
-	int x;
+	int		x;
 
 	x = 0;
 	while (w_len > 0)
@@ -59,11 +59,11 @@ static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 	return (word);
 }
 
-static char **s_words(size_t w_count, char const *s1, char c, char **splitted)
+static char	**s_words(size_t w_count, char const *s1, char c, char **splitted)
 {
-	size_t x;
-	size_t i;
-	size_t w_len;
+	size_t	x;
+	size_t	i;
+	size_t	w_len;
 
 	x = 0;
 	i = 0;
@@ -88,10 +88,10 @@ static char **s_words(size_t w_count, char const *s1, char c, char **splitted)
 	return (splitted);
 }
 
-char **ft_split(char const *s1, char c)
+char	**ft_split(char const *s1, char c)
 {
-	size_t w_count;
-	char **splitted;
+	size_t	w_count;
+	char	**splitted;
 
 	if (!s1)
 		return (NULL);

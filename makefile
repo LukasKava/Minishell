@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/18 04:09:11 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/18 10:23:26 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,8 @@ export IMG
 
 CC = gcc
 
-#CFLAGS = -Wall -Werror -Wextra -fsanitize=address
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+# CFLAGS = -Wall -Werror -Wextra
 
 NAME = minishell
 
@@ -53,7 +53,6 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/lexer.c \
 		./src/parsing/parsing.c\
 		./src/parsing/parsing_utils.c\
-		./src/parsing/debugging.c\
 		./src/parsing/expansions.c\
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\

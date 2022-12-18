@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 12:01:43 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:46:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ Allocates  and returns a substring from the string s.
 The substring begins at the index start and is of the max size len.
 */
 
-char *ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char *real_s;
-	size_t s_l;
+	char	*real_s;
+	size_t	s_l;
 
 	s_l = ft_strlen(s);
 	if (!s)

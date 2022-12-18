@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:26 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:11:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:39:26 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ size_t is used for array indexing and counting.
 It can not ever be negative.
 */
 
-size_t ft_strlen(const char *c)
+size_t	ft_strlen(const char *c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (c[i] != '\0')

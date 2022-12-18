@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 01:40:09 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:29:09 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@ static int	checking_digit(char *nbr)
 
 int	builtins_exit(t_data *hive, char **line)
 {
-	int	i;
-
-	i = 0;
 	if (line[1] == NULL)
 		exit(0);
 	if (line[2] != NULL)
@@ -50,13 +47,12 @@ int	builtins_exit(t_data *hive, char **line)
 		free(hive->info.readline);
 		exit(g_errors.g_exit_status);
 	}
-	i = ft_atoi(line[1]) % 256;
-	g_errors.g_exit_status = i;
+	g_errors.g_exit_status = ft_atoi(line[1]) % 256;
 	freeing_tokens(hive->token);
 	freeing_chunks(&hive->c_arr);
 	freeing_e_list(&hive->env);
 	freeing_e_list(&hive->exp_l);
 	free(hive->info.readline);
 	write(2, "exit\n", 6);
-	exit(i);
+	exit(g_errors.g_exit_status);
 }

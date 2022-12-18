@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:37 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 03:14:09 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:36:13 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ Allocates with malloc and returns a copy of s1 with the characters from set
 removed from the beginning and the end of the string.
 */
 
-char *ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t i;
-	size_t b;
-	size_t z;
+	size_t	i;
+	size_t	b;
+	size_t	z;
 
 	b = 0;
 	z = 0;

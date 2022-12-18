@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:14 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 11:59:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:25:50 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ Bzero function erases the data in the n bytes of memory starting at location
 pointed by s
 */
 
-void ft_bzero(void *input, size_t n)
+void	ft_bzero(void *input, size_t n)
 {
-	size_t i;
-	unsigned char *a;
+	size_t			i;
+	unsigned char	*a;
 
 	a = (unsigned char *)input;
 	i = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:32 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:11:44 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:46:04 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ Returns:
 - if =0 then it indicates str1 is equal to str2;
 */
 
-int ft_strncmp(const char *st1, const char *st2, size_t n)
+int	ft_strncmp(const char *st1, const char *st2, size_t n)
 {
-	size_t i;
-	int sum;
+	size_t	i;
+	int		sum;
 
 	i = 0;
 	if (n == 0)

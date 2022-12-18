@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:09:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:50:29 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 It duplicates the string
 */
 
-char *ft_strdup(const char *string)
+char	*ft_strdup(const char *string)
 {
-	size_t i;
-	char *a;
+	size_t	i;
+	char	*a;
 
 	i = 0;
 	a = malloc((ft_strlen(string) + 1) * sizeof(char));
