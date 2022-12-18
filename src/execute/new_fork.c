@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 10:34:48 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 14:35:59 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	no_fork_handle(t_chunk **salt, t_data *data)
+void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars)
 {
 	t_chunk	*element;
 
 	element = *salt;
-	echo_handle(&element);
-	pwd_handle(&element);
+	echo_handle(&element, vars);
+	pwd_handle(&element, vars);
 	env_handle(&element, data->env);
 	cd_handle(&element, data->env, data->exp_l);
 	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
@@ -53,15 +53,15 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 		}
 		if (vars->pid == 0)
 		{
-			echo_handle(&element);
-			pwd_handle(&element);
+			echo_handle(&element, vars);
+			pwd_handle(&element, vars);
 			env_handle(&element, data->env);
 			vars->capture_exit_flag = 1;
 			exit(EXIT_SUCCESS);
 		}
 	}
 	else
-		no_fork_handle(&element, data);
+		no_fork_handle(&element, data, vars);
 }
 
 void	execute(t_chunk **salt, t_data *data, char **envp)
@@ -84,7 +84,7 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 		vars->pipe_group++;
 		elements = elements->next;
 	}
-	if (vars->capture_exit_flag > 0)
+	if (vars->capture_exit_flag > 0 && !vars->capture_redirection_error)
 	{
 		g_errors.g_exit_status = WEXITSTATUS(status);
 		vars->capture_exit_flag = -1;

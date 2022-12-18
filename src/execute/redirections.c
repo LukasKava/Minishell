@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 00:17:53 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 14:47:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 			O_RDONLY | O_CREAT, 0644);
 			perror("Error ");
 			g_errors.g_exit_status = 1;
+			vars->capture_redirection_error = 1;
+			vars->capture_exit_flag = -1;
 			return ;
 		}
 	}
@@ -83,10 +85,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		element->out_f[vars->number_of_outfiles].name, \
 		O_WRONLY | O_CREAT | O_TRUNC, 0664);
 		if (vars->output_fd == -1)
-		{
-			perror("Error: ");
-			g_errors.g_exit_status = 1;
-		}
+			redirection_out_error(vars);
 	}
 	else if (element->out_f[vars->number_of_outfiles].type == R_AP_OUTPUT_F)
 	{
@@ -94,10 +93,7 @@ void	redirect_out_condition(t_chunk **salt, t_vars *vars)
 		(element->out_f[vars->number_of_outfiles].name, \
 		O_WRONLY | O_CREAT | O_APPEND, 0664);
 		if (vars->output_fd == -1)
-		{
-			perror("Error: ");
-			g_errors.g_exit_status = 1;
-		}
+			redirection_out_error(vars);
 	}
 }
 

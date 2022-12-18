@@ -6,13 +6,13 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/17 19:29:36 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 14:18:38 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../../includes/minishell.h"
 
-void	echo_handle(t_chunk	**salt)
+void	echo_handle(t_chunk	**salt, t_vars *vars)
 {
 	t_chunk	*element;
 
@@ -21,9 +21,8 @@ void	echo_handle(t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0], "echo", strlen("echo")) == 0)
 		{
-			builtins_echo(STDOUT_FILENO, element->arguments);
+			builtins_echo(STDOUT_FILENO, element->arguments, vars);
 		}
-		g_errors.g_exit_status = 0;
 	}	
 }
 
@@ -41,7 +40,7 @@ void	cd_handle(t_chunk	**salt, t_env	*env, t_env *exp_l)
 	}
 }
 
-void	pwd_handle(t_chunk	**salt)
+void	pwd_handle(t_chunk	**salt, t_vars *vars)
 {
 	t_chunk	*element;
 
@@ -50,7 +49,7 @@ void	pwd_handle(t_chunk	**salt)
 	{
 		if (strncmp(element->arguments[0], "pwd", strlen("pwd")) == 0)
 		{
-			builtins_pwd(STDOUT_FILENO);
+			builtins_pwd(STDOUT_FILENO, vars);
 		}
 	}
 }

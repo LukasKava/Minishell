@@ -1,3 +1,4 @@
 *.o
 infile.txt
 *.txt
+/home/piotr/code/mini_vv7/minishell.dSYM

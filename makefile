@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/18 10:23:26 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/18 11:03:12 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/expansions_two.c\
 		./src/parsing/final_check.c\
 		./src/parsing/errors.c\
+		./src/parsing/debugging.c\
 		./src/signals.c\
 		./src/builtins/builtins_utils.c\
 		./src/builtins/cd.c\
