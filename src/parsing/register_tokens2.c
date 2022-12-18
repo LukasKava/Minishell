@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 02:10:49 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:02:17 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:14:48 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	register_redirection_name(t_token **token, int redirection)
 {
-	if ((*token)->next->name == SPace)
+	if ((*token)->next->name == SPC)
 		(*token)->next->next->name = redirection;
 	else
 		(*token)->next->name = redirection;
