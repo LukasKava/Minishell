@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 23:15:06 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:43:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ static t_token	*triggered(t_info *info, t_token *token, int i)
  * RETURN_VALUE:
  * x	True if any of the cases excist.
  * x	False if any of them do not excist.
+ *	//if (info->readline[i] == '&' && info->readline[i + 1] == '&')
+ *	//	return (true);
+ *	//if (info->readline[i] == ';' && info->readline[i + 1] == ';')
+ *	//	return (true);
  */
 static bool	possible_doubles(t_info *info, int i)
 {
@@ -53,10 +57,6 @@ static bool	possible_doubles(t_info *info, int i)
 	if (info->readline[i] == '<' && info->readline[i + 1] == '<')
 		return (true);
 	if (info->readline[i] == '>' && info->readline[i + 1] == '>')
-		return (true);
-	if (info->readline[i] == '&' && info->readline[i + 1] == '&')
-		return (true);
-	if (info->readline[i] == ';' && info->readline[i + 1] == ';')
 		return (true);
 	if (info->readline[i] == '$' && info->readline[i + 1] == '?')
 		return (true);
@@ -71,15 +71,15 @@ static bool	possible_doubles(t_info *info, int i)
  * RETURN_VALUES:
  * 	x	True if any of ("<" ">" "(" ")" "|" "&" ";") excist.
  * 	x	False if they do not excist.
+ *	//if (info->readline[i] == '(' || info->readline[i] == ')')
+ *	//	return (true);
+ *	//if (info->readline[i] == '|' || info->readline[i] == '&' ||
+ *	//								info->readline[i] == ';')
+ *	//	return (true);
  */
 static bool	possible_metacharacters(t_info *info, int i)
 {
 	if (info->readline[i] == '<' || info->readline[i] == '>')
-		return (true);
-	if (info->readline[i] == '(' || info->readline[i] == ')')
-		return (true);
-	if (info->readline[i] == '|' || info->readline[i] == '&' || \
-									info->readline[i] == ';')
 		return (true);
 	return (false);
 }
@@ -95,7 +95,7 @@ void	lexer(t_info *info, t_token **token)
 	info->trigger = 0;
 	while (info->readline[i] != '\0')
 	{
-		if (info->readline[i] == 34 || info->readline[i] == 39)
+		if ((info->readline[i] == 34 || info->readline[i] == 39))
 			i = quotes(info, i, token);
 		else if (info->readline[i] == ' ')
 			i = space(info, i, token);

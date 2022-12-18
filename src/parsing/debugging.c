@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debugging.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 10:23:04 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:22:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_the_list(char *message, t_token *token)
 	printf("________%s_________________\n\n", message);
 	while (token != NULL)
 	{
-		printf("full list1[%d]: indentifier: %d %s ", token->index, token->name, token->token);
+		printf("full list1[%d]: indentifier: %d [%s] ", token->index, token->name, token->token);
 		if (token->ignore == true)
 			printf("%d", token->ignore);
 		if (token->double_quotes == true)

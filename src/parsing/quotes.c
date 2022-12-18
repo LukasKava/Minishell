@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:02:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:58:19 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,21 @@ int	check_quotes(t_info *info)
 
 static int	connecting_quotes_cases(t_token *token)
 {
-	if (token->name != SPC && token->next->name != SPC)
+	if ((token->name != SPC && token->next->name != SPC) || \
+		(token->name != EMPTY && token->next->name != EMPTY))
 	{
 		if (token->name != SPC && (token->next->single_quotes == true || \
 			token->next->double_quotes == true))
+		{
+			printf("firstly: [%s]\n", token->token);
+			if (token->next->single_quotes == true)
+				token->single_quotes = true;
+			else if (token->next->double_quotes == true)
+				token->double_quotes = true;
+			if (token->next->name != SPC && token->next->name != EMPTY)
+				token->name = token->next->name;
 			return (0);
+		}
 		if ((token->single_quotes == true || token->double_quotes == true) && \
 			token->next->name != SPC)
 			return (0);

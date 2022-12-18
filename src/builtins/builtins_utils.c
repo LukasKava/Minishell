@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 12:59:45 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 16:54:16 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	valid_name(char *name)
 
 	i = 0;
 	error = 0;
+	if (name[i] == '\0' || (name[i] >= '0' && name[i] <= '9'))
+		return (1);
 	while (name[i] != '\0')
 	{
 		if (name[i] == '=')
