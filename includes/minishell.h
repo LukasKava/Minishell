@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:04:45 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 04:09:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_vars
 	int		pipe_group;
 	int		save_stdout;
 	int		save_stdin;
+	int		capture_exit_flag;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -320,8 +321,24 @@ void	empty_data_output(t_chunk **salt, t_vars *vars);
 void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
+/*----	../src/new_fork.c	-------------*/
 void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars);
+
 void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
+void	pipe_error_execute(void);
+void	get_exit_status(t_vars *vars, int status);
+void	manage_fd(t_chunk **salt, t_vars *vars);
+void	no_fork_handle(t_chunk **salt, t_data *data);
+
+/*----	../src/execution.c	-------------*/
+void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars);
+void	fork_error(void);
+void	command_error(t_chunk **salt, t_vars *vars);
+void	restore_standard_io(t_vars *vars);
+void	child_process(t_chunk **salt, t_vars *vars, char **envp);
+
+/*----	../src/errors.c	-------------*/
+void	pipe_error_execute(void);
 
 //INDENTIFIER EXPLANATION:
 /**

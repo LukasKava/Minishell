@@ -6,7 +6,7 @@
 #    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/18 03:33:58 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/18 04:09:11 by lkavalia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,11 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/pipes.c\
 		./src/execute/redirections.c\
 		./src/execute/builtin_handles.c\
-		./src/execute/empty_data.c
+		./src/execute/empty_data.c\
+		./src/execute/builtin_handles_II.c\
+		./src/execute/execution.c\
+		./src/execute/errors.c\
+		./src/execute/redirections_II.c
 
 OBJS = ${SOURCES:.c=.o}
 
