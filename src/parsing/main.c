@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("BiebianOS> ");
+		hive.info.readline = readline("De_OS> ");
 		if (readline_err(hive) == 1)
 			break ;
 		initialize_info(&hive.info);

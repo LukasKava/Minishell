@@ -82,7 +82,8 @@ MAIN =	./src/parsing/main.c \
 		./src/execute/builtin_handles_II.c\
 		./src/execute/execution.c\
 		./src/execute/errors.c\
-		./src/execute/redirections_II.c
+		./src/execute/redirections_II.c\
+		./src/execute/child_process_do.c
 
 OBJS = ${SOURCES:.c=.o}
 

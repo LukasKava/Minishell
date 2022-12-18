@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   child_process_do.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/23 14:09:07 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 17:30:50 by pbiederm         ###   ########.fr       */
+/*   Created: 2022/12/18 19:45:33 by pbiederm          #+#    #+#             */
+/*   Updated: 2022/12/18 19:46:44 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtins_env(char **arguments, t_env *e_list, t_vars *vars)
+void	child_process_do(t_chunk **salt, \
+t_data *data, t_vars *vars, char **envp)
 {
-	if (arguments[1])
-	{
-		write(2, "\033[0;31menv: take your arguments/flags back!\033[0m\n", 49);
-		g_errors.g_exit_status = 1;
-		vars->capture_exit_flag = 0;
-		return (1);
-	}
-	while (e_list != NULL && e_list != NULL)
-	{
-		printf("%s\n", e_list->var);
-		e_list = e_list->next;
-	}
-	return (0);
+	t_chunk	*element;
+
+	element = *salt;
+	vars->save_stdout = dup(STDOUT_FILENO);
+	vars->save_stdin = dup(STDIN_FILENO);
+	pipe_fork(&element, data, envp, vars);
+	restore_standard_io(vars);
 }
