@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 19:09:40 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 00:15:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 14:06:58 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	while_loop(char **line, int i, int fd)
 	}
 }
 
-int	builtins_echo(int fd, char **line)
+int	builtins_echo(int fd, char **line, t_vars *vars)
 {
 	int	i;
 
@@ -54,6 +54,8 @@ int	builtins_echo(int fd, char **line)
 		while_loop(line, i, fd);
 		write(fd, "\n", 1);
 	}
-	g_errors.g_exit_status = 0;
+	if (!vars->capture_redirection_error)
+		g_errors.g_exit_status = 0;
+	vars->capture_redirection_error = 0;
 	return (0);
 }

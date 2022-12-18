@@ -6,7 +6,7 @@
 #    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/18 10:14:21 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/18 20:23:43 by lkavalia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,12 +53,12 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/lexer.c \
 		./src/parsing/parsing.c\
 		./src/parsing/parsing_utils.c\
-		./src/parsing/debugging.c\
 		./src/parsing/expansions.c\
 		./src/parsing/expansions_utils.c\
 		./src/parsing/expansions_two.c\
 		./src/parsing/final_check.c\
 		./src/parsing/errors.c\
+		./src/parsing/debugging.c\
 		./src/signals.c\
 		./src/builtins/builtins_utils.c\
 		./src/builtins/cd.c\

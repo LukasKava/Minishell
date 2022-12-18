@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/12/18 11:35:15 by lkavalia         ###   ########.fr       */
+=======
+/*   Updated: 2022/12/18 14:47:45 by pbiederm         ###   ########.fr       */
+>>>>>>> 7c76b00c75d9bd11fa52cacc0fab7dfa4256f769
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +121,7 @@ typedef struct s_vars
 	int		save_stdout;
 	int		save_stdin;
 	int		capture_exit_flag;
+	int		capture_redirection_error;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -244,7 +249,7 @@ int		builtins_env(char **arguments, t_env *e_list);
 int		ft_pwd(int fd);
 
 /*----	../builtins/echo.c	------------------*/
-int		builtins_echo(int fd, char **line);
+int		builtins_echo(int fd, char **line, t_vars *vars);
 
 /*----	../builtins/exit.c	------------------*/
 //int		builtins_exit(t_env **exp_l, t_env **env_l, char **line);
@@ -266,7 +271,7 @@ void	sort_indexes(t_env **exl);
 
 /*----	../builtins/pwd.c	------------------*/
 int		ft_pwd(int fd);
-int		builtins_pwd(int fd);
+int		builtins_pwd(int fd, t_vars *vars);
 
 /*----	../builtins/unset.c	------------------*/
 int		builtins_unset(t_env **exp_l, t_env **env_l, char **line);
@@ -305,9 +310,9 @@ int		in_redirection_next_node(t_chunk **salt);
 void	redirect_in(t_chunk **salt, t_vars *vars);
 
 /*----	../src/builtin_handles.c	-------------*/
-void	echo_handle(t_chunk	**salt);
+void	echo_handle(t_chunk	**salt, t_vars *vars);
 void	cd_handle(t_chunk	**salt, t_env	*env, t_env	*exp_l);
-void	pwd_handle(t_chunk	**salt);
+void	pwd_handle(t_chunk	**salt, t_vars *vars);
 void	env_handle(t_chunk **salt, t_env *e_list);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
 void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk **salt);
@@ -328,7 +333,7 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 void	pipe_error_execute(void);
 void	get_exit_status(t_vars *vars, int status);
 void	manage_fd(t_chunk **salt, t_vars *vars);
-void	no_fork_handle(t_chunk **salt, t_data *data);
+void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars);
 
 /*----	../src/execution.c	-------------*/
 void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars);
@@ -339,6 +344,7 @@ void	child_process(t_chunk **salt, t_vars *vars, char **envp);
 
 /*----	../src/errors.c	-------------*/
 void	pipe_error_execute(void);
+void	redirection_out_error(t_vars *vars);
 
 //INDENTIFIER EXPLANATION:
 /**

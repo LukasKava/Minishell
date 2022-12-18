@@ -6,17 +6,17 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 11:01:12 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:22:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // Debugging command. it prints out the token list.
-void print_the_list(char *message, t_token *token)
+void	print_the_list(char *message, t_token *token)
 {
 	printf("________%s_________________\n\n", message);
-	while (token != NULL) // Printing out the  tokens for checking the correct info
+	while (token != NULL)
 	{
 		printf("full list1[%d]: indentifier: %d [%s] ", token->index, token->name, token->token);
 		if (token->ignore == true)

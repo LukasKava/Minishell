@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:39:38 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 00:17:11 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 14:20:45 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtins_pwd(int fd)
+int	builtins_pwd(int fd, t_vars *vars)
 {
 	char	holder[PATH_MAX];
 
@@ -25,6 +25,8 @@ int	builtins_pwd(int fd)
 	}
 	ft_putstr_fd(holder, fd);
 	write(1, "\n", 1);
-	g_errors.g_exit_status = 0;
+	if (!vars->capture_redirection_error)
+		g_errors.g_exit_status = 0;
+	vars->capture_redirection_error = 0;
 	return (0);
 }
