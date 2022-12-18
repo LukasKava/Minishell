@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 23:14:02 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 01:55:25 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	quotes(t_info *info, int i, t_token **token)
 	i = checking_before_cases(token, info, i, quote);
 	(*token)->token = ft_substr(info->readline, info->f, i - (info->f));
 	(*token)->next = NULL;
-	check_quote_type(token, quote);
+	if (quote == '"')
+		(*token)->double_quotes = true;
+	else
+		(*token)->single_quotes = true;
 	info->f = i + 1;
 	info->trigger = 1;
 	if (info->readline[i + 1] == ' ')
