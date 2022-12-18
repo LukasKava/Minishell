@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:24:38 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 14:18:38 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 17:28:56 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	pwd_handle(t_chunk	**salt, t_vars *vars)
 	}
 }
 
-void	env_handle(t_chunk **salt, t_env *e_list)
+void	env_handle(t_chunk **salt, t_env *e_list, t_vars *vars)
 {
 	t_chunk	*element;
 
@@ -63,7 +63,7 @@ void	env_handle(t_chunk **salt, t_env *e_list)
 	{
 		if (strncmp(element->arguments[0], "env", strlen("env")) == 0)
 		{
-			builtins_env(element->arguments, e_list);
+			builtins_env(element->arguments, e_list, vars);
 		}
 	}	
 }

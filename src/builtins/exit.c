@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 10:29:09 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 17:49:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	checking_digit(char *nbr)
 
 int	builtins_exit(t_data *hive, char **line)
 {
+	write(1, "exit\n", 6);
 	if (line[1] == NULL)
 		exit(0);
 	if (line[2] != NULL)
@@ -42,7 +43,7 @@ int	builtins_exit(t_data *hive, char **line)
 	}
 	if (checking_digit(line[1]) == -1)
 	{
-		write(2, "\033[0;31mI only like numbers!\n\033[0mexit\n", 38);
+		write(2, "\033[0;31mI only like numbers!\n\033[0m", 33);
 		g_errors.g_exit_status = 2;
 		free(hive->info.readline);
 		exit(g_errors.g_exit_status);
@@ -53,6 +54,5 @@ int	builtins_exit(t_data *hive, char **line)
 	freeing_e_list(&hive->env);
 	freeing_e_list(&hive->exp_l);
 	free(hive->info.readline);
-	write(2, "exit\n", 6);
 	exit(g_errors.g_exit_status);
 }

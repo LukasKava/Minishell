@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 14:47:45 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 17:29:58 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ int		check_s_c(char **line);
 char	*get_env_prev(t_env **e);
 
 /*----	../builtins/env.c	------------------*/
-int		builtins_env(char **arguments, t_env *e_list);
+int		builtins_env(char **arguments, t_env *e_list, t_vars *vars);
 
 /*----	../builtins/pwd.c	------------------*/
 int		ft_pwd(int fd);
@@ -309,7 +309,7 @@ void	redirect_in(t_chunk **salt, t_vars *vars);
 void	echo_handle(t_chunk	**salt, t_vars *vars);
 void	cd_handle(t_chunk	**salt, t_env	*env, t_env	*exp_l);
 void	pwd_handle(t_chunk	**salt, t_vars *vars);
-void	env_handle(t_chunk **salt, t_env *e_list);
+void	env_handle(t_chunk **salt, t_env *e_list, t_vars *vars);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
 void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk **salt);
 void	exit_handle(t_data *hive, t_chunk **salt);
