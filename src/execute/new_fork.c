@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 14:35:59 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 16:42:37 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 			echo_handle(&element, vars);
 			pwd_handle(&element, vars);
 			env_handle(&element, data->env);
+			if (ft_strncmp(element->arguments[0], "export", strlen("export")) == 0)
+				export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
 			vars->capture_exit_flag = 1;
 			exit(EXIT_SUCCESS);
 		}
