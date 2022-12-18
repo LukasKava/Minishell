@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:08:51 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:09:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ This function searches fot the first occurrence of the char c ir the
 string pointed to by the argument str
 */
 
-char *ft_strchr(const char *str, int c)
+char	*ft_strchr(const char *str, int c)
 {
-	int i;
-	char *b;
+	int		i;
+	char	*b;
 
 	i = 0;
 	b = (char *)str;

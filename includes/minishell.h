@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:09:53 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 11:35:15 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,10 +380,11 @@ void	pipe_error_execute(void);
 # define SEMICOLON -4
 # define DOUBLE_SEMICOLON -3
 # define L_BRACKET -2
-# define R_BRACKET -1
+//# define R_BRACKET -1
 
 // USED
 # define ELSE -9
+# define EMPTY -1
 # define SPC 0
 # define PIPE 1
 # define R_INPUT 2

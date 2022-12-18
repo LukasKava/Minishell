@@ -6,17 +6,17 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:56:56 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:16:53 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:14:34 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
-#define LIBFT_H
+# define LIBFT_H
 
 /*@@@@Headers@@@@*/
 
-#include <stdlib.h>
-#include <unistd.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 /*@@@@Function Prototypes in Libf pdf order@@@@*/
 

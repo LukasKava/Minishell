@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:30 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:02:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:03:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isascii(int input)
+int	ft_isascii(int input)
 {
 	if (input >= 0 && input <= 127)
 		return (1);

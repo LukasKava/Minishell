@@ -6,15 +6,15 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:39 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:04:08 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:05:08 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t i_counter(int n)
+static size_t	i_counter(int n)
 {
-	int i;
+	int	i;
 
 	if (n == 0)
 		return (1);
@@ -29,11 +29,11 @@ static size_t i_counter(int n)
 	return (i);
 }
 
-char *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
-	size_t len;
-	size_t b;
-	char *conv;
+	size_t	len;
+	size_t	b;
+	char	*conv;
 
 	len = i_counter(n);
 	conv = malloc(sizeof(char) * (len + 1));

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 09:36:42 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:11:02 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ Allocates with malloc and returns a new string which is result of the
 both strings.
 */
 
-char *ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char *full_s;
-	size_t i;
-	size_t a;
+	char	*full_s;
+	size_t	i;
+	size_t	a;
 
 	i = 0;
 	a = 0;

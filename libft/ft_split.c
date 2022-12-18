@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/07 11:38:09 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:09:19 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ s  using the char c.
  * It is reused this way to avoid using all of the Libft library.
  */
 
-int ft_word_count(const char *s1, char c)
+int	ft_word_count(const char *s1, char c)
 {
-	int w_count;
-	int i;
+	int	w_count;
+	int	i;
 
 	i = 0;
 	w_count = 0;
@@ -44,9 +44,9 @@ int ft_word_count(const char *s1, char c)
 	return (w_count);
 }
 
-static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
+static char	*ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 {
-	int x;
+	int	x;
 
 	x = 0;
 	while (w_len > 0)
@@ -59,11 +59,11 @@ static char *ft_insert(char *word, char const *s1, size_t i, size_t w_len)
 	return (word);
 }
 
-static char **s_words(size_t w_count, char const *s1, char c, char **splitted)
+static char	**s_words(size_t w_count, char const *s1, char c, char **splitted)
 {
-	size_t x;
-	size_t i;
-	size_t w_len;
+	size_t	x;
+	size_t	i;
+	size_t	w_len;
 
 	x = 0;
 	i = 0;
@@ -88,10 +88,10 @@ static char **s_words(size_t w_count, char const *s1, char c, char **splitted)
 	return (splitted);
 }
 
-char **ft_split(char const *s1, char c)
+char	**ft_split(char const *s1, char c)
 {
-	size_t w_count;
-	char **splitted;
+	size_t	w_count;
+	char	**splitted;
 
 	if (!s1)
 		return (NULL);
@@ -102,80 +102,3 @@ char **ft_split(char const *s1, char c)
 	s_words(w_count, s1, c, splitted);
 	return (splitted);
 }
-
-// static size_t word_count(char const *s, char c)
-// {
-// 	size_t word_count;
-// 	size_t i;
-// 	size_t in_word;
-
-// 	i = 0;
-// 	in_word = 0;
-// 	word_count = 0;
-// 	while (s[i] != '\0')
-// 	{
-// 		if (s[i] != c)
-// 			in_word = 1;
-// 		if (in_word == 1 && s[i] == c)
-// 		{
-// 			in_word = 0;
-// 			word_count++;
-// 		}
-// 		i++;
-// 	}
-// 	if (in_word == 1)
-// 		word_count++;
-// 	return (word_count);
-// }
-
-// static size_t word_start(char *s, char del, size_t pos)
-// {
-// 	if (s[pos] != del)
-// 		return (pos);
-// 	while (s[pos] == del)
-// 	{
-// 		pos++;
-// 	}
-// 	if (s[pos] != del)
-// 		return (pos);
-// 	else
-// 		return (0);
-// }
-
-// static size_t word_len(char *s, char c, size_t pos)
-// {
-// 	size_t len;
-
-// 	len = 0;
-// 	while (s[pos] != '\0' && s[pos] != c)
-// 	{
-// 		len++;
-// 		pos++;
-// 	}
-// 	return (len);
-// }
-
-// char **ft_split(char const *s, char c)
-// {
-// 	char **adr_arr;
-// 	size_t w_count;
-// 	size_t i;
-// 	size_t start;
-// 	size_t len;
-
-// 	w_count = word_count(s, c);
-// 	adr_arr = (char **)malloc((w_count + 1) * sizeof(char *));
-// 	if (!adr_arr)
-// 		return (NULL);
-// 	i = 0;
-// 	len = 0;
-// 	start = 0;
-// 	while (i < w_count)
-// 	{
-// 		start = word_start((char *)s, c, start + len);
-// 		len = word_len((char *)s, c, start);
-// 		adr_arr[i++] = ft_substr((char *)s, start, len);
-// 	}
-// 	adr_arr[i] = (NULL);
-// 	return (adr_arr);
-// }

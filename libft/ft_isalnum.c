@@ -6,13 +6,14 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:22 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/10 11:59:24 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:03:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isalnum(int n)
+int	ft_isalnum(int n)
 {
-	if ((n >= 'a' && n <= 'z') || (n >= 'A' && n <= 'Z') || (n >= '0' && n <= '9'))
+	if ((n >= 'a' && n <= 'z') || (n >= 'A' && n <= 'Z') || \
+									(n >= '0' && n <= '9'))
 		return (0);
 	return (1);
 }

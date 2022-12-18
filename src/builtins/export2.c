@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:22:51 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 20:10:41 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 16:46:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int	possible_cases(char *arg)
 	{
 		if (arg[i] == '=')
 		{
-			checker = 1;
+			if (i == 0)
+				checker = -1;
+			else
+				checker = 1;
 			break ;
 		}
 		i++;

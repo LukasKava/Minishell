@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:26 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:02:08 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:03:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isalpha(int input)
+int	ft_isalpha(int input)
 {
 	if ((input >= 65 && input <= 90) || (input >= 97 && input <= 122))
 		return (1);

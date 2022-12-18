@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 13:05:50 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:02:01 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 15:59:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ t_token	*find_arguments(t_token *token, t_chunk **chunk)
 	temp = token;
 	while (token != NULL && token->name != PIPE)
 	{
-		if (token->name >= COMMAND && token->name <= FLAG)
+		if ((token->name >= COMMAND && token->name <= FLAG) || \
+			(token->name == EMPTY && (token->double_quotes == 1 || \
+			token->single_quotes == 1)) || (token->name == SPC && \
+			(token->double_quotes == 1 || token->single_quotes == 1)))
 			length++;
 		token = token->next;
 	}

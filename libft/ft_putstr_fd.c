@@ -6,19 +6,19 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:55:06 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:08:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:07:51 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (fd < 0 || !s)
-		return;
+		return ;
 	else
 	{
 		while (s[i] != '\0')

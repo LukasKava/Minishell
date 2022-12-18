@@ -6,11 +6,11 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:37 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/10/31 12:03:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:04:27 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_isprint(int input)
+int	ft_isprint(int input)
 {
 	if (input >= 32 && input <= 126)
 		return (1);

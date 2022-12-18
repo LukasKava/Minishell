@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 02:10:49 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:14:48 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 12:55:04 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	else_to_arg(t_token **token)
 {
 	while ((*token) != NULL && ((*token)->name == ELSE || \
 								(*token)->name == SPC || \
+								(*token)->name == EMPTY || \
 								(*token)->name > ESCAPE || \
 								(*token)->ignore == true))
 	{

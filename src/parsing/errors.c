@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 14:56:46 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 03:23:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:50:53 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	errors_before(t_info *info)
 			return ;
 		}
 	}
-	//	check_non_generic(info);
 	check_dollar_signs(info);
 }
 
