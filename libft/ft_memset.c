@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:54:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 10:45:31 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:25:05 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 23:45:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 02:34:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:55:58 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	find_correct_path(char **splitted_path, char *s)
 
 int	filling_arguments(t_token *token, t_chunk **chunk, int i)
 {
-	if (token->name >= COMMAND && token->name <= FLAG)
+	if ((token->name >= COMMAND && token->name <= FLAG) || \
+		(token->name == EMPTY && (token->single_quotes == 1 || \
+		token->double_quotes == 1)) || (token->name == SPC && \
+		(token->single_quotes == 1 || token->double_quotes == 1)))
 	{
 		(*chunk)->arguments[i] = token->token;
 		i++;

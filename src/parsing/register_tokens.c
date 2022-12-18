@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 04:02:30 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:59:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,9 @@ static void	check_specials(t_token **token)
 		(*token)->name = R_OUTPUT;
 	else if ((*token)->token[0] == '>' && (*token)->token[1] == '>')
 		(*token)->name = R_AP_OUTPUT;
-	else if ((*token)->token[0] == '\\')
-		(*token)->name = ESCAPE;
-	else if ((*token)->token[0] == '\0')
-		(*token)->name = SPC;
+	else if ((*token)->token[0] == '\0' && ((*token)->double_quotes == 1 || \
+	(*token)->single_quotes == 1))
+		(*token)->name = EMPTY;
 	else if (check_for_spaces((*token)->token) == 0)
 		(*token)->name = SPC;
 	else if ((*token)->token[0] == '-' && ft_isalpha((*token)->token[1]) == 1)

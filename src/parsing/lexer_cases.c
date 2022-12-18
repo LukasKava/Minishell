@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 01:55:25 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 19:55:15 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,44 @@ int	space(t_info *info, int i, t_token **token)
 	(*token)->next = NULL;
 	info->f = i + 1;
 	info->trigger = 1;
+	(*token)->double_quotes = false;
+	(*token)->single_quotes = false;
 	return (i);
 }
+
+/* else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || \
+ ft_isalnum(info->readline[i - 1]) == 0 || info->readline[i - 1] == '=' |
+ info->readline[i - 1] == '<' || info->readline[i - 1] == '>') &&
+		 (info->readline[i - 1] != 34 &&
+		  info->readline[i - 1] != 39))
+{
+	(*token) = attach_token_end(*token, info);
+	(*token)->token = ft_substr(info->readline, info->f, i - info->f);
+	(*token) = (*token)->next;
+	//info->f = skip_white_sp(info->readline, i + 1);
+	//printf("info->f: %d [%c]\n", info->f, info->readline[info->f]);
+} */
 
 static int	checking_before_cases(t_token **token, t_info *info, int i, char q)
 {
 	if (i != 0 && info->readline[i - 1] == ' ')
 	{
+		printf("first if !\n");
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = malloc(sizeof(char) + 2);
 		(*token)->token[0] = ' ';
 		(*token)->token[1] = '\0';
 		(*token) = (*token)->next;
 	}
-	else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || \
-						ft_isalnum(info->readline[i - 1]) == 0 || \
-						info->readline[i - 1] == '<' || \
-						info->readline[i - 1] == '>') && \
-						(info->readline[i - 1] != 34 && \
-						info->readline[i - 1] != 39))
+	else if (i != 0 && ft_isascii(info->readline[i - 1]) == 1 && \
+			(info->readline[i - 1] != 34 && info->readline[i - 1] != 39))
 	{
+		printf("second if !\n");
 		(*token) = attach_token_end(*token, info);
 		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
 		(*token) = (*token)->next;
 	}
-	info->f = skip_white_sp(info->readline, i + 1);
+	info->f = i + 1;
 	i = skip_quotes(info->readline, q, i + 1);
 	return (i);
 }

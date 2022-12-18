@@ -6,7 +6,11 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2022/12/18 11:35:15 by lkavalia         ###   ########.fr       */
+=======
 /*   Updated: 2022/12/18 14:47:45 by pbiederm         ###   ########.fr       */
+>>>>>>> 7c76b00c75d9bd11fa52cacc0fab7dfa4256f769
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,10 +386,11 @@ void	redirection_out_error(t_vars *vars);
 # define SEMICOLON -4
 # define DOUBLE_SEMICOLON -3
 # define L_BRACKET -2
-# define R_BRACKET -1
+//# define R_BRACKET -1
 
 // USED
 # define ELSE -9
+# define EMPTY -1
 # define SPC 0
 # define PIPE 1
 # define R_INPUT 2
