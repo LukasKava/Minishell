@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:21:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 12:15:48 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 }
 
 int	main(int argc, char **argv, char **envp)
-{
+echo{
 	t_data	hive;
 
 	if (argc != 1)
@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("De_OS> ");
+		hive.info.readline = readline("Juno> ");
 		if (readline_err(hive) == 1)
 			break ;
 		initialize_info(&hive.info);

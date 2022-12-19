@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:31:52 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 08:14:54 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef struct s_vars
 	int		save_stdin;
 	int		capture_exit_flag;
 	int		capture_redirection_error;
+	int		builtin_exit_fail;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/

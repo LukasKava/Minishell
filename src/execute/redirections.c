@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 14:47:56 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 08:16:04 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 			g_errors.g_exit_status = 1;
 			vars->capture_redirection_error = 1;
 			vars->capture_exit_flag = -1;
+			vars->builtin_exit_fail = 1;
 			return ;
 		}
 	}
