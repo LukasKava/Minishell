@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:26:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 22:39:58 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:55:30 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,17 @@ int	confirm_expansion(t_token *token)
 	int	i;
 
 	i = 0;
-	while (token->token[i] != '\0')
+	while (token->t[i] != '\0')
 	{
-		if (token->token[i] == '$')
+		if (token->t[i] == '$')
 		{
 			i++;
-			if (token->token[i] == '\0')
+			if (token->t[i] == '\0')
 				return (1);
-			if ((token->token[i] >= 'a' && token->token[i] <= 'z') || \
-				(token->token[i] >= 'A' && token->token[i] <= 'Z') || \
-				(token->token[i] >= '0' && token->token[i] <= '9') || \
-				token->token[i] == '_')
+			if ((token->t[i] >= 'a' && token->t[i] <= 'z') || \
+				(token->t[i] >= 'A' && token->t[i] <= 'Z') || \
+				(token->t[i] >= '0' && token->t[i] <= '9') || \
+				token->t[i] == '_')
 				return (0);
 		}
 		i++;

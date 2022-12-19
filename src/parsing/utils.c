@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:27 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 03:20:08 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:07:38 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,29 @@ int	skip_quotes(char *str, char quote, int i)
 	while (str[i] != quote && str[i] != '\0')
 		i++;
 	return (i);
+}
+
+char	*ft_delete(char *str, char *part)
+{
+	char	*new_str;
+	int		i;
+	int		len;
+
+	i = 0;
+	len = 0;
+	new_str = NULL;
+	while (part[i] != '\0')
+		i++;
+	len = ft_strlen(str) - i;
+	new_str = ft_calloc(len + 1, sizeof(char));
+	new_str[len] = '\0';
+	len = 0;
+	while (str[i] != '\0')
+	{
+		new_str[len] = str[i];
+		i++;
+		len++;
+	}
+	free(str);
+	return (new_str);
 }

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:21:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:05:50 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void	checker_before(t_data *hive)
 	if (hive->info.readline[i] == '\0' || \
 		(hive->info.readline[i] >= '\a' && hive->info.readline[i] <= '\r'))
 	{
-			hive->info.error = true;
-			g_errors.g_exit_status = 0;
+		hive->info.error = true;
+		g_errors.g_exit_status = 0;
 	}
 }
 

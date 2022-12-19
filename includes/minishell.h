@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:31:52 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:08:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ typedef struct s_chunk
 
 typedef struct s_token
 {
-	char			*token;
-	bool			single_quotes;
-	bool			double_quotes;
+	char			*t;
+	bool			s_quotes;
+	bool			d_quotes;
 	bool			ignore;
 	int				index;
 	int				name;
@@ -137,6 +137,7 @@ int		pipe_excistence(t_info *info);
 int		check_quotes(t_info *info);
 void	count_quotes(t_info *info);
 void	connecting_quotes(t_token **token);
+void	norminette_hell(t_token **token, t_token *delete);
 
 void	check_tokens(t_info *info, t_token **token);
 int		space(t_info *info, int i, t_token **token);
@@ -160,6 +161,7 @@ void	count_redirections(t_info *info);
 void	check_dollar_signs(t_info *info);
 int		skip_white_sp(char *s, int i);
 int		skip_quotes(char *str, char quote, int i);
+char	*ft_delete(char *str, char *part);
 
 /*----	initialize.c	-------------------*/
 void	initialize_info(t_info *info);
@@ -170,7 +172,6 @@ t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
-char	*ft_delete(char *str, char *part);
 
 /*----	register_tokens2.c	-------------*/
 void	register_redirection_name(t_token **token, int redirection);
@@ -181,6 +182,7 @@ void	recognise_commands(t_token **token);
 /*----	register_tokens3.c	-------------*/
 void	check_command_excists(t_token **token, t_env *env);
 void	ignore(t_token **token);
+int		lenght_picker(t_token *token);
 
 /*----	parsing.c	-------------*/
 void	get_the_commands(t_token *t, t_env *env, t_chunk **c, t_info *i);
