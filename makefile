@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/19 08:22:04 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/19 17:13:35 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ define IMG
 endef
 export IMG
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 #CFLAGS = -Wall -Werror -Wextra
@@ -116,5 +116,8 @@ memory:
 	valgrind --leak-check=full --show-leak-kinds=all ./minishell
 
 re_bonus:	fclean bonus
+
+unsetall:
+	unset SHELL SESSION_MANAGER QT_ACCESSIBILITY COLORTERM XDG_CONFIG_DIRS SSH_AGENT_LAUNCHER XDG_MENU_PREFIX TERM_PROGRAM_VERSION GNOME_DESKTOP_SESSION_ID LC_ADDRESS GNOME_SHELL_SESSION_MODE DOTNET_ROOT LC_NAME SSH_AUTH_SOCK XMODIFIERS DESKTOP_SESSION LC_MONETARY GTK_MODULES PWD LOGNAME XDG_SESSION_DESKTOP XDG_SESSION_TYPE SYSTEMD_EXEC_PID XAUTHORITY VSCODE_GIT_ASKPASS_NODE IM_CONFIG_CHECK_ENV GJS_DEBUG_TOPICS HOME USERNAME IM_CONFIG_PHASE LANG LC_PAPER LS_COLORS XDG_CURRENT_DESKTOP WAYLAND_DISPLAY GIT_ASKPASS INVOCATION_ID MANAGERPID DOTNET_BUNDLE_EXTRACT_BASE_DIR CHROME_DESKTOP GJS_DEBUG_OUTPUT VSCODE_GIT_ASKPASS_EXTRA_ARGS GNOME_SETUP_DISPLAY LESSCLOSE XDG_SESSION_CLASS LC_IDENTIFICATION TERM LESSOPEN USER VSCODE_GIT_IPC_HANDLE DISPLAY SHLVL LC_TELEPHONE QT_IM_MODULE LC_MEASUREMENT XDG_RUNTIME_DIR LC_TIME VSCODE_GIT_ASKPASS_MAIN JOURNAL_STREAM XDG_DATA_DIRS GDK_BACKEND PATH GDMSESSION ORIGINAL_XDG_CURRENT_DESKTOP DBUS_SESSION_BUS_ADDRESS GIO_LAUNCHED_DESKTOP_FILE_PID GIO_LAUNCHED_DESKTOP_FILE LC_NUMERIC TERM_PROGRAM _
 
 .PHONY:	clean fclean re re_bonus
