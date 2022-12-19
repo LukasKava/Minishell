@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 19:59:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:07:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,22 @@ static	int	check_for_spaces(char *str)
  */
 static void	check_specials(t_token **token)
 {
-	if ((*token)->token[0] == '|')
+	if ((*token)->t[0] == '|')
 		(*token)->name = PIPE;
-	else if ((*token)->token[0] == '<' && (*token)->token[1] != '<')
+	else if ((*token)->t[0] == '<' && (*token)->t[1] != '<')
 		(*token)->name = R_INPUT;
-	else if ((*token)->token[0] == '<' && (*token)->token[1] == '<')
+	else if ((*token)->t[0] == '<' && (*token)->t[1] == '<')
 		(*token)->name = R_AP_INPUT;
-	else if ((*token)->token[0] == '>' && (*token)->token[1] != '>')
+	else if ((*token)->t[0] == '>' && (*token)->t[1] != '>')
 		(*token)->name = R_OUTPUT;
-	else if ((*token)->token[0] == '>' && (*token)->token[1] == '>')
+	else if ((*token)->t[0] == '>' && (*token)->t[1] == '>')
 		(*token)->name = R_AP_OUTPUT;
-	else if ((*token)->token[0] == '\0' && ((*token)->double_quotes == 1 || \
-	(*token)->single_quotes == 1))
+	else if ((*token)->t[0] == '\0' && ((*token)->d_quotes == 1 || \
+										(*token)->s_quotes == 1))
 		(*token)->name = EMPTY;
-	else if (check_for_spaces((*token)->token) == 0)
+	else if (check_for_spaces((*token)->t) == 0)
 		(*token)->name = SPC;
-	else if ((*token)->token[0] == '-' && ft_isalpha((*token)->token[1]) == 1)
+	else if ((*token)->t[0] == '-' && ft_isalpha((*token)->t[1]) == 1)
 		(*token)->name = FLAG;
 	else
 		(*token)->name = ELSE;
@@ -147,29 +147,31 @@ static void	assign_indexes(t_token **token, t_info *info)
 	(*token) = temp;
 }
 
-char	*ft_delete(char *str, char *part)
+static void	connecting_spaces(t_token **token)
 {
-	char	*new_str;
-	int		i;
-	int		len;
+	t_token	*temp;
+	t_token	*delete;
 
-	i = 0;
-	len = 0;
-	new_str = NULL;
-	while (part[i] != '\0')
-		i++;
-	len = ft_strlen(str) - i;
-	new_str = ft_calloc(len + 1, sizeof(char));
-	new_str[len] = '\0';
-	len = 0;
-	while (str[i] != '\0')
+	delete = NULL;
+	temp = (*token);
+	while ((*token) != NULL)
 	{
-		new_str[len] = str[i];
-		i++;
-		len++;
+		if ((*token)->next != NULL)
+		{
+			if (((*token)->name == EMPTY || (*token)->name == SPC) && \
+				((*token)->next->name == EMPTY || (*token)->next->name == SPC))
+			{
+				(*token)->t = ft_strjoin((*token)->t, (*token)->next->t);
+				delete = (*token)->next;
+				(*token)->next = (*token)->next->next;
+				free(delete->t);
+				free(delete);
+				(*token) = temp;
+			}
+		}
+		(*token) = (*token)->next;
 	}
-	free(str);
-	return (new_str);
+	(*token) = temp;
 }
 
 void	register_tokens(t_info *info, t_token **token, t_env *env)
@@ -179,6 +181,7 @@ void	register_tokens(t_info *info, t_token **token, t_env *env)
 	temp_token = (*token);
 	expand_expansions(token, env);
 	assign_indexes(token, info);
+	connecting_spaces(token);
 	connecting_quotes(token);
 	if (info->error == false)
 		check_tokens(info, token);

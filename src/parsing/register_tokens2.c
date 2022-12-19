@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 02:10:49 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 12:55:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:48:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ void	recognise_builtins(t_token **token)
 	int	check;
 
 	check = 0;
-	if (ft_strcmp((*token)->token, "echo") == 0)
+	if (ft_strcmp((*token)->t, "echo") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "cd") == 0)
+	else if (ft_strcmp((*token)->t, "cd") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "pwd") == 0)
+	else if (ft_strcmp((*token)->t, "pwd") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "export") == 0)
+	else if (ft_strcmp((*token)->t, "export") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "unset") == 0)
+	else if (ft_strcmp((*token)->t, "unset") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "env") == 0)
+	else if (ft_strcmp((*token)->t, "env") == 0)
 		check = BUILT_IN;
-	else if (ft_strcmp((*token)->token, "exit") == 0)
+	else if (ft_strcmp((*token)->t, "exit") == 0)
 		check = BUILT_IN;
 	if (check == BUILT_IN)
 		(*token)->name = BUILT_IN;

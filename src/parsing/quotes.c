@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 19:58:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:50:44 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,21 @@ int	check_quotes(t_info *info)
 
 static int	connecting_quotes_cases(t_token *token)
 {
-	if ((token->name != SPC && token->next->name != SPC) || \
-		(token->name != EMPTY && token->next->name != EMPTY))
+	if ((token->name != SPC || token->name != EMPTY) && \
+		(token->s_quotes == true || token->d_quotes == true))
 	{
-		if (token->name != SPC && (token->next->single_quotes == true || \
-			token->next->double_quotes == true))
-		{
-			printf("firstly: [%s]\n", token->token);
-			if (token->next->single_quotes == true)
-				token->single_quotes = true;
-			else if (token->next->double_quotes == true)
-				token->double_quotes = true;
-			if (token->next->name != SPC && token->next->name != EMPTY)
-				token->name = token->next->name;
-			return (0);
-		}
-		if ((token->single_quotes == true || token->double_quotes == true) && \
-			token->next->name != SPC)
+		if ((token->next->name != SPC || token->next->name != EMPTY) && \
+									(token->next->d_quotes == true || \
+									token->next->d_quotes == true))
 			return (0);
 	}
 	return (1);
 }
 
-static void	norminette_hell(t_token **token, t_token *delete)
+void	norminette_hell(t_token **token, t_token *delete)
 {
 	connecting_quotes(token);
-	free(delete->token);
+	free(delete->t);
 	free(delete);
 	recognise_builtins(token);
 }
@@ -105,8 +94,8 @@ void	connecting_quotes(t_token **token)
 		{
 			if (connecting_quotes_cases(*token) == 0)
 			{
-				temp_ptr = ft_strjoin((*token)->token, (*token)->next->token);
-				(*token)->token = temp_ptr;
+				temp_ptr = ft_strjoin((*token)->t, (*token)->next->t);
+				(*token)->t = temp_ptr;
 				delete = (*token)->next;
 				(*token)->next = (*token)->next->next;
 				norminette_hell(token, delete);

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:35:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:23:23 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/18 21:53:49 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	builtins_exit(t_data *hive, char **line)
 	g_errors.g_exit_status = ft_atoi(line[1]) % 256;
 	freeing_tokens(hive->token);
 	freeing_chunks(&hive->c_arr);
-	freeing_e_list(&hive->env);
 	freeing_e_list(&hive->exp_l);
+	freeing_e_list(&hive->env);
 	free(hive->info.readline);
 	exit(g_errors.g_exit_status);
 }

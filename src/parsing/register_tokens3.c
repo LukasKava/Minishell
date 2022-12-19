@@ -6,11 +6,21 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 03:02:57 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 03:32:46 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:06:56 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	lenght_picker(t_token *token)
+{
+	if (token->name >= COMMAND && token->name <= FLAG)
+		return (0);
+	if ((token->name == EMPTY || token->name == SPC) && \
+		(token->s_quotes == false && token->d_quotes == false))
+		return (0);
+	return (1);
+}
 
 static	int	looping_through_tokens(t_token **token, char *path, t_token *temp)
 {
@@ -25,7 +35,7 @@ static	int	looping_through_tokens(t_token **token, char *path, t_token *temp)
 		{
 			split_path = ft_split(path, ':');
 			split_path[0] = ft_delete(split_path[0], "PATH=");
-			i = find_correct_path(split_path, (*token)->token);
+			i = find_correct_path(split_path, (*token)->t);
 			if (split_path[i] == NULL)
 			{
 				free_splitted_path(split_path, i);
@@ -45,9 +55,10 @@ void	check_command_excists(t_token **token, t_env *env)
 	t_token	*temp;
 
 	path = NULL;
-	while (env != NULL && env->var != ft_strnstr(env->var, "PATH", 5))
+	while (env != NULL && env->var != NULL && \
+			env->var != ft_strnstr(env->var, "PATH", 5))
 		env = env->next;
-	if (env == NULL)
+	if (env == NULL || env->var == NULL)
 		return ;
 	else
 		path = env->var;
