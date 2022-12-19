@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:22:51 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 16:25:10 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:58:52 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void inject_to_exp_l(t_env **exp_l, char *str)
 	while ((*exp_l) != NULL && (*exp_l)->next != NULL)
 		(*exp_l) = (*exp_l)->next;
 	if ((*exp_l) == NULL)
-		write(2, "list is empty!\n", 16);
+		write(2, "List empty\n", 12);
 	else
 	{
 		(*exp_l) = attach_end(*exp_l);
@@ -91,10 +91,10 @@ void inject_to_e_l(t_env **env_l, char *str)
 	t_env *temp;
 
 	temp = (*env_l);
-	while ((*env_l)->next != NULL)
+	while ((*env_l) != NULL && (*env_l)->next != NULL)
 		(*env_l) = (*env_l)->next;
 	if ((*env_l) == NULL)
-		write(2, "list is empty!\n", 16);
+		write(2, "List empty\n", 12);
 	else
 	{
 		(*env_l) = attach_end(*env_l);

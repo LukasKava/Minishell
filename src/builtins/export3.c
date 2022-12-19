@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:31:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:58:17 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:58:31 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	sort_indexes(t_env **exl)
 	t_env	*temp;
 
 	temp = (*exl);
-	while ((*exl)->next != NULL)
+	while ((*exl) != NULL && (*exl)->next != NULL)
 	{
 		if (ft_strncmp((*exl)->var_name, (*exl)->next->var_name, \
 						check_len(*exl)) > 0)

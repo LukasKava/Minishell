@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:08:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:28:02 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef struct s_vars
 	int		save_stdin;
 	int		capture_exit_flag;
 	int		capture_redirection_error;
+	int		builtin_exit_fail;
 }t_vars;
 
 /*----	lexer_cases.c	-----------------*/
@@ -313,7 +314,7 @@ void	cd_handle(t_chunk	**salt, t_env	*env, t_env	*exp_l);
 void	pwd_handle(t_chunk	**salt, t_vars *vars);
 void	env_handle(t_chunk **salt, t_env *e_list, t_vars *vars);
 void	export_handle(t_env **exp_list, t_env **e_l, t_chunk **salt, int fd);
-void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk **salt);
+void	unset_handle(t_env **exp_l, t_env **env_l, t_chunk **salt, char **envp);
 void	exit_handle(t_data *hive, t_chunk **salt);
 
 /*----	../src/empty_data.c	-------------*/
@@ -325,13 +326,14 @@ void	last_cmd_output(t_chunk	**salt, t_vars *vars, int i);
 void	first_cmd_input(t_chunk **salt, int i);
 
 /*----	../src/new_fork.c	-------------*/
-void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars);
+void	built_in_handler(t_chunk **salt, t_data \
+*data, t_vars *vars, char **envp);
 
 void	redirect_in_conditions(t_chunk **salt, t_vars *vars);
 void	pipe_error_execute(void);
 void	get_exit_status(t_vars *vars, int status);
 void	manage_fd(t_chunk **salt, t_vars *vars);
-void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars);
+void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars, char **envp);
 
 /*----	../src/execution.c	-------------*/
 void	pipe_fork(t_chunk **salt, t_data *data, char **envp, t_vars *vars);
