@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/18 19:54:25 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 08:47:51 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	built_in_handler_child(t_chunk **salt, t_data *data, t_vars *vars)
 	"export", strlen("export")) == 0)
 		export_handle(&data->exp_l, &data->env, \
 		&element, STDOUT_FILENO);
-	vars->capture_exit_flag = 1;
+	if (vars->builtin_exit_fail)
+		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);
 }
 
@@ -76,7 +77,8 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 	t_chunk	*element;
 
 	element = *salt;
-	if (pipe_this_node(&element) && element->indentifier == BUILT_IN_BLOCK)
+	if ((pipe_this_node(&element) || pipe_last_node(&element)) && \
+	element->indentifier == BUILT_IN_BLOCK)
 	{
 		vars->pid = fork();
 		if (vars->pid == -1)
@@ -111,12 +113,11 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 		waitpid(vars->pid, &status, 0);
 	while (--vars->pipe_group)
 		waitpid(-1, NULL, 0);
-	// if (vars->capture_exit_flag > 0 && !vars->capture_redirection_error)
-	if (WIFEXITED(status))
+	if (WIFEXITED(status) && !(vars->builtin_exit_fail))
 	{
 		g_errors.g_exit_status = WEXITSTATUS(status);
-		// vars->capture_exit_flag = -1;
+		vars->capture_redirection_error = 0;
 	}
 	g_errors.bip = false;
 	free(vars);
-}	
+}			
