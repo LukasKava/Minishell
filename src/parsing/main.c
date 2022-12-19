@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/12/19 14:54:26 by lkavalia         ###   ########.fr       */
-=======
-/*   Updated: 2022/12/19 14:39:33 by pbiederm         ###   ########.fr       */
->>>>>>> ebf94584461e330d78a78fb015a5c9079346dab5
+/*   Updated: 2022/12/19 17:02:07 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-<<<<<<< HEAD
-		signal(SIGINT, handle_sigint);
-		hive.info.readline = readline("De_OS> ");
-=======
 		hive.info.readline = readline("Juno> ");
->>>>>>> ebf94584461e330d78a78fb015a5c9079346dab5
 		if (readline_err(hive) == 1)
 			break ;
 		initialize_info(&hive.info);
