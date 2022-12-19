@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:05:50 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:54:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_errors.g_exit_status = 0;
 	initialize_hive(&hive, envp);
-	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		signal(SIGINT, handle_sigint);
 		hive.info.readline = readline("De_OS> ");
 		if (readline_err(hive) == 1)
 			break ;

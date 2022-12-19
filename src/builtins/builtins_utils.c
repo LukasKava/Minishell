@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 16:54:16 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:32:27 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	create_e_list(t_env **e_list, char **env)
 		actions(e_list, env, temp, i);
 		(*e_list) = (*e_list)->next;
 		i++;
-	}
+	} 
 	(*e_list)->var = ft_strdup(env[i]);
 	(*e_list)->var_name = save_name(env[i]);
 	(*e_list) = head;
