@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:15 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 13:39:28 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:53:21 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ t_token	*initialize_token(t_token *token, t_info *info)
 		info->error = true;
 		return (NULL);
 	}
-	token->token = NULL;
+	token->t = NULL;
 	token->next = NULL;
-	token->single_quotes = false;
-	token->double_quotes = false;
+	token->s_quotes = false;
+	token->d_quotes = false;
 	token->ignore = false;
 	token->name = 0;
 	return (token);
@@ -87,8 +87,8 @@ t_token	*attach_token_end(t_token *token, t_info *info)
 		info->error = true;
 		return (NULL);
 	}
-	temp->double_quotes = false;
-	temp->single_quotes = false;
+	temp->d_quotes = false;
+	temp->s_quotes = false;
 	temp->ignore = false;
 	temp->index = 0;
 	temp->name = 0;

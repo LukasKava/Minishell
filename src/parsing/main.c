@@ -72,8 +72,8 @@ void	checker_before(t_data *hive)
 	if (hive->info.readline[i] == '\0' || \
 		(hive->info.readline[i] >= '\a' && hive->info.readline[i] <= '\r'))
 	{
-			hive->info.error = true;
-			g_errors.g_exit_status = 0;
+		hive->info.error = true;
+		g_errors.g_exit_status = 0;
 	}
 }
 

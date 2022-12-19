@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:13 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 02:35:21 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:53:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	freeing_tokens(t_token *token)
 	while (token != NULL)
 	{
 		temp = token;
-		free(token->token);
+		free(token->t);
 		token = token->next;
 		free(temp);
 	}
@@ -54,12 +54,16 @@ void	freeing_e_list(t_env **e_list)
 	free_token = (*e_list);
 	while ((*e_list) != NULL)
 	{
-		free((*e_list)->var);
-		free((*e_list)->var_name);
-		free((*e_list)->trim_var);
+		if ((*e_list)->var != NULL)
+			free((*e_list)->var);
+		if ((*e_list)->var_name != NULL)
+			free((*e_list)->var_name);
+		if ((*e_list)->trim_var != NULL)
+			free((*e_list)->trim_var);
 		free_token = (*e_list);
 		(*e_list) = (*e_list)->next;
-		free(free_token);
+		if (free_token != NULL)
+			free(free_token);
 	}
 	free(*e_list);
 }

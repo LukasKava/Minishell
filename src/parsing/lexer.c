@@ -6,11 +6,14 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 19:43:35 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:51:48 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/* 	if (str[i - 1] == '&' || str[i - 1] == ';' || str[i - 1] == '(')
+		return (1); */
 
 int	ft_check_speacials(char *str, int i)
 {
@@ -18,8 +21,6 @@ int	ft_check_speacials(char *str, int i)
 		return (1);
 	if (str[i - 1] == '|' || str[i - 1] == ' ' || \
 		str[i - 1] == 34 || str[i - 1] == 39)
-		return (1);
-	if (str[i - 1] == '&' || str[i - 1] == ';' || str[i - 1] == '(')
 		return (1);
 	return (0);
 }
@@ -49,11 +50,11 @@ static t_token	*triggered(t_info *info, t_token *token, int i)
  *	//	return (true);
  *	//if (info->readline[i] == ';' && info->readline[i + 1] == ';')
  *	//	return (true);
+ * //	if (info->readline[i] == '>' && info->readline[i + 1] == '|')
+ * //		return (true);
  */
 static bool	possible_doubles(t_info *info, int i)
 {
-	if (info->readline[i] == '>' && info->readline[i + 1] == '|')
-		return (true);
 	if (info->readline[i] == '<' && info->readline[i + 1] == '<')
 		return (true);
 	if (info->readline[i] == '>' && info->readline[i + 1] == '>')
@@ -80,6 +81,8 @@ static bool	possible_doubles(t_info *info, int i)
 static bool	possible_metacharacters(t_info *info, int i)
 {
 	if (info->readline[i] == '<' || info->readline[i] == '>')
+		return (true);
+	if (info->readline[i] == '|')
 		return (true);
 	return (false);
 }
@@ -108,6 +111,6 @@ void	lexer(t_info *info, t_token **token)
 		i++;
 	}
 	if (ft_check_speacials(info->readline, i) == 0)
-		(*token)->token = ft_substr(info->readline, info->f, i - info->f);
+		(*token)->t = ft_substr(info->readline, info->f, i - info->f);
 	(*token) = temp_token;
 }

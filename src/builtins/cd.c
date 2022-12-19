@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 09:50:09 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:35:09 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ static void	reset_old_pwd(t_env **e)
 	(*e) = temp;
 	while ((*e) != NULL && (*e)->var != ft_strnstr((*e)->var, "OLDPWD", 7))
 		(*e) = (*e)->next;
-	if ((*e) == NULL)
+	if ((*e) == NULL || (*e)->trim_var != NULL)
 		return ;
-	free((*e)->var);
-	free((*e)->trim_var);
+	if ((*e)->var != NULL)
+		free((*e)->var);
+	if ((*e)->trim_var != NULL)
+		free((*e)->trim_var);
 	(*e)->trim_var = ft_strdup(curr_pwd);
 	(*e)->var = ft_strdup("OLDPWD=");
 	(*e)->var = ft_strjoin((*e)->var, curr_pwd);
@@ -52,8 +54,10 @@ static void	reset_pwd(t_env **e)
 	free((*e)->trim_var);
 	pwd = getcwd(curr_dir, PATH_MAX);
 	(*e)->var = ft_strdup("PWD=");
-	(*e)->trim_var = ft_strdup(pwd);
-	(*e)->var = ft_strjoin((*e)->var, pwd);
+	if (pwd != NULL)
+		(*e)->trim_var = ft_strdup(pwd);
+	if (pwd != NULL)
+		(*e)->var = ft_strjoin((*e)->var, pwd);
 	(*e) = temp;
 }
 
@@ -69,12 +73,12 @@ static int	cd_possible(char **str, char *s_case, t_env **e_list, t_env **exp_l)
 	if (check_s_c(str) != 0)
 	{
 		s_case = all_cases(e_list, str, check_s_c(str));
-		if (chdir(s_case) != 0)
+		if (s_case != NULL && chdir(s_case) != 0)
 		{
-			free(s_case);
 			return (cd_errors(10));
 		}
-		// free(s_case);
+		//if (s_case != NULL)
+			//free(s_case);
 	}
 	else if (chdir(str[1]) != 0)
 		return (cd_errors(10));

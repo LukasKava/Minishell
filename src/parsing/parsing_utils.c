@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 23:45:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 19:55:58 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:51:43 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,9 @@ int	find_correct_path(char **splitted_path, char *s)
 
 int	filling_arguments(t_token *token, t_chunk **chunk, int i)
 {
-	if ((token->name >= COMMAND && token->name <= FLAG) || \
-		(token->name == EMPTY && (token->single_quotes == 1 || \
-		token->double_quotes == 1)) || (token->name == SPC && \
-		(token->single_quotes == 1 || token->double_quotes == 1)))
+	if (lenght_picker(token) == 0)
 	{
-		(*chunk)->arguments[i] = token->token;
+		(*chunk)->arguments[i] = token->t;
 		i++;
 	}
 	return (i);
@@ -99,7 +96,7 @@ t_token	*choosing_block(t_token *token, t_chunk **chunk, t_env *env)
 	if (token->name == COMMAND)
 	{
 		(*chunk)->indentifier = CMD_BLOCK;
-		(*chunk)->command_path = find_command_path(token->token, env);
+		(*chunk)->command_path = find_command_path(token->t, env);
 		token = find_arguments(token, chunk);
 	}
 	else if (token->name == BUILT_IN)
