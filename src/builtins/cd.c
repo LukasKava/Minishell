@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 13:35:09 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:40:59 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,7 @@ static int	cd_possible(char **str, char *s_case, t_env **e_list, t_env **exp_l)
 	{
 		s_case = all_cases(e_list, str, check_s_c(str));
 		if (s_case != NULL && chdir(s_case) != 0)
-		{
 			return (cd_errors(10));
-		}
-		//if (s_case != NULL)
-			//free(s_case);
 	}
 	else if (chdir(str[1]) != 0)
 		return (cd_errors(10));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:27:10 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 22:24:29 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:36:47 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	free_first_node(t_env **exp_l, t_env **temp_ex)
 
 static void	free_node(t_env **exp_l, t_env **temp_node)
 {
+	if ((*exp_l)->next == NULL)
+		write(2, "Cannot unset all of the list\n", 30);
 	(*temp_node) = (*exp_l)->next;
 	(*exp_l)->next = (*exp_l)->next->next;
 	free((*temp_node)->trim_var);

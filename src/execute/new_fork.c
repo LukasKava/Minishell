@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/19 08:47:51 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:27:45 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	manage_fd(t_chunk **salt, t_vars *vars)
 	set_pipe_io(&element, vars);
 }
 
-void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars)
+void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars, char **envp)
 {
 	t_chunk	*element;
 
@@ -51,7 +51,7 @@ void	no_fork_handle(t_chunk **salt, t_data *data, t_vars *vars)
 	env_handle(&element, data->env, vars);
 	cd_handle(&element, data->env, data->exp_l);
 	export_handle(&data->exp_l, &data->env, &element, STDOUT_FILENO);
-	unset_handle(&data->exp_l, &data->env, &element);
+	unset_handle(&data->exp_l, &data->env, &element, envp);
 	exit_handle(data, &element);
 }
 
@@ -72,7 +72,8 @@ void	built_in_handler_child(t_chunk **salt, t_data *data, t_vars *vars)
 	exit(EXIT_SUCCESS);
 }
 
-void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
+void	built_in_handler(t_chunk **salt, t_data \
+*data, t_vars *vars, char **envp)
 {
 	t_chunk	*element;
 
@@ -90,7 +91,7 @@ void	built_in_handler(t_chunk **salt, t_data *data, t_vars *vars)
 			built_in_handler_child(&element, data, vars);
 	}
 	else
-		no_fork_handle(&element, data, vars);
+		no_fork_handle(&element, data, vars, envp);
 }
 
 void	execute(t_chunk **salt, t_data *data, char **envp)

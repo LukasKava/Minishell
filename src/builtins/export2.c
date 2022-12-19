@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:22:51 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 16:46:35 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:41:45 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,17 @@ void	inject_to_exp_l(t_env **exp_l, char *str)
 	t_env	*temp;
 
 	temp = (*exp_l);
-	while ((*exp_l)->next != NULL)
+	while ((*exp_l) != NULL && (*exp_l)->next != NULL)
 		(*exp_l) = (*exp_l)->next;
-	(*exp_l) = attach_end(*exp_l);
-	(*exp_l) = (*exp_l)->next;
-	(*exp_l)->var_name = save_name(str);
-	(*exp_l)->var = ft_strdup(str);
+	if ((*exp_l) == NULL)
+		write(2, "List empty\n", 12);
+	else
+	{
+		(*exp_l) = attach_end(*exp_l);
+		(*exp_l) = (*exp_l)->next;
+		(*exp_l)->var_name = save_name(str);
+		(*exp_l)->var = ft_strdup(str);
+	}
 	(*exp_l) = temp;
 }
 
@@ -86,11 +91,16 @@ void	inject_to_e_l(t_env **env_l, char *str)
 	t_env	*temp;
 
 	temp = (*env_l);
-	while ((*env_l)->next != NULL)
+	while ((*env_l) != NULL && (*env_l)->next != NULL)
 		(*env_l) = (*env_l)->next;
-	(*env_l) = attach_end(*env_l);
-	(*env_l) = (*env_l)->next;
-	(*env_l)->var = ft_strdup(str);
-	(*env_l)->var_name = save_name(str);
+	if ((*env_l) == NULL)
+		write(2, "List empty\n", 12);
+	else
+	{
+		(*env_l) = attach_end(*env_l);
+		(*env_l) = (*env_l)->next;
+		(*env_l)->var = ft_strdup(str);
+		(*env_l)->var_name = save_name(str);
+	}
 	(*env_l) = temp;
 }

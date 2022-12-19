@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:31:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 22:14:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:58:03 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	sort_indexes(t_env **exl)
 	t_env	*temp;
 
 	temp = (*exl);
-	while ((*exl)->next != NULL)
+	while ((*exl) != NULL && (*exl)->next != NULL)
 	{
 		if (ft_strncmp((*exl)->var_name, (*exl)->next->var_name, \
 						check_len(*exl)) > 0)
