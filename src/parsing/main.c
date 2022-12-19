@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 12:15:48 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:39:33 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 }
 
 int	main(int argc, char **argv, char **envp)
-echo{
+{
 	t_data	hive;
 
 	if (argc != 1)
