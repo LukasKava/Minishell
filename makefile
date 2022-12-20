@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/19 17:13:35 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/20 12:29:12 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ MAIN =	./src/parsing/main.c \
 		./src/builtins/pwd.c\
 		./src/builtins/unset.c\
 		./src/execute/here_doc.c\
-		./src/execute/new_fork.c\
+		./src/execute/execution_begin.c\
 		./src/execute/run.c\
 		./src/execute/initialize_variables.c\
 		./src/execute/pipes.c\
