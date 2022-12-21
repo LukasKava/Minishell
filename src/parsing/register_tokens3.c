@@ -6,18 +6,36 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 03:02:57 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:06:56 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:09:42 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	lenght_picker(t_token *token)
+int	lenght_picker(t_token *t)
 {
-	if (token->name >= COMMAND && token->name <= FLAG)
+	if (t->name >= COMMAND && t->name <= FLAG)
 		return (0);
-	if ((token->name == EMPTY || token->name == SPC) && \
-		(token->s_quotes == false && token->d_quotes == false))
+	if (t->name == SPC && (t->s_quotes == true || t->d_quotes == true))
+		return (0);
+	if (t->name == EMPTY && t->s_quotes == true && t->d_quotes == true)
+	{
+		if (t->next != NULL)
+		{
+			if (t->next->name != PIPE)
+				return (0);
+		}
+	}
+	if (t->name == EMPTY && (t->s_quotes == true || t->d_quotes == true))
+	{
+		if (t->next != NULL)
+		{
+			if (t->next->name == SPC && \
+			(t->next->s_quotes == false && t->next->d_quotes == false))
+				return (0);
+		}
+	}
+	if (t->ignore == true && t->next->ignore == true)
 		return (0);
 	return (1);
 }
@@ -80,7 +98,8 @@ void	ignore(t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if ((*token)->ignore == true)
+		if ((*token)->ignore == true && \
+			((*token)->name != SPC && (*token)->name != EMPTY))
 		{
 			while ((*token) != NULL && ((*token)->name < PIPE || \
 										(*token)->name > R_AP_OUTPUT))
@@ -93,4 +112,21 @@ void	ignore(t_token **token)
 			(*token) = (*token)->next;
 	}
 	(*token) = temp;
+}
+
+int	change_the_node(t_token **token, t_token *temp, t_token *del, int ign)
+{
+	free((*token)->t);
+	(*token)->t = ft_strdup((*token)->next->t);
+	(*token)->ignore = (*token)->next->ignore;
+	(*token)->d_quotes = (*token)->next->d_quotes;
+	(*token)->s_quotes = (*token)->next->s_quotes;
+	(*token)->name = (*token)->next->name;
+	del = (*token)->next;
+	(*token)->next = (*token)->next->next;
+	free(del->t);
+	free(del);
+	(*token) = temp;
+	ign = 1;
+	return (ign);
 }

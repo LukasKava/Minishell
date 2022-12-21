@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:05 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/11/17 04:00:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:24:13 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ int	pipe_cases(t_info *info)
 
 	i = 0;
 	pipe = 0;
-	while (info->readline[i] == ' ')
+	while (info->r[i] == ' ')
 		i++;
-	if (info->readline[i] == '|')
+	if (info->r[i] == '|')
 		return (1);
-	while (info->readline[i])
+	while (info->r[i])
 	{
-		if (info->readline[i] == '"' || info->readline[i] == 39)
-			i = skip_quotes(info->readline, info->readline[i], i + 1);
-		if (info->readline[i] == '|' \
-			&& info->readline[skip_white_sp(info->readline, i + 1)] == '|' )
+		if (info->r[i] == '"' || info->r[i] == 39)
+			i = skip_quotes(info->r, info->r[i], i + 1);
+		if (info->r[i] == '|' \
+			&& info->r[skip_white_sp(info->r, i + 1)] == '|' )
 			return (1);
-		if (info->readline[i] == '|')
+		if (info->r[i] == '|')
 			pipe = 1;
-		if ((info->readline[i] != ' ' && info->readline[i] != '|') && pipe == 1)
+		if ((info->r[i] != ' ' && info->r[i] != '|') && pipe == 1)
 			pipe = 0;
 		i++;
 	}
@@ -69,15 +69,29 @@ int	pipe_excistence(t_info *info)
 	int	i;
 
 	i = 0;
-	while (info->readline[i] != '\0')
+	while (info->r[i] != '\0')
 	{
-		if (info->readline[i] == 34 || info->readline[i] == 39)
-			i = skip_quotes(info->readline, info->readline[i], i + 1);
-		else if (info->readline[i] == '|')
+		if (info->r[i] == 34 || info->r[i] == 39)
+			i = skip_quotes(info->r, info->r[i], i + 1);
+		else if (info->r[i] == '|')
 			info->pipes++;
 		i++;
 	}
 	if (info->pipes != 0)
 		return (0);
 	return (1);
+}
+
+int	check_for_spaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
 }

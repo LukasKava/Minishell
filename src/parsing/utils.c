@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:27 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:07:38 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/20 16:33:08 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ void	check_dollar_signs(t_info *info)
 	int	i;
 
 	i = 0;
-	while (info->readline[i] != '\0')
+	while (info->r[i] != '\0')
 	{
-		if (info->readline[i] == '$' && info->readline[i + 1] == '$')
+		if (info->r[i] == '$' && info->r[i + 1] == '$')
 		{
 			printf("ERROR (count_dollar_signs): dolar signs are together!\n");
 			info->error = true;
 			break ;
 		}
-		if (info->readline[i] == '$' && info->readline[i + 1] == '?')
+		if (info->r[i] == '$' && info->r[i + 1] == '?')
 			info->dollar_question_sign++;
-		else if (info->readline[i] == '$' && info->readline[i + 1] != '?')
+		else if (info->r[i] == '$' && info->r[i + 1] != '?')
 			info->dollar_sign++;
 		i++;
 	}

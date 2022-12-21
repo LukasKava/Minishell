@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
+#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/19 08:22:04 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/20 16:50:11 by lkavalia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ MAIN =	./src/parsing/main.c \
 		./src/parsing/check_tokens.c\
 		./src/parsing/check_pipes.c \
 		./src/parsing/quotes.c \
+		./src/parsing/quotes2.c\
 		./src/parsing/lexer.c \
 		./src/parsing/parsing.c\
 		./src/parsing/parsing_utils.c\

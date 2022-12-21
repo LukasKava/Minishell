@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 17:02:07 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:26:27 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	checker_before(t_data *hive)
 	int	i;
 
 	i = 0;
-	while (hive->info.readline[i] != '\0' && hive->info.readline[i] == ' ')
+	while (hive->info.r[i] != '\0' && hive->info.r[i] == ' ')
 		i++;
-	if (hive->info.readline[i] == '\0' || \
-		(hive->info.readline[i] >= '\a' && hive->info.readline[i] <= '\r'))
+	if (hive->info.r[i] == '\0' || \
+		(hive->info.r[i] >= '\a' && hive->info.r[i] <= '\r'))
 	{
 		hive->info.error = true;
 		g_errors.g_exit_status = 0;
@@ -86,7 +86,9 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		hive->token = initialize_token(hive->token, &hive->info);
 		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
 		lexer(&hive->info, &hive->token);
+		//print_the_list("after lexing:", hive->token);
 		register_tokens(&hive->info, &hive->token, hive->env);
+		//print_the_list("final List:", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
 		if (hive->info.error == false)
@@ -95,9 +97,9 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr);
 	}
-	if (ft_strlen(hive->info.readline) != 0)
-		add_history(hive->info.readline);
-	free(hive->info.readline);
+	if (ft_strlen(hive->info.r) != 0)
+		add_history(hive->info.r);
+	free(hive->info.r);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -112,14 +114,14 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		hive.info.readline = readline("Juno> ");
+		hive.info.r = readline("Juno> ");
 		if (readline_err(hive) == 1)
 			break ;
 		initialize_info(&hive.info);
 		errors_before(&hive.info);
 		parsing_and_execution(&hive, envp);
 	}
-	free(hive.info.readline);
+	free(hive.info.r);
 	rl_clear_history();
 	freeing_e_list(&(&hive)->env);
 	freeing_e_list(&(&hive)->exp_l);
