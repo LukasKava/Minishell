@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/16 19:02:41 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 17:18:42 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	here_doc(char	*delimit)
 		if (!buff)
 		{
 			write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
-			perror(" ");
 			return (1);
 		}
 		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 && \
