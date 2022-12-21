@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:18 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 13:51:48 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 00:15:43 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	ft_check_speacials(char *str, int i)
 
 static t_token	*triggered(t_info *info, t_token *token, int i)
 {
-	if (info->readline[i + 1] == '\0')
+	if (info->r[i + 1] == '\0')
 	{
 		i++;
-		if (ft_check_speacials(info->readline, i) == 1)
+		if (ft_check_speacials(info->r, i) == 1)
 			return (token);
 	}
 	token = attach_token_end(token, info);
@@ -55,11 +55,11 @@ static t_token	*triggered(t_info *info, t_token *token, int i)
  */
 static bool	possible_doubles(t_info *info, int i)
 {
-	if (info->readline[i] == '<' && info->readline[i + 1] == '<')
+	if (info->r[i] == '<' && info->r[i + 1] == '<')
 		return (true);
-	if (info->readline[i] == '>' && info->readline[i + 1] == '>')
+	if (info->r[i] == '>' && info->r[i + 1] == '>')
 		return (true);
-	if (info->readline[i] == '$' && info->readline[i + 1] == '?')
+	if (info->r[i] == '$' && info->r[i + 1] == '?')
 		return (true);
 	return (false);
 }
@@ -80,9 +80,9 @@ static bool	possible_doubles(t_info *info, int i)
  */
 static bool	possible_metacharacters(t_info *info, int i)
 {
-	if (info->readline[i] == '<' || info->readline[i] == '>')
+	if (info->r[i] == '<' || info->r[i] == '>')
 		return (true);
-	if (info->readline[i] == '|')
+	if (info->r[i] == '|')
 		return (true);
 	return (false);
 }
@@ -93,15 +93,15 @@ void	lexer(t_info *info, t_token **token)
 	t_token	*temp_token;
 
 	temp_token = (*token);
-	i = skip_white_sp(info->readline, 0);
+	i = skip_white_sp(info->r, 0);
 	info->f = i;
 	info->trigger = 0;
-	while (info->readline[i] != '\0')
+	while (info->r[i] != '\0')
 	{
-		if ((info->readline[i] == 34 || info->readline[i] == 39))
+		if ((info->r[i] == 34 || info->r[i] == 39))
 			i = quotes(info, i, token);
-		else if (info->readline[i] == ' ')
-			i = space(info, i, token);
+		else if (info->r[i] == ' ')
+			i = space_norm(token, info, i);
 		else if (possible_doubles(info, i) == true)
 			i = doubles(info, i, token);
 		else if (possible_metacharacters(info, i) == true)
@@ -110,7 +110,7 @@ void	lexer(t_info *info, t_token **token)
 			(*token) = triggered(info, (*token), i);
 		i++;
 	}
-	if (ft_check_speacials(info->readline, i) == 0)
-		(*token)->t = ft_substr(info->readline, info->f, i - info->f);
+	if (ft_check_speacials(info->r, i) == 0)
+		(*token)->t = ft_substr(info->r, info->f, i - info->f);
 	(*token) = temp_token;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_fork.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/19 16:27:45 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:57:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 
 	elements = *salt;
 	vars = initialize_vars(salt);
+	signal(SIGINT, handle_child);
 	while (elements && g_errors.bip == false)
 	{
-		signal(SIGINT, handle_child);
 		child_process_do(&elements, data, vars, envp);
 		signal(SIGINT, handle_sigint);
 		vars->pipe_group++;

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 13:50:44 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:01:02 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	count_quotes(t_info *info)
 	i = 0;
 	double_quotes = 0;
 	single_quotes = 0;
-	while (info->readline[i] != '\0')
+	while (info->r[i] != '\0')
 	{
-		if (info->readline[i] == 34)
+		if (info->r[i] == 34)
 			double_quotes++;
-		else if (info->readline[i] == 39)
+		else if (info->r[i] == 39)
 			single_quotes++;
 		i++;
 	}
@@ -44,13 +44,13 @@ int	check_quotes(t_info *info)
 
 	i = 0;
 	quote = '1';
-	while (info->readline[i] != '\0')
+	while (info->r[i] != '\0')
 	{
-		if (info->readline[i] == '"' || info->readline[i] == 39)
+		if (info->r[i] == '"' || info->r[i] == 39)
 		{
-			quote = info->readline[i];
-			i = skip_quotes(info->readline, quote, i + 1);
-			if (info->readline[i] != quote)
+			quote = info->r[i];
+			i = skip_quotes(info->r, quote, i + 1);
+			if (info->r[i] != quote)
 				return (1);
 		}
 		i++;
@@ -58,50 +58,64 @@ int	check_quotes(t_info *info)
 	return (0);
 }
 
-static int	connecting_quotes_cases(t_token *token)
-{
-	if ((token->name != SPC || token->name != EMPTY) && \
-		(token->s_quotes == true || token->d_quotes == true))
-	{
-		if ((token->next->name != SPC || token->next->name != EMPTY) && \
-									(token->next->d_quotes == true || \
-									token->next->d_quotes == true))
-			return (0);
-	}
-	return (1);
-}
-
 void	norminette_hell(t_token **token, t_token *delete)
 {
-	connecting_quotes(token);
+	(void)token;
 	free(delete->t);
 	free(delete);
-	recognise_builtins(token);
 }
 
-void	connecting_quotes(t_token **token)
+void	connecting_quotes(t_token **t)
 {
 	t_token	*temp;
 	t_token	*delete;
-	char	*temp_ptr;
+	int		ignore;
 
 	delete = NULL;
-	temp_ptr = NULL;
-	temp = (*token);
-	while ((*token) != NULL)
+	temp = (*t);
+	ignore = 0;
+	while ((*t) != NULL)
 	{
-		if ((*token)->next != NULL)
+		while ((*t) != NULL && (*t)->next != NULL)
 		{
-			if (connecting_quotes_cases(*token) == 0)
+			ignore = first_group(t, delete, ignore);
+			ignore = full_quote_space_quote(t, delete, ignore);
+			if ((*t) != NULL && (*t)->next != NULL && \
+				((space_check(*t) == -1 && (*t)->ignore == false) && \
+				(*t)->next->ignore == false))
+				ignore = remaking_node(t, delete, ignore);
+			if ((*t) != NULL && ignore != 1)
+				(*t) = (*t)->next;
+			ignore = 0;
+		}
+		if ((*t) != NULL)
+			(*t) = (*t)->next;
+	}
+	(*t) = temp;
+}
+
+void	check_for_deleting_spaces(t_token **t)
+{
+	t_token	*temp;
+
+	temp = (*t);
+	first_token(t);
+	while ((*t) != NULL)
+	{
+		if (space_check(*t) == -1 && (*t)->ignore == true)
+		{
+			if ((*t)->next != NULL)
 			{
-				temp_ptr = ft_strjoin((*token)->t, (*token)->next->t);
-				(*token)->t = temp_ptr;
-				delete = (*token)->next;
-				(*token)->next = (*token)->next->next;
-				norminette_hell(token, delete);
+				(*t) = (*t)->next;
+				if (space_check(*t) == -1)
+				{
+					if ((*t)->next != NULL)
+						final_decision(t);
+				}
 			}
 		}
-		(*token) = (*token)->next;
+		if ((*t) != NULL)
+			(*t) = (*t)->next;
 	}
-	(*token) = temp;
+	(*t) = temp;
 }

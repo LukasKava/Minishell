@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:31:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:58:03 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:58:31 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

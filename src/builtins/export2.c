@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:22:51 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 16:41:45 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:58:52 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int	possible_cases(char *arg)
 	return (checker);
 }
 
-void	inject_to_exp_l(t_env **exp_l, char *str)
+void inject_to_exp_l(t_env **exp_l, char *str)
 {
-	t_env	*temp;
+	t_env *temp;
 
 	temp = (*exp_l);
 	while ((*exp_l) != NULL && (*exp_l)->next != NULL)
@@ -86,9 +86,9 @@ void	inject_to_exp_l(t_env **exp_l, char *str)
 	(*exp_l) = temp;
 }
 
-void	inject_to_e_l(t_env **env_l, char *str)
+void inject_to_e_l(t_env **env_l, char *str)
 {
-	t_env	*temp;
+	t_env *temp;
 
 	temp = (*env_l);
 	while ((*env_l) != NULL && (*env_l)->next != NULL)

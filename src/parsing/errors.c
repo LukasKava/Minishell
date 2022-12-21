@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 14:56:46 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/18 20:22:32 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/20 16:38:24 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	errors_before(t_info *info)
 
 int	readline_err(t_data hive)
 {
-	if (!hive.info.readline)
+	if (!hive.info.r)
 	{
 		write(1, "\033[0;31mCtrl-D was activated!\033[0m\n", 34);
 		return (1);

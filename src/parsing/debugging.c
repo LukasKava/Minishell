@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 14:13:42 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 13:56:15 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/20 05:19:08 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	print_the_list(char *message, t_token *token)
 	{
 		printf("full list1[%d]: indentifier: %d [%s] ", token->index, token->name, token->t);
 		if (token->ignore == true)
-			printf("%d", token->ignore);
+			printf("ignore: %d", token->ignore);
 		if (token->d_quotes == true)
-			printf("%d\n", token->d_quotes);
-		else if (token->s_quotes == true)
-			printf("%d\n", token->s_quotes);
+			printf("d_quotes: %d\n", token->d_quotes);
+		if (token->s_quotes == true)
+			printf("s_quotes: %d\n", token->s_quotes);
 		else
 			printf("\n");
 		token = token->next;

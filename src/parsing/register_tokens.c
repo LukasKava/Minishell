@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 14:07:18 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:25:36 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,6 @@
 	return (false);
 } */
 
-static	int	check_for_spaces(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] != ' ')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 /**
  * FUNCTION: (check_speacials) checks for special character combinations
  * 				that are included in mandatory part of the minishell.
@@ -97,7 +83,9 @@ static	int	check_for_spaces(char *str)
  */
 static void	check_specials(t_token **token)
 {
-	if ((*token)->t[0] == '|')
+	if ((*token)->s_quotes == true || (*token)->d_quotes == true)
+		(*token)->name = ELSE;
+	else if ((*token)->t[0] == '|')
 		(*token)->name = PIPE;
 	else if ((*token)->t[0] == '<' && (*token)->t[1] != '<')
 		(*token)->name = R_INPUT;
@@ -134,7 +122,8 @@ static void	assign_indexes(t_token **token, t_info *info)
 	{
 		check_specials(token);
 		recognise_builtins(token);
-		if ((*token)->ignore == true)
+		if ((*token)->ignore == true && ((*token)->name != SPC && \
+			(*token)->name != EMPTY))
 		{
 			info->error = true;
 			g_errors.g_exit_status = 2;
@@ -147,31 +136,84 @@ static void	assign_indexes(t_token **token, t_info *info)
 	(*token) = temp;
 }
 
-static void	connecting_spaces(t_token **token)
+/* static void	connecting_spaces(t_token **token)
 {
 	t_token	*temp;
-	t_token	*delete;
 
-	delete = NULL;
 	temp = (*token);
 	while ((*token) != NULL)
 	{
 		if ((*token)->next != NULL)
 		{
-			if (((*token)->name == EMPTY || (*token)->name == SPC) && \
-				((*token)->next->name == EMPTY || (*token)->next->name == SPC))
+			if (space_check(*token) == -1 && ((*token)->s_quotes == true
+	 || (*token)->d_quotes == true))
 			{
-				(*token)->t = ft_strjoin((*token)->t, (*token)->next->t);
-				delete = (*token)->next;
-				(*token)->next = (*token)->next->next;
-				free(delete->t);
-				free(delete);
-				(*token) = temp;
+				printf("next: [%s]\n", (*token)->next->t);
+				printf("next_name: [%d]\n", (*token)->next->name);
+				if ((*token)->next->name != PIPE)
+				{
+					if ((*token)->next->ignore == true &&
+					 (*token)->next->d_quotes != NULL && 
+						)
+					{
+						printf("BOMB\n");
+						(*token)->s_quotes = true;
+						(*token)->d_quotes = true;
+					}
+				}
 			}
 		}
 		(*token) = (*token)->next;
 	}
 	(*token) = temp;
+} */
+
+static void	delete_ignored_spaces(t_token **token)
+{
+	t_token	*temp;
+	t_token	*delete;
+	int		ignore;
+
+	temp = (*token);
+	delete = NULL;
+	ignore = 0;
+	while ((*token) != NULL)
+	{
+		if ((*token)->next != NULL)
+		{
+			if ((*token)->name == SPC && (*token)->ignore == true && \
+				((*token)->s_quotes == true || (*token)->d_quotes == true))
+			{
+				ignore = change_the_node(token, temp, delete, ignore);
+			}
+		}
+		if (ignore != 1)
+			(*token) = (*token)->next;
+		ignore = 0;
+	}
+	(*token) = temp;
+}
+
+static void	set_up_ignores(t_token **t)
+{
+	t_token	*temp;
+
+	temp = (*t);
+	while ((*t) != NULL)
+	{
+		if ((*t)->next != NULL)
+		{
+			if (space_check(*t) == -1 && \
+				((*t)->s_quotes == true || (*t)->d_quotes == true))
+			{
+				if ((*t)->next->ignore != true && \
+					space_check((*t)->next) == -1)
+					(*t)->ignore = true;
+			}
+		}
+		(*t) = (*t)->next;
+	}
+	(*t) = temp;
 }
 
 void	register_tokens(t_info *info, t_token **token, t_env *env)
@@ -180,16 +222,23 @@ void	register_tokens(t_info *info, t_token **token, t_env *env)
 
 	temp_token = (*token);
 	expand_expansions(token, env);
-	assign_indexes(token, info);
-	connecting_spaces(token);
+	set_up_ignores(token);
+	delete_ignored_spaces(token);
+	check_for_deleting_spaces(token);
+	delete_ignored_spaces(token);
 	connecting_quotes(token);
+	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token);
+	//print_the_list("check_tokens!", *token);
 	if (info->error == false)
 	{
 		recognise_commands(token);
+		//print_the_list("recognise_commands!", *token);
 		check_command_excists(token, env);
+		//print_the_list("check_commands_excist!", *token);
 		ignore(token);
+		//print_the_list("ignore!", *token);
 	}
 	(*token) = temp_token;
 }

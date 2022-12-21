@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 16:28:02 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/21 03:22:57 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_token
 
 typedef struct s_info
 {
-	char	*readline;
+	char	*r;
 	int		s_quotes;
 	int		d_quotes;
 	int		redirect_input;
@@ -133,15 +133,26 @@ void	lexer(t_info *info, t_token **token);
 /*----	check_pipes.c	-----------------*/
 int		pipe_cases(t_info *info);
 int		pipe_excistence(t_info *info);
+int		check_for_spaces(char *str);
 
 /*----	quotes.c	-----------------*/
 int		check_quotes(t_info *info);
 void	count_quotes(t_info *info);
 void	connecting_quotes(t_token **token);
 void	norminette_hell(t_token **token, t_token *delete);
+void	check_for_deleting_spaces(t_token **t);
+
+/*----	quotes2.c	-----------------*/
+int		remaking_node(t_token **t, t_token *delete, int ignore);
+int		first_group(t_token **t, t_token *delete, int ignore);
+int		full_qoute_empty_qoute(t_token **t, t_token *delete, int ignore);
+int		full_quote_space_quote(t_token **t, t_token *delete, int ignore);
+void	final_decision(t_token **t);
 
 void	check_tokens(t_info *info, t_token **token);
 int		space(t_info *info, int i, t_token **token);
+int		space_norm(t_token **token, t_info *info, int i);
+void	first_token(t_token **t);
 
 /*----	freeing.c	----------------------*/
 void	freeing_tokens(t_token *token);
@@ -173,6 +184,7 @@ t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info);
 
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
+int		space_check(t_token *token);
 
 /*----	register_tokens2.c	-------------*/
 void	register_redirection_name(t_token **token, int redirection);
@@ -184,6 +196,7 @@ void	recognise_commands(t_token **token);
 void	check_command_excists(t_token **token, t_env *env);
 void	ignore(t_token **token);
 int		lenght_picker(t_token *token);
+int		change_the_node(t_token **token, t_token *temp, t_token *del, int ign);
 
 /*----	parsing.c	-------------*/
 void	get_the_commands(t_token *t, t_env *env, t_chunk **c, t_info *i);
