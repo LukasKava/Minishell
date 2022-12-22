@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/19 17:18:42 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/22 04:44:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	here_doc(char	*delimit)
 	if (pipe(pfd) == -1)
 		pipe_error();
 	signal(SIGINT, handle_sigint);
-	while (TRUE)
+	while (TRUE && g_errors.bip == false)
 	{
 		buff = readline("> ");
 		if (!buff)

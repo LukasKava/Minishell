@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:39:04 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 22:32:10 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/21 16:02:59 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ size_t	en_excists(char *str, t_env *env)
 	if (env == NULL || (env->var[ft_strlen(str)] != '=' && \
 						env->var[ft_strlen(str)] != '\0'))
 	{
-		printf("\033[0;31mEnv_var does not excist!\033[0m\n");
-		g_errors.g_exit_status = 127;
+		printf("\033[0;31mEnv_var: %s does not excist!\033[0m\n", str);
 		return (1);
 	}
 	return (0);

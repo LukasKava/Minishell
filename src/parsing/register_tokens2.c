@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 02:10:49 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 21:33:10 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 05:22:48 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	else_to_arg(t_token **token)
 								(*token)->name == SPC || \
 								(*token)->name == EMPTY || \
 								(*token)->name > ESCAPE || \
-								(*token)->ignore == true))
+								(*token)->ig == true))
 	{
 		if ((*token)->name == ELSE)
 			(*token)->name = ARGUMENT;

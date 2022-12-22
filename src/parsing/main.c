@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:38:40 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 08:05:19 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,20 @@ t_collect	g_errors;
 	}
 } */
 
+static void	check_before_specials(t_token **token)
+{
+	if ((*token)->t[0] == '|')
+		(*token)->name = PIPE;
+	else if ((*token)->t[0] == '<' && (*token)->t[1] != '<')
+		(*token)->name = R_INPUT;
+	else if ((*token)->t[0] == '<' && (*token)->t[1] == '<')
+		(*token)->name = R_AP_INPUT;
+	else if ((*token)->t[0] == '>' && (*token)->t[1] != '>')
+		(*token)->name = R_OUTPUT;
+	else if ((*token)->t[0] == '>' && (*token)->t[1] == '>')
+		(*token)->name = R_AP_OUTPUT;
+}
+
 static void	initialize_hive(t_data *h, char **envp)
 {
 	h->env = NULL;
@@ -62,19 +76,17 @@ static void	initialize_hive(t_data *h, char **envp)
 	g_errors.bip = false;
 }
 
-void	checker_before(t_data *hive)
+static void	recognise_specials(t_token **token)
 {
-	int	i;
+	t_token	*temp;
 
-	i = 0;
-	while (hive->info.r[i] != '\0' && hive->info.r[i] == ' ')
-		i++;
-	if (hive->info.r[i] == '\0' || \
-		(hive->info.r[i] >= '\a' && hive->info.r[i] <= '\r'))
+	temp = (*token);
+	while ((*token) != NULL)
 	{
-		hive->info.error = true;
-		g_errors.g_exit_status = 0;
+		check_before_specials(token);
+		(*token) = (*token)->next;
 	}
+	(*token) = temp;
 }
 
 static void	parsing_and_execution(t_data *hive, char **envp)
@@ -86,9 +98,8 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		hive->token = initialize_token(hive->token, &hive->info);
 		hive->c_arr = initialize_chunk(hive->c_arr, &hive->info);
 		lexer(&hive->info, &hive->token);
-		//print_the_list("after lexing:", hive->token);
+		recognise_specials(&hive->token);
 		register_tokens(&hive->info, &hive->token, hive->env);
-		//print_the_list("final List:", hive->token);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
 		if (hive->info.error == false)

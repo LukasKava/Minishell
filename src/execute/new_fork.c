@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 11:52:18 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/19 16:57:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 08:19:47 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 	while (elements && g_errors.bip == false)
 	{
 		child_process_do(&elements, data, vars, envp);
-		signal(SIGINT, handle_sigint);
 		vars->pipe_group++;
 		elements = elements->next;
 	}
@@ -119,6 +118,7 @@ void	execute(t_chunk **salt, t_data *data, char **envp)
 		g_errors.g_exit_status = WEXITSTATUS(status);
 		vars->capture_redirection_error = 0;
 	}
+	signal(SIGINT, handle_sigint);
 	g_errors.bip = false;
 	free(vars);
 }			

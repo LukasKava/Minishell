@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:28:40 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 07:58:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,9 @@ void	check_tokens(t_info *i, t_token **t)
 
 int	space_norm(t_token **token, t_info *info, int i)
 {
-	//printf("space function!\n");
-	//printf ("i: %d: [%c]\n", i, info->r[i]);
-	//printf("i - 1: %d: [%c]\n", i - 1, info->r[i - 1]);
 	if (i - 1 != 0 && (info->r[i - 1] == 34 || info->r[i - 1] == 39))
-		(*token)->ignore = true;
+		(*token)->ig = true;
 	i = space(info, i, token);
-	//printf("after space: [%s] ignore: %d\n", (*token)->t, (*token)->ignore);
 	return (i);
 }
 
@@ -103,8 +99,8 @@ void	first_token(t_token **t)
 		if ((*t)->next != NULL)
 		{
 			if (space_check((*t)->next) != -1 && \
-				(*t)->next->ignore == false)
-				(*t)->ignore = true;
+				(*t)->next->ig == false)
+				(*t)->ig = true;
 		}
 	}
 }
