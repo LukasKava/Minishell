@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/20 16:37:46 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 06:30:35 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	checking_before_cases(t_token **token, t_info *info, int i, char q)
 		(*token) = attach_token_end(*token, info);
 		(*token)->t = ft_calloc(1, sizeof(char));
 		(*token)->t[0] = '\0';
-		(*token)->ignore = true;
+		(*token)->ig = true;
 		(*token) = (*token)->next;
 	}
 	else if (i != 0 && ft_isascii(info->r[i - 1]) == 1 && \

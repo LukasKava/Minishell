@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 17:28:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 17:08:06 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/21 16:12:51 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static int	brains_export(t_env **exp_l, t_env **e_l, int a, char **line)
 	if (i == -1)
 	{
 		write(2, "\033[0;31mNot a valid indentifier!\033[0m\n", 37);
+		g_errors.g_exit_status = 1;
 		return (1);
 	}
 	if (name_exists(*e_l, line[a]) == 1 && i == 0)

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:08 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:01:02 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 08:14:56 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,19 @@ int	check_quotes(t_info *info)
 	return (0);
 }
 
-void	norminette_hell(t_token **token, t_token *delete)
+static int	control(t_token **t, t_token *delete, int ignore)
 {
-	(void)token;
-	free(delete->t);
-	free(delete);
+	if (((*t)->name < PIPE || (*t)->name > R_AP_OUTPUT) && \
+		((*t)->next->name < PIPE || (*t)->next->name > R_AP_OUTPUT))
+	{
+		ignore = first_group(t, delete, ignore);
+		ignore = full_quote_space_quote(t, delete, ignore);
+		if ((*t) != NULL && (*t)->next != NULL && \
+			((space_check(*t) == -1 && (*t)->ig == false) && \
+			(*t)->next->ig == false))
+			ignore = remaking_node(t, delete, ignore);
+	}
+	return (ignore);
 }
 
 void	connecting_quotes(t_token **t)
@@ -78,12 +86,7 @@ void	connecting_quotes(t_token **t)
 	{
 		while ((*t) != NULL && (*t)->next != NULL)
 		{
-			ignore = first_group(t, delete, ignore);
-			ignore = full_quote_space_quote(t, delete, ignore);
-			if ((*t) != NULL && (*t)->next != NULL && \
-				((space_check(*t) == -1 && (*t)->ignore == false) && \
-				(*t)->next->ignore == false))
-				ignore = remaking_node(t, delete, ignore);
+			ignore = control(t, delete, ignore);
 			if ((*t) != NULL && ignore != 1)
 				(*t) = (*t)->next;
 			ignore = 0;
@@ -102,7 +105,7 @@ void	check_for_deleting_spaces(t_token **t)
 	first_token(t);
 	while ((*t) != NULL)
 	{
-		if (space_check(*t) == -1 && (*t)->ignore == true)
+		if (space_check(*t) == -1 && (*t)->ig == true)
 		{
 			if ((*t)->next != NULL)
 			{

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:24 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:25:36 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 07:59:33 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@
  *		|redirect_append_input = 4
  *		|redirect_append_output = 5
  */
-static void	check_specials(t_token **token)
+void	check_specials(t_token **token)
 {
-	if ((*token)->s_quotes == true || (*token)->d_quotes == true)
+	if (((*token)->s_quotes == true || (*token)->d_quotes == true))
 		(*token)->name = ELSE;
 	else if ((*token)->t[0] == '|')
 		(*token)->name = PIPE;
@@ -122,8 +122,8 @@ static void	assign_indexes(t_token **token, t_info *info)
 	{
 		check_specials(token);
 		recognise_builtins(token);
-		if ((*token)->ignore == true && ((*token)->name != SPC && \
-			(*token)->name != EMPTY))
+		if ((*token)->ig == true && \
+			((*token)->name < EMPTY || (*token)->name > R_AP_OUTPUT))
 		{
 			info->error = true;
 			g_errors.g_exit_status = 2;
@@ -181,7 +181,7 @@ static void	delete_ignored_spaces(t_token **token)
 	{
 		if ((*token)->next != NULL)
 		{
-			if ((*token)->name == SPC && (*token)->ignore == true && \
+			if ((*token)->name == SPC && (*token)->ig == true && \
 				((*token)->s_quotes == true || (*token)->d_quotes == true))
 			{
 				ignore = change_the_node(token, temp, delete, ignore);
@@ -206,9 +206,9 @@ static void	set_up_ignores(t_token **t)
 			if (space_check(*t) == -1 && \
 				((*t)->s_quotes == true || (*t)->d_quotes == true))
 			{
-				if ((*t)->next->ignore != true && \
+				if ((*t)->next->ig != true && \
 					space_check((*t)->next) == -1)
-					(*t)->ignore = true;
+					(*t)->ig = true;
 			}
 		}
 		(*t) = (*t)->next;
@@ -230,15 +230,10 @@ void	register_tokens(t_info *info, t_token **token, t_env *env)
 	assign_indexes(token, info);
 	if (info->error == false)
 		check_tokens(info, token);
-	//print_the_list("check_tokens!", *token);
 	if (info->error == false)
 	{
 		recognise_commands(token);
-		//print_the_list("recognise_commands!", *token);
 		check_command_excists(token, env);
-		//print_the_list("check_commands_excist!", *token);
-		ignore(token);
-		//print_the_list("ignore!", *token);
 	}
 	(*token) = temp_token;
 }

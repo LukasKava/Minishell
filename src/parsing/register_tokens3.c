@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 03:02:57 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:09:42 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 08:07:29 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	lenght_picker(t_token *t)
 				return (0);
 		}
 	}
-	if (t->ignore == true && t->next->ignore == true)
+	if (t != NULL && t->next != NULL && t->ig == true && t->next->ig == true)
 		return (0);
 	return (1);
 }
@@ -98,13 +98,13 @@ void	ignore(t_token **token)
 	temp = (*token);
 	while ((*token) != NULL)
 	{
-		if ((*token)->ignore == true && \
+		if ((*token)->ig == true && \
 			((*token)->name != SPC && (*token)->name != EMPTY))
 		{
 			while ((*token) != NULL && ((*token)->name < PIPE || \
 										(*token)->name > R_AP_OUTPUT))
 			{
-				(*token)->ignore = true;
+				(*token)->ig = true;
 				(*token) = (*token)->next;
 			}
 		}
@@ -118,7 +118,7 @@ int	change_the_node(t_token **token, t_token *temp, t_token *del, int ign)
 {
 	free((*token)->t);
 	(*token)->t = ft_strdup((*token)->next->t);
-	(*token)->ignore = (*token)->next->ignore;
+	(*token)->ig = (*token)->next->ig;
 	(*token)->d_quotes = (*token)->next->d_quotes;
 	(*token)->s_quotes = (*token)->next->s_quotes;
 	(*token)->name = (*token)->next->name;

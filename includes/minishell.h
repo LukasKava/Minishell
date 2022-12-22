@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 03:22:57 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 08:17:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_token
 	char			*t;
 	bool			s_quotes;
 	bool			d_quotes;
-	bool			ignore;
+	bool			ig;
 	int				index;
 	int				name;
 	struct s_token	*next;
@@ -139,7 +139,6 @@ int		check_for_spaces(char *str);
 int		check_quotes(t_info *info);
 void	count_quotes(t_info *info);
 void	connecting_quotes(t_token **token);
-void	norminette_hell(t_token **token, t_token *delete);
 void	check_for_deleting_spaces(t_token **t);
 
 /*----	quotes2.c	-----------------*/
@@ -185,6 +184,7 @@ t_chunk	*attach_chunk_end(t_chunk *chunk, t_info *info);
 /*----	register_tokens.c	-------------*/
 void	register_tokens(t_info *info, t_token **token, t_env *env);
 int		space_check(t_token *token);
+void	check_specials(t_token **token);
 
 /*----	register_tokens2.c	-------------*/
 void	register_redirection_name(t_token **token, int redirection);
@@ -358,10 +358,11 @@ void	child_process(t_chunk **salt, t_vars *vars, char **envp);
 /*----	../src/errors.c	-------------*/
 void	pipe_error_execute(void);
 void	redirection_out_error(t_vars *vars);
+void	checker_before(t_data *hive);
 
 /*----	../src/child_process_do.c	-------------*/
-void	child_process_do(t_chunk **salt, \
-t_data *data, t_vars *vars, char **envp);
+void	child_process_do(t_chunk **salt,
+			t_data	*data, t_vars *vars, char **envp);
 
 //INDENTIFIER EXPLANATION:
 /**
