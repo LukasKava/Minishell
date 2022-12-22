@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/22 15:03:08 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:00:03 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ void	here_doc_read(int pfd_output, char	*delimit)
 {
 	char	*buff;
 
-	signal(SIGINT, handle_sigint);
-	while (TRUE && g_errors.bip == false)
+	//signal(SIGINT, handle_here);
+	while (TRUE)
 	{
+		//signal(SIGINT, handle_here);
 		buff = readline("> ");
 		if (!buff)
 		{
@@ -71,6 +72,7 @@ void	here_doc(char	*delimit, t_vars	*vars)
 	int		pfd[2];
 	int		pid;
 
+	//signal(SIGINT, SIG_IGN);
 	if (pipe(pfd) == -1)
 		pipe_error();
 	vars->input_fd = dup(pfd[INPUT]);
@@ -80,12 +82,14 @@ void	here_doc(char	*delimit, t_vars	*vars)
 		write(2, "Here doc error\n", 16);
 	if (pid == 0)
 	{
+		signal(SIGINT, handle_here);
 		here_doc_read(pfd[OUTPUT], delimit);
 		close(pfd[OUTPUT]);
 		exit(0);
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		wait(NULL);
 		close(pfd[OUTPUT]);
 	}

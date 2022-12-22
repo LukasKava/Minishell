@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 14:53:40 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/22 16:12:24 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,7 @@ void	check_for_executables(t_chunk **chunk);
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);
 void	handle_child(int sig);
+void	handle_here(int sig);
 
 /*----	../builtins/builtins_utils.c	------------------*/
 void	create_e_list(t_env **e_list, char **env);
