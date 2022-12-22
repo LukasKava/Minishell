@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+         #
+#    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/21 03:34:44 by lkavalia         ###   ########.fr        #
+#    Updated: 2022/12/22 15:36:22 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ export IMG
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
-#CFLAGS = -Wall -Werror -Wextra
+# CFLAGS = -Wall -Werror -Wextra
 
 NAME = minishell
 
