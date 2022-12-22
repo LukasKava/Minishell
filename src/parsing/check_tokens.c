@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:11 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 07:58:28 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 18:53:37 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ void	check_tokens(t_info *i, t_token **t)
 				err = err_m(i, "Syntax err near unexpected token `newline'", 2);
 			else if (((*t)->name >= PIPE && (*t)->name <= R_AP_OUTPUT))
 			{
-				if ((*t)->next->d_quotes == 0 && (*t)->next->s_quotes == 0)
+				if ((*t)->next->d_quotes == 0 && (*t)->next->s_quotes == 0 &&
+					((*t)->name != PIPE && ((*t)->next->name <= PIPE && \
+					(*t)->next->name > R_AP_OUTPUT)))
 				{
 					if ((*t)->next->name >= PIPE && \
 						(*t)->next->name <= R_AP_OUTPUT)
