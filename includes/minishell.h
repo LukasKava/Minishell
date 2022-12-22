@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 08:17:37 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 14:53:40 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,8 @@ int		readline_err(t_data hive);
 void	errors_before(t_info *info);
 
 /*----	../src/here_doc.c	-------------*/
-int		here_doc(char *delimit);
+void	here_doc_handle(t_chunk **salt, t_vars *vars);
+void	here_doc(char *delimit, t_vars *vars);
 
 /*----	../src/run.c	-------------*/
 void	run(t_chunk	*salt, char	**envp);

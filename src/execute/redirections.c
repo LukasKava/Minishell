@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/19 08:16:04 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/22 14:53:58 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,14 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 		}
 	}
 	else if (element->in_f[vars->number_of_infiles].type == DELIMITOR)
-	{
-		vars->input_fd = here_doc \
-		(element->in_f[vars->number_of_infiles].name);
-	}
+		here_doc_handle(&element, vars);
 }
 
 void	redirect_in(t_chunk **salt, t_vars *vars)
 {
 	t_chunk	*element;
 
-	vars->input_fd = -11;
+	vars->input_fd = -1;
 	element = *salt;
 	if (in_redirection_this_node(&element))
 	{

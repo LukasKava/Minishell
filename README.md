@@ -108,3 +108,8 @@ ls ""
 '               ' this example crashes.
 ls '|' cat
 unset $PATH
+
+--leak-check=full --track-fds=yes ./minishell
+
+TnT — 03/11/2022 21:09
+valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes
