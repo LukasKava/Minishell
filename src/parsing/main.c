@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 08:05:19 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/22 18:55:04 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		register_tokens(&hive->info, &hive->token, hive->env);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
+		print_the_list("final", hive->token);
 		if (hive->info.error == false)
 			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		execute(&hive->c_arr, hive, envp);
