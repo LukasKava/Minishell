@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:05 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/23 04:47:53 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:32:33 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,7 @@ int	check_for_spaces(char *str)
 int	pipe_redirections(t_token **t)
 {
 	if ((*t)->next->d_quotes == 0 && (*t)->next->s_quotes == 0 && \
-		((*t)->name != PIPE && ((*t)->next->name <= PIPE && \
-		(*t)->next->name > R_AP_OUTPUT)))
+		(*t)->name != PIPE)
 		return (0);
 	return (1);
 }

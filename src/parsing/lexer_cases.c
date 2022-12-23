@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:06:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 06:30:35 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:35:10 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,6 @@ int	space(t_info *info, int i, t_token **token)
 	(*token)->s_quotes = false;
 	return (i);
 }
-
-/* else if (i != 0 && (ft_isalpha(info->readline[i - 1]) == 1 || \
- ft_isalnum(info->readline[i - 1]) == 0 || info->readline[i - 1] == '=' |
- info->readline[i - 1] == '<' || info->readline[i - 1] == '>') &&
-		 (info->readline[i - 1] != 34 &&
-		  info->readline[i - 1] != 39))
-{
-	(*token) = attach_token_end(*token, info);
-	(*token)->token = ft_substr(info->readline, info->f, i - info->f);
-	(*token) = (*token)->next;
-	//info->f = skip_white_sp(info->readline, i + 1);
-	//printf("info->f: %d [%c]\n", info->f, info->readline[info->f]);
-} */
 
 static int	checking_before_cases(t_token **token, t_info *info, int i, char q)
 {

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:24:58 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 17:04:26 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:35:55 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,5 @@ void	handle_child(int sig)
 		g_errors.bip = true;
 		write(1, "\n", 1);
 		g_errors.g_exit_status = 130;
-	}
-}
-
-void	handle_here(int sig)
-{
-	if (sig == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		exit(1);
 	}
 }

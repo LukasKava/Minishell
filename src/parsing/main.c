@@ -3,53 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:37:21 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/23 12:16:41 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:35:28 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 t_collect	g_errors;
-
-/* static void check_non_generic(t_info *info)
-{
-	int i;
-
-	i = 0;
-	if (ft_strlen(info->readline) > 0)
-	{
-		while (info->readline[i] == ' ' && info->readline[i] != '\0')
-			i++;
-		if (info->readline[i] == '&' && info->readline[i + 1] == '&')
-			simple_err_message(info, "syntax_err near unexpected token &&", 2);
-		if (info->readline[i] == ';' && info->readline[i + 1] == ';')
-			simple_err_message(info, "syntax_err near unexpected token ;;", 2);
-		if (info->readline[i] == ';' && info->readline[i + 1] != ';')
-			simple_err_message((info), "syntax_err: near unexpected token ;", 2);
-		if (info->readline[i] == '&' && info->readline[i + 1] != '&')
-			simple_err_message((info), "syntax_err: near unexpected token &", 2);
-		if (info->readline[i] == '(' || info->readline[i] == ')')
-		{
-			printf("in\n");
-			i++;
-			while (info->readline[i] == ' ' && info->readline[i] != '\0')
-				i++;
-			if (i > 0)
-				i--;
-			if (info->readline[i + 1] == '(' || info->readline[i + 1] == ')')
-				printf()
-			{
-				printf("bash: syntax error near unexpected token `)'\n");
-				info->error = true;
-				g_exit_status = 2;
-				return ;
-			}
-		}
-	}
-} */
 
 static void	check_before_specials(t_token **token)
 {
@@ -102,8 +65,6 @@ static void	parsing_and_execution(t_data *hive, char **envp)
 		register_tokens(&hive->info, &hive->token, hive->env);
 		get_the_commands(hive->token, hive->env, &hive->c_arr, &hive->info);
 		check_for_executables(&hive->c_arr);
-		if (hive->info.error == false)
-			print_the_chunk_list("CHUNK LIST", hive->c_arr);
 		execute(&hive->c_arr, hive, envp);
 		freeing_tokens(hive->token);
 		freeing_chunks(&hive->c_arr);
