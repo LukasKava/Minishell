@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 17:28:52 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/21 16:12:51 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 03:24:18 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	brains_export(t_env **exp_l, t_env **e_l, int a, char **line)
 {
 	int	i;
 
-	i = possible_cases(line[a]);
+	i = possible_cases(line[a], line[0]);
 	if (i == -1)
 	{
 		write(2, "\033[0;31mNot a valid indentifier!\033[0m\n", 37);

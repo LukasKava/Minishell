@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 18:27:10 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 16:58:21 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 02:15:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,18 @@ int	builtins_unset(t_env **exp_l, t_env **env_l, char **line)
 	{
 		if (i == 0)
 			i++;
-		if (line[i] != NULL && valid_name(line[i]) == 0)
+		if (line[i] != NULL && valid_name(line[i], line[0]) == 0)
 		{
 			delete_exp_node(exp_l, line[i]);
 			delete_env_node(env_l, line[i]);
 		}
-		else
-			return (1);
-		i++;
+		else if (line[i] != NULL && valid_name(line[i], line[0]) == 1)
+		{
+			write(2, "\033[0;31mNot a valid indentifier!\033[0m\n", 37);
+			g_errors.g_exit_status = 1;
+		}
+		if (line[i] != NULL)
+			i++;
 	}
 	return (0);
 }
