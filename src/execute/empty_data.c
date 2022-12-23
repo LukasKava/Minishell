@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 11:32:53 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/22 19:11:03 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 13:32:07 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	empty_data_input(t_chunk	**salt, t_vars *vars)
 	(!(in_redirection_this_node(&element))) && \
 	(!(pipe_last_node(&element))))
 	{
-		empty_input_fd = open("./includes/tmp_in.txt", \
+		empty_input_fd = open("/tmp/tmp_in.txt", \
 		O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (empty_input_fd == -1)
 		{
@@ -46,10 +46,11 @@ void	empty_data_output(t_chunk	**salt, t_vars *vars)
 	(!(pipe_this_node(&element))) && \
 	element->indentifier != ELSE_BLOCK)
 	{
-		empty_output_fd = open("./includes/tmp_out.txt", \
-		O_CREAT | O_RDWR | O_TRUNC, 0644);
+		empty_output_fd = open("/tmp/tmp_out.txt", \
+		O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (empty_output_fd == -1)
 		{
+			perror(":");
 			write(2, "Error while opening temporary output file\n", 43);
 			g_errors.g_exit_status = 1;
 		}
