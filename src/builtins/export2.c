@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:22:51 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 08:19:04 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 02:01:13 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ int	name_exists(t_env *exp_list, char *str)
 	return (0);
 }
 
-int	possible_cases(char *arg)
+int	possible_cases(char *arg, char *command)
 {
 	int	i;
 	int	checker;
 
 	i = 0;
 	checker = 0;
-	if (valid_name(arg) == 1)
+	if (valid_name(arg, command) == 1)
 		return (-1);
 	while (arg[i] != '\0')
 	{

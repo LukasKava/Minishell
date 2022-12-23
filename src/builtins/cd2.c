@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 20:30:30 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/17 12:46:55 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 03:40:22 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ char	*all_cases(t_env **e, char **line, int spec)
 {
 	char	*combination;
 	char	*temp;
+	char	*second_temp;
 
 	combination = NULL;
 	temp = NULL;
+	second_temp = NULL;
 	if (spec == 1)
 		return (get_env_prev(e));
 	if (spec == 2)
@@ -57,11 +59,12 @@ char	*all_cases(t_env **e, char **line, int spec)
 	if (spec == 3)
 	{
 		if (line[1][0] == '~' && line[1][1] == '/')
-			combination = ft_strtrim_f(line[1], "~/");
+			second_temp = ft_strtrim_f(line[1], "~/");
 		else
-			combination = ft_strtrim_f(line[1], "~");
+			second_temp = ft_strtrim_f(line[1], "~");
 		temp = ft_strdup("/home/");
-		combination = ft_strjoin(temp, combination);
+		combination = ft_strjoin(temp, second_temp);
+		free(second_temp);
 		return (combination);
 	}
 	return (NULL);

@@ -6,13 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:06:12 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 08:18:27 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 02:15:38 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	valid_name(char *name)
+int	valid_name(char *name, char *command)
 {
 	int	i;
 	int	error;
@@ -23,7 +23,7 @@ int	valid_name(char *name)
 		return (1);
 	while (name[i] != '\0')
 	{
-		if (name[i] == '=')
+		if (name[i] == '=' && (ft_strncmp("unset", command, 6) != 0))
 			break ;
 		if (((name[i] >= 'a' && name[i] <= 'z') || \
 			(name[i] >= 'A' && name[i] <= 'Z')) || \

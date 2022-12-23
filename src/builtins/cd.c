@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 14:04:01 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 16:40:59 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 04:51:48 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	reset_old_pwd(t_env **e)
 	(*e) = temp;
 	while ((*e) != NULL && (*e)->var != ft_strnstr((*e)->var, "OLDPWD", 7))
 		(*e) = (*e)->next;
-	if ((*e) == NULL || (*e)->trim_var != NULL)
+	if ((*e) == NULL || (*e)->trim_var == NULL)
 		return ;
 	if ((*e)->var != NULL)
 		free((*e)->var);
@@ -50,12 +50,15 @@ static void	reset_pwd(t_env **e)
 		(*e) = (*e)->next;
 	if ((*e) == NULL)
 		return ;
-	free((*e)->var);
-	free((*e)->trim_var);
+	if ((*e)->var != NULL)
+		free((*e)->var);
 	pwd = getcwd(curr_dir, PATH_MAX);
 	(*e)->var = ft_strdup("PWD=");
 	if (pwd != NULL)
+	{
+		free((*e)->trim_var);
 		(*e)->trim_var = ft_strdup(pwd);
+	}
 	if (pwd != NULL)
 		(*e)->var = ft_strjoin((*e)->var, pwd);
 	(*e) = temp;
@@ -74,15 +77,22 @@ static int	cd_possible(char **str, char *s_case, t_env **e_list, t_env **exp_l)
 	{
 		s_case = all_cases(e_list, str, check_s_c(str));
 		if (s_case != NULL && chdir(s_case) != 0)
+		{
+			free(s_case);
 			return (cd_errors(10));
+		}
 	}
 	else if (chdir(str[1]) != 0)
+	{
+		free(s_case);
 		return (cd_errors(10));
+	}
 	reset_old_pwd(e_list);
 	reset_pwd(e_list);
 	reset_old_pwd(exp_l);
 	reset_pwd(exp_l);
 	g_errors.g_exit_status = 0;
+	free(s_case);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/22 17:00:03 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 04:50:54 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ void	here_doc_read(int pfd_output, char	*delimit)
 {
 	char	*buff;
 
-	//signal(SIGINT, handle_here);
 	while (TRUE)
 	{
-		//signal(SIGINT, handle_here);
 		buff = readline("> ");
 		if (!buff)
 		{
@@ -72,7 +70,6 @@ void	here_doc(char	*delimit, t_vars	*vars)
 	int		pfd[2];
 	int		pid;
 
-	//signal(SIGINT, SIG_IGN);
 	if (pipe(pfd) == -1)
 		pipe_error();
 	vars->input_fd = dup(pfd[INPUT]);

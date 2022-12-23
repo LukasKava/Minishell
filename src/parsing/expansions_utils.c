@@ -6,12 +6,13 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 03:26:55 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/19 13:55:30 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 04:42:26 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+//len++;
 char	*ft_strtrim_f(char *s1, char *s2)
 {
 	int		b;
@@ -23,9 +24,11 @@ char	*ft_strtrim_f(char *s1, char *s2)
 	final = NULL;
 	while (s1[b] != '\0' && s2[b] != '\0' && s1[b] == s2[b])
 		b++;
-	while (s1[b++] != '\0')
+	while (s1[b] != '\0')
+	{
+		b++;
 		len++;
-	len++;
+	}
 	final = ft_calloc(len + 1, sizeof(char));
 	final[len] = '\0';
 	len--;

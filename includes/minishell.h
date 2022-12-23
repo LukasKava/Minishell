@@ -6,7 +6,7 @@
 /*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/22 16:12:24 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 04:48:30 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	lexer(t_info *info, t_token **token);
 int		pipe_cases(t_info *info);
 int		pipe_excistence(t_info *info);
 int		check_for_spaces(char *str);
+int		pipe_redirections(t_token **t);
 
 /*----	quotes.c	-----------------*/
 int		check_quotes(t_info *info);
@@ -244,7 +245,7 @@ void	handle_here(int sig);
 
 /*----	../builtins/builtins_utils.c	------------------*/
 void	create_e_list(t_env **e_list, char **env);
-int		valid_name(char *name);
+int		valid_name(char *name, char *command);
 t_env	*attach_end(t_env *token);
 char	*save_name(char *str);
 
@@ -273,7 +274,7 @@ int		builtins_export(t_env **exp_list, t_env **e_l, char **line, int fd);
 void	print_export_l(t_env *ex_l, int fd);
 
 /*----	../builtins/export2.c	------------------*/
-int		possible_cases(char *arg);
+int		possible_cases(char *arg, char *command);
 int		name_exists(t_env *exp_list, char *str);
 void	inject_to_exp_l(t_env **exp_l, char *str);
 void	inject_to_e_l(t_env **env_l, char *str);
