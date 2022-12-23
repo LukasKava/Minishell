@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/23 16:11:42 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 18:47:13 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	here_doc_read(char	*delimit)
 	fd = open("/tmp/here_dox.txt", O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (fd == -1)
 		perror(":");
+	signal(SIGINT, handle_sigint);
 	while (TRUE)
 	{
 		buff = readline("> ");

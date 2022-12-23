@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:22:19 by lkavalia          #+#    #+#             */
-/*   Updated: 2022/12/23 13:37:46 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:40:24 by lkavalia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,11 +210,6 @@ int		filling_arguments(t_token *token, t_chunk **chunk, int i);
 char	*find_command_path(char *s, t_env *env);
 t_token	*choosing_block(t_token *token, t_chunk **chunk, t_env *env);
 
-/*----	debugging.c	-------------*/
-void	print_the_list(char *message, t_token *token);
-void	print_the_chunk_list(char *message, t_chunk *chunk);
-void	print_the_chunk_list_backwards(char *message, t_chunk *chunk);
-
 /*----	input_output.c	-------------*/
 void	input_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
 void	output_first(int **fd, t_chunk	*salt, t_info *info, char	**envp);
@@ -241,7 +236,6 @@ void	check_for_executables(t_chunk **chunk);
 /*----	../signals.c	------------------*/
 void	handle_sigint(int sig);
 void	handle_child(int sig);
-void	handle_here(int sig);
 
 /*----	../builtins/builtins_utils.c	------------------*/
 void	create_e_list(t_env **e_list, char **env);
