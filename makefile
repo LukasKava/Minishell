@@ -6,7 +6,7 @@
 #    By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/10 16:25:07 by lkavalia          #+#    #+#              #
-#    Updated: 2022/12/22 15:36:22 by pbiederm         ###   ########.fr        #
+#    Updated: 2022/12/23 16:13:31 by pbiederm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ export IMG
 
 CC = cc
 
+# CFLAGS =
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 # CFLAGS = -Wall -Werror -Wextra
 

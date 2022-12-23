@@ -6,7 +6,7 @@
 /*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 18:30:01 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/22 14:53:58 by pbiederm         ###   ########.fr       */
+/*   Updated: 2022/12/23 13:37:55 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	redirect_in_conditions(t_chunk **salt, t_vars *vars)
 		(element->in_f[vars->number_of_infiles].name, O_RDONLY);
 		if (vars->input_fd == -1)
 		{
-			vars->input_fd = open("./includes/err_read.txt", \
+			vars->input_fd = open("/tmp/err_read.txt", \
 			O_RDONLY | O_CREAT, 0644);
 			perror("Error ");
 			g_errors.g_exit_status = 1;

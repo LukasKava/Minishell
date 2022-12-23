@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkavalia <lkavalia@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: pbiederm <pbiederm@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 09:05:13 by pbiederm          #+#    #+#             */
-/*   Updated: 2022/12/23 04:50:54 by lkavalia         ###   ########.fr       */
+/*   Updated: 2022/12/23 16:11:42 by pbiederm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	here_doc_handle(t_chunk **salt, t_vars *vars)
 		here_doc(element->in_f[vars->number_of_infiles].name, vars);
 	else
 	{
-		empty_input_fd = open("./includes/tmp_in.txt", \
-		O_CREAT | O_RDWR | O_TRUNC, 0644);
+		empty_input_fd = open("/tmp/tmp_here.txt", \
+		O_CREAT | O_RDONLY | O_TRUNC, 0644);
 		if (empty_input_fd == -1)
 		{
 			write(2, "Error while opening temporary input file\n", 42);
@@ -44,50 +44,33 @@ void	pipe_error(void)
 	perror(" ");
 }
 
-void	here_doc_read(int pfd_output, char	*delimit)
+int	here_doc_read(char	*delimit)
 {
+	int		fd;
 	char	*buff;
 
+	fd = open("/tmp/here_dox.txt", O_CREAT | O_RDWR | O_TRUNC, 0666);
+	if (fd == -1)
+		perror(":");
 	while (TRUE)
 	{
 		buff = readline("> ");
-		if (!buff)
-		{
-			close(pfd_output);
-			write(2, "\033[0;31mCtrl-D was activated\033[0m\n", 33);
-			exit(1);
-		}
 		if (ft_strncmp(buff, delimit, ft_strlen(delimit)) == 0 && \
 		(ft_strlen(delimit) == ft_strlen(buff)))
 			break ;
-		write(pfd_output, buff, strlen(buff));
-		write(pfd_output, "\n", 1);
+		write(fd, buff, strlen(buff));
+		write(fd, "\n", 1);
+		free(buff);
 	}
+	close(fd);
+	fd = open("/tmp/here_dox.txt", O_CREAT | O_RDONLY, 0666);
+	if (fd == -1)
+		perror(":");
+	free(buff);
+	return (fd);
 }
 
 void	here_doc(char	*delimit, t_vars	*vars)
 {
-	int		pfd[2];
-	int		pid;
-
-	if (pipe(pfd) == -1)
-		pipe_error();
-	vars->input_fd = dup(pfd[INPUT]);
-	close(pfd[INPUT]);
-	pid = fork();
-	if (pid < 0)
-		write(2, "Here doc error\n", 16);
-	if (pid == 0)
-	{
-		signal(SIGINT, handle_here);
-		here_doc_read(pfd[OUTPUT], delimit);
-		close(pfd[OUTPUT]);
-		exit(0);
-	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		wait(NULL);
-		close(pfd[OUTPUT]);
-	}
+		vars->input_fd = here_doc_read(delimit);
 }
